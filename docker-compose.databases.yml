@@ -1,0 +1,76 @@
+# =============================================================
+# DATABASES ONLY — Spin up all databases in isolation
+# Use: docker-compose -f docker-compose.databases.yml up
+# =============================================================
+
+services:
+
+  # -----------------------------------------------------------
+  # PostgreSQL — hosts 4 databases:
+  #   ocr_procurement_db    (Agent 1 output)
+  #   construction_*_db     (Construction industry)
+  #   manufacturing_*_db    (Manufacturing industry)
+  #   procurement_db        (Agent 4 output)
+  # -----------------------------------------------------------
+  postgres:
+    build:
+      context: ./databases/postgres
+      dockerfile: Dockerfile
+    container_name: procurement_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER:     ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB:       postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - procurement_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # -----------------------------------------------------------
+  # MySQL 8.0 — hosts 4 databases:
+  #   pharma_inventory_db   (Pharmaceutical inventory)
+  #   pharma_vendor_db      (Pharmaceutical vendors)
+  #   electronics_inventory_db
+  #   electronics_vendor_db
+  # Demonstrates multi-DB compatibility
+  # -----------------------------------------------------------
+  mysql:
+    build:
+      context: ./databases/mysql
+      dockerfile: Dockerfile
+    container_name: procurement_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER:          ${MYSQL_USER}
+      MYSQL_PASSWORD:      ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - procurement_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${MYSQL_USER}", "-p${MYSQL_PASSWORD}", "--silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:
+    driver: local
+  mysql_data:
+    driver: local
+
+networks:
+  procurement_network:
+    driver: bridge
+    name: procurement_network

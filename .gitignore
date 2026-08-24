@@ -1,0 +1,434 @@
+# ============================================================================
+# ProcureFlow - Multi-Agent Procurement System
+# Git Ignore File
+# ============================================================================
+
+# ============================================================================
+# SECURITY & CREDENTIALS
+# ============================================================================
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+*.p12
+*.pfx
+secrets/
+credentials/
+
+# ============================================================================
+# PYTHON
+# ============================================================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask
+instance/
+.webassets-cache
+
+# Scrapy
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath
+*.sage.py
+
+# Environments
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder
+.spyderproject
+.spyproject
+
+# Rope
+.ropeproject
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre
+.pyre/
+
+# ============================================================================
+# NODE.JS / NEXT.JS
+# ============================================================================
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Testing
+/coverage
+
+# Next.js
+.next/
+out/
+build/
+
+# Production
+/build
+.vercel
+
+# Misc
+.DS_Store
+*.pem
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Turbo
+.turbo
+
+# ============================================================================
+# DOCKER
+# ============================================================================
+# Docker volumes
+docker-compose.override.yml
+.docker/
+
+# ============================================================================
+# DATABASE
+# ============================================================================
+# PostgreSQL
+*.sql.gz
+*.dump
+pg_log/
+postgresql.conf.bak
+
+# MySQL
+*.sql.backup
+mysql-data/
+
+# SQLite
+*.db
+*.sqlite
+*.sqlite3
+
+# Database backups
+backups/
+*.backup
+*.bak
+
+# ============================================================================
+# LOGS
+# ============================================================================
+logs/
+*.log
+*.log.*
+log/
+*.out
+
+# ============================================================================
+# IDE / EDITORS
+# ============================================================================
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+.netrwhist
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+
+# Eclipse
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.pydevproject
+
+# ============================================================================
+# OPERATING SYSTEM
+# ============================================================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+.directory
+.Trash-*
+
+# ============================================================================
+# TEMPORARY FILES
+# ============================================================================
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+.#*
+\#*#
+
+# ============================================================================
+# UPLOADS & USER DATA
+# ============================================================================
+uploads/
+upload/
+user-uploads/
+uploaded-files/
+*.pdf
+*.docx
+*.xlsx
+*.csv
+# Note: You may want to keep sample files, adjust as needed
+
+# ============================================================================
+# MINIO / OBJECT STORAGE
+# ============================================================================
+minio-data/
+.minio.sys/
+
+# ============================================================================
+# KAFKA / ZOOKEEPER
+# ============================================================================
+kafka-logs/
+zookeeper-data/
+zookeeper-logs/
+
+# ============================================================================
+# REDIS
+# ============================================================================
+dump.rdb
+appendonly.aof
+redis-data/
+
+# ============================================================================
+# TESTING & CI/CD
+# ============================================================================
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+junit/
+test-results/
+.test/
+
+# ============================================================================
+# BUILD ARTIFACTS
+# ============================================================================
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# ============================================================================
+# DOCUMENTATION
+# ============================================================================
+# Keep documentation but ignore builds
+docs/_build/
+site/
+
+# ============================================================================
+# MISC
+# ============================================================================
+# Backup files
+*~
+*.orig
+*.rej
+
+# Cache directories
+.cache/
+cache/
+
+# Local configuration overrides
+config.local.*
+settings.local.*
+
+# Archive files (unless needed)
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+
+# ============================================================================
+# PROJECT SPECIFIC
+# ============================================================================
+# Agent-specific temp files
+services/agent*/temp/
+services/agent*/cache/
+
+# Frontend build artifacts
+frontend/.next/
+frontend/out/
+frontend/build/
+
+# Old/archived folders
+Agentic-AI-for-Smart-Procurement/
+
+# Database initialization flags
+*.initialized
+*.migrated
+
+# Generated API documentation
+api-docs/generated/
+
+# Performance profiling
+*.prof
+*.pstats
+
+# ============================================================================
+# KEEP THESE FILES (Negated patterns)
+# ============================================================================
+# Keep example environment file
+!.env.example
+
+# Keep init scripts
+!databases/postgres/init/*.sql
+!databases/mysql/init/*.sql
+
+# Keep Dockerfiles
+!Dockerfile
+!*/Dockerfile
+
+# Keep documentation
+!README.md
+!docs/*.md
+!*.md
+
+# Keep configuration templates
+!*.template
+!*.example
+
+# Keep sample data (if you have any)
+!sample-data/
+!test-data/
+
+# ============================================================================
+# END OF FILE
+# ============================================================================
