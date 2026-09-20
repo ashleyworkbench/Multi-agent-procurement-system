@@ -334,45 +334,33 @@ Return ONLY the JSON.
     # ========================================================
 
     try:
-
+        model_name = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
         response = client.models.generate_content(
-            model="gemini-3.5-flash",
+            model=model_name,
             contents=prompt
         )
 
         result = response.text.strip()
 
         # ----------------------------------------------------
-        # Remove Markdown Code Fences
+        # Extract and Parse JSON
         # ----------------------------------------------------
+        import re
+        json_match = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", result)
+        if json_match:
+            result = json_match.group(1).strip()
 
-        if result.startswith("```"):
-
-            result = result.replace(
-                "```json",
-                ""
-            )
-
-            result = result.replace(
-                "```",
-                ""
-            )
-
-            result = result.strip()
-
-        # ----------------------------------------------------
-        # Parse JSON
-        # ----------------------------------------------------
+        # Isolate the JSON object bounds if there is extra text
+        start_idx = result.find("{")
+        end_idx = result.rfind("}")
+        if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
+            result = result[start_idx:end_idx + 1]
 
         structured_data = json.loads(result)
-
         return structured_data
 
     except Exception as e:
-
         print("Gemini Error:", e)
-
         # Propagate the error so the processing pipeline
         # can mark the extraction as failed.
-
         raise

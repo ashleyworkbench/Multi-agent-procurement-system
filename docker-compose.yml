@@ -20,7 +20,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB:       postgres
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -59,7 +59,7 @@ services:
     restart: unless-stopped
     command: redis-server --requirepass ${REDIS_PASSWORD}
     ports:
-      - "6379:6379"
+      - "6380:6379"
     volumes:
       - redis_data:/data
     networks:
@@ -325,6 +325,7 @@ services:
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       INTEGRATION_GATEWAY_URL: http://api-gateway:8000
       OCR_SERVICE_URL:         http://ocr-service:8001
+      PROCUREMENT_SERVICE_URL: http://procurement-service:8004
       REDIS_HOST:              redis
       ONBOARDING_SERVICE_URL:  http://onboarding-service:8000
     ports:
@@ -351,6 +352,7 @@ services:
     environment:
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       INTEGRATION_GATEWAY_URL: http://api-gateway:8000
+      PROCUREMENT_SERVICE_URL: http://procurement-service:8004
       REDIS_HOST:              redis
     ports:
       - "8006:8006"
@@ -406,7 +408,7 @@ services:
     container_name: procurement_frontend
     restart: unless-stopped
     environment:
-      NEXT_PUBLIC_API_URL: http://api-gateway:8000
+      NEXT_PUBLIC_API_URL: http://localhost:8000
     ports:
       - "3000:3000"
     networks:

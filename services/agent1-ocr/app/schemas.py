@@ -8,7 +8,7 @@ from typing import List, Optional, Dict, Any
 
 class ProcurementItem(BaseModel):
     description: str
-    quantity: int
+    quantity: float
     estimated_cost: float
 
 

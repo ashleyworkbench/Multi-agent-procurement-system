@@ -492,6 +492,43 @@ def delete_document(
 
 
 # ============================================================
+# Cancel Processing
+# ============================================================
+
+@app.post("/documents/{processing_id}/cancel")
+def cancel_document_processing(
+    processing_id: int,
+    db: Session = Depends(get_db)
+):
+    document = crud.get_document_processing(db, processing_id)
+    if not document:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    document.status = "cancelled"
+    document.error_message = "Cancelled by user"
+    db.commit()
+    db.refresh(document)
+    return {"message": "Document processing cancelled successfully", "processing_id": processing_id, "status": "cancelled"}
+
+
+# ============================================================
+# Clear All Documents (Demo cleanup)
+# ============================================================
+
+@app.delete("/documents")
+def clear_all_documents(db: Session = Depends(get_db)):
+    from .models import DocumentProcessing
+    try:
+        db.query(DocumentProcessing).delete()
+        db.commit()
+        return {"message": "All document processing records cleared"}
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
+# ============================================================
 # Reprocess Document
 # ============================================================
 

@@ -1,2 +1,5 @@
-import { ComingSoon } from "@/components/ui/ComingSoon";
-export default function Page() { return <ComingSoon title="Workflow Tracker" />; }
+import { WorkflowView } from "@/components/workflows/WorkflowView";
+
+export default function WorkflowsPage() {
+  return <WorkflowView />;
+}

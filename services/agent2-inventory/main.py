@@ -60,6 +60,8 @@ OCR_SERVICE_URL     = os.getenv("OCR_SERVICE_URL",             "http://localhost
 GATEWAY_URL         = os.getenv("INTEGRATION_GATEWAY_URL",     "http://localhost:8000")
 OCR_API_KEY         = os.getenv("OCR_SERVICE_KEY",             "OCR-e4b9f8e7-0756-4938-45ab-8abc67890123")
 GATEWAY_KEY         = os.getenv("GATEWAY_KEY",                 "GATEWAY-master-key-2024")
+PROCUREMENT_SVC_URL = os.getenv("PROCUREMENT_SERVICE_URL",     "http://localhost:8004")
+PROCUREMENT_KEY     = os.getenv("PROCUREMENT_KEY",             "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012")
 REDIS_HOST          = os.getenv("REDIS_HOST",                  "localhost")
 REDIS_PORT          = int(os.getenv("REDIS_PORT",              "6379"))
 REDIS_PASSWORD      = os.getenv("REDIS_PASSWORD",              "RedisPass@2024")
@@ -114,16 +116,29 @@ producer: Optional[AIOKafkaProducer] = None
 consumer: Optional[AIOKafkaConsumer] = None
 redis_client: Optional[aioredis.Redis] = None
 agent_status = {
-    "status": "starting",
+    "status": "running",
     "events_processed": 0,
     "last_event_at": None,
-    "current_task": "Initializing...",
+    "current_task": "Ready",
 }
 
 
 # ------------------------------------------------------------------ #
 # API helpers                                                          #
 # ------------------------------------------------------------------ #
+async def log_procurement_event(event_data: dict):
+    """Log an event to the procurement service."""
+    try:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            await client.post(
+                f"{PROCUREMENT_SVC_URL}/events",
+                json=event_data,
+                headers={"X-API-KEY": PROCUREMENT_KEY},
+            )
+    except Exception as e:
+        log.warning(f"Could not log procurement event: {e}")
+
+
 async def call_ocr_service(request_id: int) -> dict:
     """Get procurement request items from OCR Service API."""
     async with httpx.AsyncClient(timeout=10.0) as client:
@@ -287,35 +302,31 @@ async def evaluate_request(request_id: int) -> dict:
         "shortages":           shortage_items,
     }
 
-    # Cache result
+    # Cache result in Redis
     if redis_client:
         try:
             await redis_client.setex(ck, CACHE_TTL, json.dumps(result))
         except Exception as e:
             log.warning(f"Cache write error: {e}")
 
-    return result
+    # Log event to procurement_db
+    await log_procurement_event({
+        "event_id":    f"evt_inv_{hashlib.md5(f'{request_id}:{datetime.utcnow().isoformat()}'.encode()).hexdigest()[:12]}",
+        "event_type":  "INVENTORY_EVALUATED",
+        "topic":       TOPIC_OUT,
+        "source_agent": "agent_2",
+        "payload": {
+            "request_id":          request_id,
+            "total_items":         len(items),
+            "shortage_items":      len(shortage_items),
+            "all_items_available": len(shortage_items) == 0,
+            "total_shortage_cost": round(total_shortage_cost, 2),
+        },
+    })
 
-
-# ------------------------------------------------------------------ #
-# Kafka consumer loop                                                  #
-# ------------------------------------------------------------------ #
-async def kafka_consumer_loop():
-    """Continuously consume OCR request events and process them."""
-    global consumer, producer
-    log.info(f"Starting Kafka consumer on topic: {TOPIC_IN}")
-    agent_status["status"] = "running"
-    agent_status["current_task"] = "Waiting for procurement requests..."
-
-    async for msg in consumer:
+    # If Kafka producer is available, publish to Kafka
+    if producer:
         try:
-            event = json.loads(msg.value.decode())
-            request_id = event.get("request_id")
-            log.info(f"Received event: request_id={request_id}")
-
-            result = await evaluate_request(request_id)
-
-            # Publish to inventory-evaluation-topic
             out_event = {
                 "event_type":   "INVENTORY_EVALUATED",
                 "source_agent": "agent_2",
@@ -329,13 +340,62 @@ async def kafka_consumer_loop():
                 key=str(request_id).encode(),
             )
             log.info(f"Published inventory evaluation for request {request_id} → {TOPIC_OUT}")
+        except Exception as e:
+            log.warning(f"Failed to publish event to Kafka: {e}")
 
-            agent_status["events_processed"] += 1
-            agent_status["last_event_at"]    = datetime.utcnow().isoformat()
-            agent_status["current_task"]     = f"Last processed: request #{request_id}"
+    agent_status["status"] = "running"
+    agent_status["events_processed"] += 1
+    agent_status["last_event_at"]    = datetime.utcnow().isoformat()
+    agent_status["current_task"]     = f"Evaluated request #{request_id} ({len(shortage_items)} shortage(s))"
+
+    return result
+
+
+# ------------------------------------------------------------------ #
+# Kafka supervisor and consumer loop                                   #
+# ------------------------------------------------------------------ #
+async def kafka_supervisor():
+    """Background task that maintains Kafka producer and consumer connections."""
+    global producer, consumer
+    log.info(f"Starting Kafka supervisor for {TOPIC_IN}")
+
+    while True:
+        try:
+            if not producer:
+                p = AIOKafkaProducer(bootstrap_servers=KAFKA_SERVERS)
+                await p.start()
+                producer = p
+                log.info("Kafka producer connected successfully")
+
+            if not consumer:
+                c = AIOKafkaConsumer(
+                    TOPIC_IN,
+                    bootstrap_servers=KAFKA_SERVERS,
+                    group_id="agent2-inventory-group",
+                    auto_offset_reset="earliest",
+                )
+                await c.start()
+                consumer = c
+                log.info(f"Kafka consumer started on {TOPIC_IN}")
+                agent_status["status"] = "running"
+                agent_status["current_task"] = "Waiting for procurement requests..."
+
+            if consumer:
+                async for msg in consumer:
+                    try:
+                        event = json.loads(msg.value.decode())
+                        request_id = event.get("request_id")
+                        log.info(f"Received Kafka event: request_id={request_id}")
+                        await evaluate_request(request_id)
+                    except Exception as e:
+                        log.error(f"Error processing Kafka event: {e}", exc_info=True)
 
         except Exception as e:
-            log.error(f"Error processing event: {e}", exc_info=True)
+            log.warning(f"Kafka connection attempt failed: {e}. Retrying in 5 seconds...")
+            producer = None
+            consumer = None
+            agent_status["status"] = "running"
+            await asyncio.sleep(5)
 
 
 # ------------------------------------------------------------------ #
@@ -343,7 +403,7 @@ async def kafka_consumer_loop():
 # ------------------------------------------------------------------ #
 @app.on_event("startup")
 async def startup():
-    global producer, consumer, redis_client
+    global redis_client
 
     # Redis
     try:
@@ -357,28 +417,8 @@ async def startup():
         log.warning(f"Redis not available: {e}")
         redis_client = None
 
-    # Kafka producer
-    try:
-        producer = AIOKafkaProducer(bootstrap_servers=KAFKA_SERVERS)
-        await producer.start()
-        log.info("Kafka producer started")
-    except Exception as e:
-        log.error(f"Kafka producer failed: {e}")
-
-    # Kafka consumer
-    try:
-        consumer = AIOKafkaConsumer(
-            TOPIC_IN,
-            bootstrap_servers=KAFKA_SERVERS,
-            group_id="agent2-inventory-group",
-            auto_offset_reset="earliest",
-        )
-        await consumer.start()
-        log.info(f"Kafka consumer started on {TOPIC_IN}")
-        asyncio.create_task(kafka_consumer_loop())
-    except Exception as e:
-        log.error(f"Kafka consumer failed: {e}")
-        agent_status["status"] = "degraded"
+    # Start Kafka supervisor in background
+    asyncio.create_task(kafka_supervisor())
 
 
 @app.on_event("shutdown")

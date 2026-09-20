@@ -32,6 +32,13 @@ CREATE TABLE IF NOT EXISTS purchase_orders (
     -- status values: PENDING_APPROVAL | APPROVED | REJECTED | ORDERED | DELIVERED
     delivery_date_expected DATE,
     notes                TEXT,
+    approval_tier        VARCHAR(50)    DEFAULT 'TIER_1_OFFICER',
+    assigned_approver_name VARCHAR(255) DEFAULT 'Procurement Officer',
+    assigned_approver_email VARCHAR(255) DEFAULT 'officer.procurement@procureflow.local',
+    docusign_envelope_id VARCHAR(100),
+    docusign_status      VARCHAR(50)    DEFAULT 'NOT_SENT',
+    signed_document_url  TEXT,
+    pdf_path             TEXT,
     created_at           TIMESTAMP      NOT NULL DEFAULT NOW(),
     updated_at           TIMESTAMP      NOT NULL DEFAULT NOW()
 );
@@ -40,6 +47,7 @@ CREATE INDEX idx_po_request_id  ON purchase_orders(request_id);
 CREATE INDEX idx_po_vendor_id   ON purchase_orders(vendor_id);
 CREATE INDEX idx_po_status      ON purchase_orders(status);
 CREATE INDEX idx_po_number      ON purchase_orders(po_number);
+CREATE INDEX idx_po_approval_tier ON purchase_orders(approval_tier);
 
 -- -------------------------------------------------------
 -- Table: procurement_audit

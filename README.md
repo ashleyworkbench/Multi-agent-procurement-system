@@ -193,47 +193,78 @@ The following ports must be available:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/procureflow.git
-cd procureflow
+git clone https://github.com/ashleyworkbench/Multi-agent-procurement-system.git
+cd Multi-agent-procurement-system
 ```
 
-### 2. Configure Environment Variables
+### 2. Launch the System (One-Command Startup)
 
-Copy the example environment file:
-
+#### 🐧 On Linux / macOS:
 ```bash
-cp .env.example .env
+chmod +x start.sh stop.sh test-system.sh
+./start.sh
 ```
 
-The default `.env` includes all required credentials. **Change passwords for production!**
+#### 🪟 On Windows (PowerShell):
+```powershell
+.\start.ps1
+```
 
-### 3. Start the System
+#### 🪟 On Windows (Command Prompt):
+```cmd
+start.bat
+```
 
+> **Note**: The startup scripts will automatically copy `.env.example` to `.env` if it does not already exist, start the infrastructure databases, brokers, microservices, AI agents, and frontend dashboard in order, waiting for dependencies to report healthy!
+
+---
+
+### 3. Verify Health & Status
+
+#### 🐧 On Linux / macOS:
 ```bash
-docker-compose up -d --build
+./test-system.sh
 ```
 
-**First run takes 5-7 minutes** as it:
-- Builds all service images
-- Initializes 10+ databases
-- Starts Kafka + Zookeeper
-- Launches all 4 agents
+#### 🪟 On Windows (PowerShell):
+```powershell
+.\test-system.ps1
+```
 
-### 4. Verify All Services
+#### 🪟 On Windows (Command Prompt):
+```cmd
+test-system.bat
+```
 
+---
+
+### 4. Stop the System
+
+#### 🐧 On Linux / macOS:
 ```bash
-docker ps
+./stop.sh
 ```
 
-You should see 15+ containers running with status `healthy` or `Up`.
+#### 🪟 On Windows (PowerShell):
+```powershell
+.\stop.ps1
+```
 
-### 5. Access the Dashboard
+#### 🪟 On Windows (Command Prompt):
+```cmd
+stop.bat
+```
 
-Open your browser:
+---
 
+### 5. Access the Web Dashboard
+
+Open your browser at:
 ```
 http://localhost:3000
 ```
+- **API Gateway**: `http://localhost:8000`
+- **MinIO Storage Console**: `http://localhost:9001` (User: `minioadmin`, Pass: `minioadmin`)
 
 ---
 

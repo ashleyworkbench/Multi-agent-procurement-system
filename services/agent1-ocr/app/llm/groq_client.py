@@ -393,8 +393,9 @@ Return ONLY the JSON.
             "document structure to Groq..."
         )
 
+        model_name = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
         response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model=model_name,
             messages=[
                 {
                     "role": "user",
@@ -407,36 +408,24 @@ Return ONLY the JSON.
         result = response.choices[0].message.content.strip()
 
         # ----------------------------------------------------
-        # Remove Markdown Code Fences
+        # Extract and Parse JSON
         # ----------------------------------------------------
+        import re
+        json_match = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", result)
+        if json_match:
+            result = json_match.group(1).strip()
 
-        if result.startswith("```"):
-
-            result = result.replace(
-                "```json",
-                ""
-            )
-
-            result = result.replace(
-                "```",
-                ""
-            )
-
-            result = result.strip()
-
-        # ----------------------------------------------------
-        # Parse JSON
-        # ----------------------------------------------------
+        # Isolate the JSON object bounds if there is extra text
+        start_idx = result.find("{")
+        end_idx = result.rfind("}")
+        if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
+            result = result[start_idx:end_idx + 1]
 
         structured_data = json.loads(result)
-
         return structured_data
 
     except Exception as e:
-
         print("Groq Error:", e)
-
         # Propagate the error so the fallback mechanism
         # can automatically use Gemini.
-
         raise

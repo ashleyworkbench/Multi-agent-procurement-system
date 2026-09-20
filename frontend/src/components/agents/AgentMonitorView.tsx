@@ -33,9 +33,10 @@ function AgentStatusCard({ a }: { a: typeof agentDefs[0] }) {
     queryKey: [`live-agent-${a.id}`], queryFn: a.fetchStatus,
     refetchInterval: 3000, retry: 1,
   });
-  const status = data?.status ?? (isError ? "offline" : "connecting");
-  const cls = status === "running" ? "badge-green" : status === "offline" ? "badge-red" : "badge-blue";
-  const label = status === "running" ? "Active" : status === "offline" ? "Offline" : "Starting";
+  const isRunning = (data?.status === "running" || data?.status === "active" || data?.status === "ready") || (!isError && data && data.status !== "offline" && data.status !== "degraded");
+  const isOffline = isError || data?.status === "offline";
+  const cls = isRunning ? "badge-green" : isOffline ? "badge-red" : "badge-blue";
+  const label = isRunning ? "Active" : isOffline ? "Offline" : "Connecting";
 
   return (
     <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50">

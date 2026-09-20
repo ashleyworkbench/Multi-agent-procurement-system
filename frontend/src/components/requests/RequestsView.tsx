@@ -1,14 +1,16 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { cn, formatCurrency } from "@/lib/utils";
 import {
   Upload, FileText, FileImage, Loader2, CheckCircle2,
   AlertTriangle, RefreshCw, ChevronDown, ChevronUp,
-  Clock, Cpu, Brain, Package, Plus, X,
+  Clock, Cpu, Brain, Package, Plus, X, Trash2, Play,
+  XCircle, RotateCcw,
 } from "lucide-react";
 import { toast } from "sonner";
+import { ocrApi } from "@/lib/api";
 
 const GATEWAY_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 const OCR_URL    = process.env.NEXT_PUBLIC_OCR_URL  || "http://localhost:8001";
@@ -17,10 +19,14 @@ const OCR_KEY    = "OCR-e4b9f8e7-0756-4938-45ab-8abc67890123";
 // ------------------------------------------------------------------ //
 // API helpers                                                          //
 // ------------------------------------------------------------------ //
-async function uploadInvoice(file: File) {
+async function uploadInvoice(file: File, signal?: AbortSignal) {
   const form = new FormData();
   form.append("file", file);
-  const resp = await fetch(`${GATEWAY_URL}/agent1/upload`, { method: "POST", body: form });
+  const resp = await fetch(`${GATEWAY_URL}/agent1/upload`, {
+    method: "POST",
+    body: form,
+    signal,
+  });
   if (!resp.ok) throw new Error(await resp.text());
   return resp.json();
 }
@@ -58,6 +64,7 @@ function StatusBadge({ status }: { status: string }) {
     processing: { cls: "badge-blue",   icon: Loader2,      label: "Processing" },
     queued:     { cls: "badge-yellow", icon: Clock,        label: "Queued" },
     failed:     { cls: "badge-red",    icon: AlertTriangle,label: "Failed" },
+    cancelled:  { cls: "bg-amber-100 text-amber-800 border border-amber-300", icon: XCircle, label: "Cancelled" },
     pending:    { cls: "badge-slate",  icon: Clock,        label: "Pending" },
   };
   const c = map[status] ?? map.pending;
@@ -73,22 +80,25 @@ function StatusBadge({ status }: { status: string }) {
 // Processing step row                                                  //
 // ------------------------------------------------------------------ //
 function StepRow({ icon: Icon, label, status }: { icon: any; label: string; status: string }) {
-  const done    = status === "completed";
-  const failed  = status === "failed";
-  const running = status === "processing";
+  const done      = status === "completed";
+  const failed    = status === "failed";
+  const running   = status === "processing";
+  const cancelled = status === "cancelled";
   return (
     <div className="flex items-center gap-2 text-xs">
       <div className={cn("w-5 h-5 rounded-full flex items-center justify-center shrink-0",
         done ? "bg-emerald-100 text-emerald-600" :
         failed ? "bg-red-100 text-red-500" :
+        cancelled ? "bg-amber-100 text-amber-600" :
         running ? "bg-blue-100 text-blue-600" : "bg-slate-100 text-slate-400")}>
         {running ? <Loader2 size={10} className="animate-spin" /> :
          done    ? <CheckCircle2 size={10} /> :
          failed  ? <AlertTriangle size={10} /> :
+         cancelled ? <XCircle size={10} /> :
                    <Icon size={10} />}
       </div>
       <span className={cn("font-medium",
-        done ? "text-emerald-700" : failed ? "text-red-600" : running ? "text-blue-700" : "text-slate-400")}>
+        done ? "text-emerald-700" : failed ? "text-red-600" : cancelled ? "text-amber-700" : running ? "text-blue-700" : "text-slate-400")}>
         {label}
       </span>
       <span className="ml-auto text-slate-400 capitalize">{status}</span>
@@ -99,7 +109,7 @@ function StepRow({ icon: Icon, label, status }: { icon: any; label: string; stat
 // ------------------------------------------------------------------ //
 // Request card (expanded from OCR db)                                  //
 // ------------------------------------------------------------------ //
-function RequestCard({ request }: { request: any }) {
+function RequestCard({ request, onDelete }: { request: any; onDelete: (id: number) => void }) {
   const [open, setOpen] = useState(false);
   const { data: itemsData, isLoading } = useQuery({
     queryKey: ["request-items", request.id],
@@ -109,7 +119,7 @@ function RequestCard({ request }: { request: any }) {
   const items = itemsData?.items ?? [];
 
   return (
-    <div className="section-card overflow-hidden">
+    <div className="section-card overflow-hidden relative group">
       <div className="p-4">
         <div className="flex items-start justify-between">
           <div>
@@ -122,8 +132,17 @@ function RequestCard({ request }: { request: any }) {
             )}
             <p className="text-xs text-slate-400 mt-1">{new Date(request.created_at).toLocaleString()}</p>
           </div>
-          <div className="text-right">
-            <p className="text-base font-bold text-brand-600">{formatCurrency(request.total_estimated_cost)}</p>
+          <div className="text-right flex flex-col items-end gap-1">
+            <div className="flex items-center gap-2">
+              <p className="text-base font-bold text-brand-600">{formatCurrency(request.total_estimated_cost)}</p>
+              <button
+                onClick={() => onDelete(request.id)}
+                className="p-1 text-slate-300 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                title="Delete this request"
+              >
+                <Trash2 size={13} />
+              </button>
+            </div>
             <span className="badge badge-green text-[10px]">Extracted</span>
           </div>
         </div>
@@ -167,7 +186,15 @@ function RequestCard({ request }: { request: any }) {
 // ------------------------------------------------------------------ //
 // Document processing card                                             //
 // ------------------------------------------------------------------ //
-function DocumentCard({ doc }: { doc: any }) {
+function DocumentCard({
+  doc,
+  onDelete,
+  onCancel,
+}: {
+  doc: any;
+  onDelete: (id: number) => void;
+  onCancel: (id: number) => void;
+}) {
   const [open, setOpen] = useState(false);
   const isProcessing = ["queued", "processing"].includes(doc.status);
 
@@ -175,15 +202,17 @@ function DocumentCard({ doc }: { doc: any }) {
   const { data: live } = useQuery({
     queryKey: ["doc-status", doc.id],
     queryFn:  () => fetchProcessingStatus(doc.id),
-    refetchInterval: isProcessing ? 3000 : false,
+    refetchInterval: isProcessing ? 2000 : false,
     initialData: doc,
   });
   const d = live ?? doc;
+  const isLiveProcessing = ["queued", "processing"].includes(d.status);
 
   return (
-    <div className={cn("section-card p-4 border-l-4",
+    <div className={cn("section-card p-4 border-l-4 relative group",
       d.status === "completed" ? "border-l-emerald-400" :
       d.status === "failed"    ? "border-l-red-400"     :
+      d.status === "cancelled" ? "border-l-amber-400"   :
       d.status === "processing"? "border-l-blue-400"    : "border-l-amber-300")}>
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2">
@@ -197,7 +226,16 @@ function DocumentCard({ doc }: { doc: any }) {
             <p className="text-[11px] text-slate-400">{d.created_at ? new Date(d.created_at).toLocaleString() : "—"}</p>
           </div>
         </div>
-        <StatusBadge status={d.status} />
+        <div className="flex items-center gap-2">
+          <StatusBadge status={d.status} />
+          <button
+            onClick={() => onDelete(d.id)}
+            className="p-1 text-slate-300 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+            title="Delete processing record"
+          >
+            <Trash2 size={13} />
+          </button>
+        </div>
       </div>
 
       <div className="space-y-1.5">
@@ -205,6 +243,31 @@ function DocumentCard({ doc }: { doc: any }) {
         <StepRow icon={Cpu}      label="Document Structure" status={d.docling_status} />
         <StepRow icon={Brain}    label="LLM Extraction"     status={d.gemini_status} />
       </div>
+
+      {/* Cancel button mid-way while Agent 1 is actively running */}
+      {isLiveProcessing && (
+        <div className="mt-3 p-2.5 bg-blue-50/70 border border-blue-100 rounded-xl flex items-center justify-between">
+          <div className="flex items-center gap-2 text-xs text-blue-700">
+            <Loader2 size={13} className="animate-spin text-blue-600 shrink-0" />
+            <span>Agent 1 is actively extracting...</span>
+          </div>
+          <button
+            onClick={() => onCancel(d.id)}
+            className="flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-red-600 bg-white hover:bg-red-50 border border-red-200 rounded-lg shadow-sm transition-colors"
+            title="Cancel Agent 1 extraction mid-process"
+          >
+            <X size={12} />
+            Cancel
+          </button>
+        </div>
+      )}
+
+      {d.status === "cancelled" && (
+        <div className="mt-3 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800 flex items-center gap-1.5">
+          <XCircle size={13} className="shrink-0 text-amber-600" />
+          Extraction cancelled by user mid-process.
+        </div>
+      )}
 
       {d.request_id && (
         <div className="mt-3 px-3 py-2 bg-emerald-50 border border-emerald-100 rounded-lg text-xs text-emerald-700">
@@ -242,52 +305,135 @@ function UploadZone({ onUploaded }: { onUploaded: () => void }) {
   const [dragging, setDragging] = useState(false);
   const [file, setFile]         = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
+  const abortRef = useRef<AbortController | null>(null);
 
-  const handle = async (f: File) => {
+  const handleSelect = (f: File) => {
     setFile(f);
-    setUploading(true);
-    try {
-      await uploadInvoice(f);
-      toast.success(`${f.name} uploaded — Agent 1 is processing it`);
-      setFile(null);
-      onUploaded();
-    } catch (e: any) {
-      toast.error(`Upload failed: ${e.message}`);
+  };
+
+  const handleCancelSelection = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (uploading && abortRef.current) {
+      abortRef.current.abort();
+      toast.info("Invoice extraction cancelled by user");
     }
     setUploading(false);
+    setFile(null);
+    abortRef.current = null;
+  };
+
+  const startExtraction = async (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (!file) return;
+
+    setUploading(true);
+    const controller = new AbortController();
+    abortRef.current = controller;
+
+    try {
+      await uploadInvoice(file, controller.signal);
+      toast.success(`${file.name} extracted successfully — Agent 1 pipeline initiated!`);
+      setFile(null);
+      onUploaded();
+    } catch (err: any) {
+      if (err.name === "AbortError" || controller.signal.aborted) {
+        toast.info("Invoice extraction was cancelled");
+      } else {
+        toast.error(`Extraction failed: ${err.message}`);
+      }
+    } finally {
+      setUploading(false);
+      abortRef.current = null;
+    }
   };
 
   const onDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault(); setDragging(false);
+    e.preventDefault();
+    setDragging(false);
     const f = e.dataTransfer.files[0];
-    if (f) handle(f);
+    if (f) handleSelect(f);
   }, []);
 
+  // 1. In-flight extraction state with Cancel Extraction button
+  if (uploading && file) {
+    return (
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 rounded-2xl border-2 border-brand-200 bg-brand-50/50">
+        <div className="flex items-center gap-3">
+          <Loader2 size={24} className="animate-spin text-brand-600 shrink-0" />
+          <div>
+            <p className="text-sm font-semibold text-slate-800">Extracting invoice: {file.name}</p>
+            <p className="text-xs text-slate-500">Agent 1 is running OCR & LLM data extraction...</p>
+          </div>
+        </div>
+        <button
+          onClick={handleCancelSelection}
+          type="button"
+          className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-red-600 bg-white hover:bg-red-50 border border-red-200 rounded-xl transition-all shadow-sm"
+        >
+          <X size={14} />
+          Cancel Extraction
+        </button>
+      </div>
+    );
+  }
+
+  // 2. Selected file preview state with Extract & Cancel buttons
+  if (file) {
+    const isPdf = file.name.endsWith(".pdf");
+    const fileSizeKb = (file.size / 1024).toFixed(1);
+    return (
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 rounded-2xl border-2 border-brand-300 bg-white shadow-sm">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+            {isPdf ? <FileText size={20} /> : <FileImage size={20} />}
+          </div>
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-slate-900 truncate">{file.name}</p>
+            <p className="text-xs text-slate-400">{fileSizeKb} KB &bull; Ready for Agent 1 extraction</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={handleCancelSelection}
+            type="button"
+            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 hover:text-red-600 hover:bg-red-50 border border-slate-200 rounded-xl transition-colors"
+          >
+            <Trash2 size={13} />
+            Cancel
+          </button>
+          <button
+            onClick={startExtraction}
+            type="button"
+            className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl transition-all shadow-sm"
+          >
+            <Play size={13} className="fill-white" />
+            Extract with Agent 1
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // 3. Default dropzone state
   return (
     <label
       className={cn(
         "flex flex-col items-center justify-center gap-3 w-full min-h-[140px] rounded-2xl border-2 border-dashed cursor-pointer transition-all",
-        dragging ? "border-brand-400 bg-brand-50" : "border-slate-200 hover:border-brand-300 hover:bg-slate-50",
-        uploading && "opacity-60 pointer-events-none"
+        dragging ? "border-brand-400 bg-brand-50" : "border-slate-200 hover:border-brand-300 hover:bg-slate-50"
       )}
       onDragOver={e => { e.preventDefault(); setDragging(true); }}
       onDragLeave={() => setDragging(false)}
       onDrop={onDrop}
     >
-      <input type="file" className="sr-only" accept=".pdf,.png,.jpg,.jpeg"
-        onChange={e => { const f = e.target.files?.[0]; if (f) handle(f); }} />
-      {uploading ? (
-        <>
-          <Loader2 size={24} className="animate-spin text-brand-500" />
-          <p className="text-sm text-slate-600">Uploading {file?.name}...</p>
-        </>
-      ) : (
-        <>
-          <Upload size={22} className="text-slate-400" />
-          <p className="text-sm font-semibold text-slate-600">Drop invoice here or click to browse</p>
-          <p className="text-xs text-slate-400">PDF, PNG, JPG, JPEG</p>
-        </>
-      )}
+      <input
+        type="file"
+        className="sr-only"
+        accept=".pdf,.png,.jpg,.jpeg"
+        onChange={e => { const f = e.target.files?.[0]; if (f) handleSelect(f); }}
+      />
+      <Upload size={22} className="text-slate-400" />
+      <p className="text-sm font-semibold text-slate-600">Drop invoice here or click to browse</p>
+      <p className="text-xs text-slate-400">PDF, PNG, JPG, JPEG</p>
     </label>
   );
 }
@@ -311,6 +457,53 @@ export function RequestsView() {
     refetchInterval: 5000,
   });
 
+  // Mutations for single deletion & cancel
+  const deleteReqMut = useMutation({
+    mutationFn: (id: number) => ocrApi.deleteRequest(id),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["ocr-requests-list"] });
+      toast.success("Request deleted");
+    },
+    onError: (err: any) => toast.error(`Failed to delete request: ${err.message}`),
+  });
+
+  const clearReqsMut = useMutation({
+    mutationFn: () => ocrApi.clearRequests(),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["ocr-requests-list"] });
+      toast.success("All extracted requests cleared");
+    },
+    onError: (err: any) => toast.error(`Failed to clear requests: ${err.message}`),
+  });
+
+  const deleteDocMut = useMutation({
+    mutationFn: (id: number) => ocrApi.deleteDocument(id),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["agent1-documents"] });
+      toast.success("Processing record deleted");
+    },
+    onError: (err: any) => toast.error(`Failed to delete record: ${err.message}`),
+  });
+
+  const clearDocsMut = useMutation({
+    mutationFn: () => ocrApi.clearDocuments(),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["agent1-documents"] });
+      toast.success("All processing history cleared");
+    },
+    onError: (err: any) => toast.error(`Failed to clear records: ${err.message}`),
+  });
+
+  const cancelDocMut = useMutation({
+    mutationFn: (id: number) => ocrApi.cancelDocument(id),
+    onSuccess: (_, id) => {
+      qc.invalidateQueries({ queryKey: ["agent1-documents"] });
+      qc.invalidateQueries({ queryKey: ["doc-status", id] });
+      toast.info("Agent 1 processing cancelled successfully");
+    },
+    onError: (err: any) => toast.error(`Cancel failed: ${err.message}`),
+  });
+
   const requests  = requestsData?.requests ?? [];
   const documents = Array.isArray(docsData) ? docsData : [];
   const processing = documents.filter((d: any) => ["queued","processing"].includes(d.status)).length;
@@ -325,9 +518,41 @@ export function RequestsView() {
             Upload invoices for Agent 1 to extract. Extracted requests flow automatically to Agents 2 → 3 → 4.
           </p>
         </div>
-        <button onClick={() => { refetchReqs(); refetchDocs(); }} className="btn-secondary">
-          <RefreshCw size={14} /> Refresh
-        </button>
+        <div className="flex items-center gap-2">
+          {tab === "requests" && requests.length > 0 && (
+            <button
+              onClick={() => {
+                if (window.confirm("Clear all extracted requests?")) {
+                  clearReqsMut.mutate();
+                }
+              }}
+              disabled={clearReqsMut.isPending}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-red-600 hover:bg-red-50 border border-slate-200 rounded-lg transition-colors"
+            >
+              <Trash2 size={13} />
+              <span>Clear Requests</span>
+            </button>
+          )}
+
+          {tab === "processing" && documents.length > 0 && (
+            <button
+              onClick={() => {
+                if (window.confirm("Clear all processing history logs?")) {
+                  clearDocsMut.mutate();
+                }
+              }}
+              disabled={clearDocsMut.isPending}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-red-600 hover:bg-red-50 border border-slate-200 rounded-lg transition-colors"
+            >
+              <Trash2 size={13} />
+              <span>Clear History</span>
+            </button>
+          )}
+
+          <button onClick={() => { refetchReqs(); refetchDocs(); }} className="btn-secondary">
+            <RefreshCw size={14} /> Refresh
+          </button>
+        </div>
       </div>
 
       {/* Upload zone */}
@@ -356,21 +581,23 @@ export function RequestsView() {
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-1 border-b border-slate-200">
-        {([
-          { id: "requests",   label: "Extracted Requests",   count: requests.length },
-          { id: "processing", label: "Processing History",   count: documents.length },
-        ] as const).map(t => (
-          <button key={t.id} onClick={() => setTab(t.id)}
-            className={cn("flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors",
-              tab === t.id ? "border-brand-600 text-brand-600" : "border-transparent text-slate-500 hover:text-slate-700")}>
-            {t.label}
-            <span className={cn("text-[11px] px-1.5 py-0.5 rounded-full font-bold",
-              tab === t.id ? "bg-brand-100 text-brand-700" : "bg-slate-100 text-slate-500")}>
-              {t.count}
-            </span>
-          </button>
-        ))}
+      <div className="flex items-center justify-between border-b border-slate-200">
+        <div className="flex items-center gap-1">
+          {([
+            { id: "requests",   label: "Extracted Requests",   count: requests.length },
+            { id: "processing", label: "Processing History",   count: documents.length },
+          ] as const).map(t => (
+            <button key={t.id} onClick={() => setTab(t.id)}
+              className={cn("flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors",
+                tab === t.id ? "border-brand-600 text-brand-600" : "border-transparent text-slate-500 hover:text-slate-700")}>
+              {t.label}
+              <span className={cn("text-[11px] px-1.5 py-0.5 rounded-full font-bold",
+                tab === t.id ? "bg-brand-100 text-brand-700" : "bg-slate-100 text-slate-500")}>
+                {t.count}
+              </span>
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Tab content */}
@@ -386,7 +613,13 @@ export function RequestsView() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {requests.map((r: any) => <RequestCard key={r.id} request={r} />)}
+            {requests.map((r: any) => (
+              <RequestCard
+                key={r.id}
+                request={r}
+                onDelete={(id) => deleteReqMut.mutate(id)}
+              />
+            ))}
           </div>
         )
       )}
@@ -403,7 +636,14 @@ export function RequestsView() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {documents.map((d: any) => <DocumentCard key={d.id} doc={d} />)}
+            {documents.map((d: any) => (
+              <DocumentCard
+                key={d.id}
+                doc={d}
+                onDelete={(id) => deleteDocMut.mutate(id)}
+                onCancel={(id) => cancelDocMut.mutate(id)}
+              />
+            ))}
           </div>
         )
       )}

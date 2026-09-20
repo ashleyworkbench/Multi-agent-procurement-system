@@ -317,3 +317,71 @@ async def proxy_processing_status(processing_id: int):
     async with httpx.AsyncClient(timeout=10.0) as client:
         resp = await client.get(f"{AGENT1_URL}/processing/{processing_id}")
         return resp.json()
+
+@app.post("/agent1/documents/{processing_id}/cancel", summary="Proxy document cancel to Agent 1")
+async def proxy_cancel_document(processing_id: int):
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.post(f"{AGENT1_URL}/documents/{processing_id}/cancel")
+        return resp.json()
+
+@app.delete("/agent1/documents/{processing_id}", summary="Proxy delete document to Agent 1")
+async def proxy_delete_document(processing_id: int):
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.delete(f"{AGENT1_URL}/documents/{processing_id}")
+        return resp.json()
+
+@app.delete("/agent1/documents", summary="Proxy clear all documents to Agent 1")
+async def proxy_clear_documents():
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.delete(f"{AGENT1_URL}/documents")
+        return resp.json()
+
+# ---- OCR & Procurement Clean-up & Demo Reset Proxies ------------- #
+OCR_SVC_URL = os.getenv("OCR_SERVICE_URL", "http://ocr-service:8001")
+PROC_SVC_URL = os.getenv("PROCUREMENT_SERVICE_URL", "http://procurement-service:8004")
+
+@app.delete("/ocr/requests/{request_id}")
+async def proxy_delete_request(request_id: int):
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.delete(
+            f"{OCR_SVC_URL}/requests/{request_id}",
+            headers={"X-API-KEY": "OCR-e4b9f8e7-0756-4938-45ab-8abc67890123"}
+        )
+        return resp.json()
+
+@app.delete("/ocr/requests")
+async def proxy_clear_requests():
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.delete(
+            f"{OCR_SVC_URL}/requests",
+            headers={"X-API-KEY": "OCR-e4b9f8e7-0756-4938-45ab-8abc67890123"}
+        )
+        return resp.json()
+
+@app.delete("/procurement/purchase-orders/{po_id}")
+async def proxy_delete_po(po_id: int):
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.delete(
+            f"{PROC_SVC_URL}/purchase-orders/{po_id}",
+            headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+        )
+        return resp.json()
+
+@app.delete("/procurement/purchase-orders")
+async def proxy_clear_pos():
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.delete(
+            f"{PROC_SVC_URL}/purchase-orders",
+            headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+        )
+        return resp.json()
+
+@app.post("/demo/reset")
+async def proxy_demo_reset():
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        resp = await client.post(
+            f"{PROC_SVC_URL}/demo/reset",
+            headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+        )
+        return resp.json()
+

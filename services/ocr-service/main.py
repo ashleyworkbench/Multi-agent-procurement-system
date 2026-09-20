@@ -137,3 +137,45 @@ async def get_request_items(request_id: int):
     cur.close()
     conn.close()
     return {"request_id": request_id, "items": [dict(r) for r in rows], "total": len(rows)}
+
+
+@app.delete(
+    "/requests/{request_id}",
+    summary="Delete a procurement request",
+    dependencies=[Depends(verify_api_key)],
+)
+async def delete_request(request_id: int):
+    """Deletes a procurement request and its items."""
+    conn = get_conn()
+    cur = conn.cursor()
+    try:
+        cur.execute("DELETE FROM procurement_request_items WHERE request_id = %s", (request_id,))
+        cur.execute("DELETE FROM procurement_requests WHERE id = %s RETURNING id", (request_id,))
+        deleted = cur.fetchone()
+        conn.commit()
+        if not deleted:
+            raise HTTPException(404, f"Request #{request_id} not found")
+        return {"message": f"Request #{request_id} deleted successfully"}
+    finally:
+        cur.close()
+        conn.close()
+
+
+@app.delete(
+    "/requests",
+    summary="Clear all procurement requests (demo cleanup)",
+    dependencies=[Depends(verify_api_key)],
+)
+async def clear_all_requests():
+    """Deletes all procurement requests and items for demo cleanup."""
+    conn = get_conn()
+    cur = conn.cursor()
+    try:
+        cur.execute("DELETE FROM procurement_request_items")
+        cur.execute("DELETE FROM procurement_requests")
+        conn.commit()
+        return {"message": "All procurement requests cleared successfully"}
+    finally:
+        cur.close()
+        conn.close()
+

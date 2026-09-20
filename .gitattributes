@@ -1,0 +1,45 @@
+# ============================================================================
+# ProcureFlow - Git Attributes File
+# Ensures cross-platform line ending consistency across Linux, Windows & macOS
+# ============================================================================
+
+# Auto-detect text files and normalize line endings to LF on commit
+* text=auto eol=lf
+
+# Linux shell scripts and Docker entrypoints must always have LF line endings
+*.sh text eol=lf
+Dockerfile* text eol=lf
+
+# Database init scripts must have LF line endings
+*.sql text eol=lf
+
+# Source code & configs must have LF line endings
+*.py text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+*.env.example text eol=lf
+
+# Windows batch and PowerShell scripts must preserve Windows line endings
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.tar.gz binary
+*.db binary
+*.sqlite binary

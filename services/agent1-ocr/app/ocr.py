@@ -305,66 +305,48 @@ def extract_text(file_path: str):
     # ========================================================
 
     if extension == ".pdf":
-
-        document = fitz.open(
-            file_path
-        )
-
+        document = fitz.open(file_path)
         try:
+            # 1. Try extracting native digital text from the PDF pages first
+            digital_pages = []
+            has_digital_text = False
 
-            for page_number, page in enumerate(
-                document,
-                start=1
-            ):
+            for page_number, page in enumerate(document, start=1):
+                raw_text = page.get_text("text").strip()
+                if raw_text and len(raw_text) > 20:
+                    has_digital_text = True
+                    digital_pages.append(f"\n--- PAGE {page_number} ---\n{raw_text}\n")
+                else:
+                    digital_pages.append(None)
 
-                print(
-                    f"Processing PDF page {page_number}..."
-                )
+            # If all/most pages have digital text, use direct text extraction
+            if has_digital_text and all(p is not None for p in digital_pages):
+                print(f"Extracted native text directly from PDF ({len(''.join(digital_pages))} chars)")
+                extracted_text = "".join(digital_pages)
+            else:
+                # 2. Scanned or mixed PDF: render pages and run Tesseract OCR
+                print("Running OCR on PDF pages...")
+                for page_number, page in enumerate(document, start=1):
+                    # If page had good digital text, keep it
+                    if digital_pages[page_number - 1]:
+                        extracted_text += digital_pages[page_number - 1]
+                        continue
 
-                # ------------------------------------------------
-                # Render PDF page at high resolution
-                # ------------------------------------------------
+                    print(f"Processing PDF page {page_number} with Tesseract...")
+                    pix = page.get_pixmap(matrix=fitz.Matrix(2, 2), alpha=False)
+                    image = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
 
-                pix = page.get_pixmap(
-                    matrix=fitz.Matrix(3, 3),
-                    alpha=False
-                )
+                    # Try OCR on preprocessed image
+                    processed_image = preprocess_image(image)
+                    page_text = run_ocr(processed_image)
 
-                image = Image.frombytes(
-                    "RGB",
-                    [
-                        pix.width,
-                        pix.height
-                    ],
-                    pix.samples
-                )
+                    # Fallback to direct raw image OCR if empty
+                    if not page_text or not page_text.strip():
+                        page_text = pytesseract.image_to_string(image, config="--oem 3 --psm 6")
 
-                # ------------------------------------------------
-                # Image preprocessing
-                # ------------------------------------------------
-
-                processed_image = preprocess_image(
-                    image
-                )
-
-                # ------------------------------------------------
-                # Tesseract OCR
-                # ------------------------------------------------
-
-                page_text = run_ocr(
-                    processed_image
-                )
-
-                extracted_text += (
-                    f"\n--- PAGE {page_number} ---\n"
-                )
-
-                extracted_text += page_text
-
-                extracted_text += "\n"
+                    extracted_text += f"\n--- PAGE {page_number} ---\n{page_text}\n"
 
         finally:
-
             document.close()
 
     # ========================================================

@@ -126,10 +126,17 @@ def process_message(event: dict, db):
         crud.update_ocr_status(db, processing_id, "completed", ocr_text)
         log.info(f"OCR done for {processing_id}")
 
-        # Docling (optional - skip if it causes issues)
+        # Docling Document Structure Extraction
         document_structure = ""
-        crud.update_docling_status(db, processing_id, "skipped")
-        log.info(f"Skipping Docling for {processing_id} (optional step)")
+        try:
+            crud.update_docling_status(db, processing_id, "processing")
+            log.info(f"Extracting document structure with Docling for {processing_id}...")
+            document_structure = extract_document_structure(temporary_file_path)
+            crud.update_docling_status(db, processing_id, "completed")
+            log.info(f"Docling extraction completed for {processing_id}")
+        except Exception as docling_err:
+            log.warning(f"Docling extraction failed for {processing_id} ({docling_err}). Proceeding with OCR text.")
+            crud.update_docling_status(db, processing_id, "failed")
 
         # LLM
         crud.update_gemini_status(db, processing_id, "processing")
@@ -205,7 +212,6 @@ def consumer_loop():
                 enable_auto_commit=True,
                 group_id="document-intelligence-agent",
                 value_deserializer=lambda v: json.loads(v.decode("utf-8")),
-                consumer_timeout_ms=5000,
             )
             log.info("Kafka consumer connected, waiting for messages...")
 
@@ -219,8 +225,6 @@ def consumer_loop():
                     process_message(event, db)
                 finally:
                     db.close()
-
-            consumer.close()
 
         except Exception as e:
             log.error(f"Consumer error: {e}, retrying in 10s...")
