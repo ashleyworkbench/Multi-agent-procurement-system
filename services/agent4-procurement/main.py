@@ -68,21 +68,21 @@ CACHE_TTL            = int(os.getenv("CACHE_TTL_SECONDS",      "600"))
 # SMTP / approval email configuration
 SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
 SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
-SMTP_USER = os.getenv("SMTP_USER", "")
-SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
-SMTP_FROM = os.getenv("SMTP_FROM", SMTP_USER)
+SMTP_USER = os.getenv("SMTP_USER", "").strip()
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "").replace(" ", "").strip()
+SMTP_FROM = os.getenv("SMTP_FROM", SMTP_USER).strip()
 
 PROCUREMENT_OFFICER_EMAIL = os.getenv(
     "PROCUREMENT_OFFICER_EMAIL",
-    "shindeishwari2010@gmail.com"
+    SMTP_USER or "shindeishwari2010@gmail.com"
 )
 OPERATIONS_MANAGER_EMAIL = os.getenv(
     "OPERATIONS_MANAGER_EMAIL",
-    "shindeishwari45@gmail.com"
+    SMTP_USER or "shindeishwari45@gmail.com"
 )
 FINANCE_DIRECTOR_EMAIL = os.getenv(
     "FINANCE_DIRECTOR_EMAIL",
-    "simplesalt7@gmail.com"
+    SMTP_USER or "simplesalt7@gmail.com"
 )
 
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")

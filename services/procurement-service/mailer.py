@@ -17,9 +17,9 @@ log = logging.getLogger("procurement-mailer")
 
 SMTP_HOST     = os.getenv("SMTP_HOST", "localhost")
 SMTP_PORT     = int(os.getenv("SMTP_PORT", "587"))
-SMTP_USER     = os.getenv("SMTP_USER", "")
-SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
-SMTP_FROM     = os.getenv("SMTP_FROM", "procureflow-approvals@company.com")
+SMTP_USER     = os.getenv("SMTP_USER", "").strip()
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "").replace(" ", "").strip()
+SMTP_FROM     = os.getenv("SMTP_FROM", SMTP_USER or "procureflow-approvals@company.com").strip()
 SMTP_USE_TLS  = os.getenv("SMTP_USE_TLS", "false").lower() == "true"
 APP_URL       = os.getenv("FRONTEND_APP_URL", "http://localhost:3000")
 

@@ -194,19 +194,20 @@ async def create_po(po: CreatePO):
         approver_name = po.assigned_approver_name
         approver_email = po.assigned_approver_email
 
+        default_email = os.getenv("SMTP_USER", "").strip()
         if not tier or tier == "TIER_1_OFFICER":
             if po.total_price > 200000:
                 tier = "TIER_3_DIRECTOR"
                 approver_name = "Finance Director"
-                approver_email = "director.finance@procureflow.local"
+                approver_email = os.getenv("FINANCE_DIRECTOR_EMAIL") or default_email or "director.finance@procureflow.local"
             elif po.total_price >= 50000:
                 tier = "TIER_2_MANAGER"
                 approver_name = "Operations Manager"
-                approver_email = "manager.ops@procureflow.local"
+                approver_email = os.getenv("OPERATIONS_MANAGER_EMAIL") or default_email or "manager.ops@procureflow.local"
             else:
                 tier = "TIER_1_OFFICER"
                 approver_name = "Procurement Officer"
-                approver_email = "officer.procurement@procureflow.local"
+                approver_email = os.getenv("PROCUREMENT_OFFICER_EMAIL") or default_email or "officer.procurement@procureflow.local"
 
         cur.execute("""
             INSERT INTO purchase_orders
