@@ -23,6 +23,9 @@ import json
 import asyncio
 import logging
 import uuid
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from datetime import datetime, timedelta
 from typing import Optional
 
@@ -61,6 +64,28 @@ REDIS_HOST           = os.getenv("REDIS_HOST",                 "localhost")
 REDIS_PORT           = int(os.getenv("REDIS_PORT",             "6379"))
 REDIS_PASSWORD       = os.getenv("REDIS_PASSWORD",             "RedisPass@2024")
 CACHE_TTL            = int(os.getenv("CACHE_TTL_SECONDS",      "600"))
+
+# SMTP / approval email configuration
+SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
+SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
+SMTP_USER = os.getenv("SMTP_USER", "")
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
+SMTP_FROM = os.getenv("SMTP_FROM", SMTP_USER)
+
+PROCUREMENT_OFFICER_EMAIL = os.getenv(
+    "PROCUREMENT_OFFICER_EMAIL",
+    "shindeishwari2010@gmail.com"
+)
+OPERATIONS_MANAGER_EMAIL = os.getenv(
+    "OPERATIONS_MANAGER_EMAIL",
+    "shindeishwari45@gmail.com"
+)
+FINANCE_DIRECTOR_EMAIL = os.getenv(
+    "FINANCE_DIRECTOR_EMAIL",
+    "simplesalt7@gmail.com"
+)
+
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
 # ------------------------------------------------------------------ #
 # Global state                                                         #
@@ -114,6 +139,141 @@ async def log_procurement_event(event_data: dict) -> dict:
 
 
 # ------------------------------------------------------------------ #
+# Approval email                                                       #
+# ------------------------------------------------------------------ #
+
+def send_approval_email(
+    po: dict,
+    approver_name: str,
+    approver_email: str,
+    approval_tier: str,
+) -> None:
+    """Send an approval/signature request through Gmail SMTP."""
+
+    if not SMTP_USER or not SMTP_PASSWORD:
+        log.warning(
+            "SMTP is not configured. Approval email was NOT sent for %s",
+            po.get("po_number"),
+        )
+        return
+
+    po_number = po.get("po_number", "Unknown PO")
+    po_id = po.get("id")
+    vendor_name = po.get("vendor_name", "Unknown Vendor")
+    item_name = po.get("item_name", "Unknown Item")
+    quantity = po.get("quantity", 0)
+    total_price = float(po.get("total_price", 0))
+    currency = po.get("currency", "INR")
+    request_id = po.get("request_id", "")
+    delivery_date = po.get("delivery_date_expected", "")
+
+    approval_url = f"{FRONTEND_URL}/approvals"
+
+    subject = f"ProcureFlow - {po_number} requires your approval"
+
+    text = f"""
+Hello {approver_name},
+
+A Purchase Order has been generated and requires your review
+and digital-signature approval.
+
+Purchase Order: {po_number}
+Request: #{request_id}
+Vendor: {vendor_name}
+Item: {item_name}
+Quantity: {quantity}
+Total Amount: {currency} {total_price:,.2f}
+Expected Delivery: {delivery_date}
+Approval Tier: {approval_tier}
+
+Please open ProcureFlow, review the PO and complete the
+digital-signature approval.
+
+Review & Sign:
+{approval_url}
+
+PO ID: {po_id if po_id is not None else "N/A"}
+
+This is an automated approval request from ProcureFlow.
+"""
+
+    html = f"""
+<html>
+<body style="font-family:Arial,sans-serif;color:#1e293b;">
+  <h2>ProcureFlow - Purchase Order Approval</h2>
+
+  <p>Hello <strong>{approver_name}</strong>,</p>
+
+  <p>
+    A Purchase Order has been generated and requires your
+    <strong>review and digital-signature approval</strong>.
+  </p>
+
+  <table cellpadding="8" cellspacing="0"
+         style="border-collapse:collapse;border:1px solid #e2e8f0;">
+    <tr><td><strong>Purchase Order</strong></td><td>{po_number}</td></tr>
+    <tr><td><strong>Request</strong></td><td>#{request_id}</td></tr>
+    <tr><td><strong>Vendor</strong></td><td>{vendor_name}</td></tr>
+    <tr><td><strong>Item</strong></td><td>{item_name}</td></tr>
+    <tr><td><strong>Quantity</strong></td><td>{quantity}</td></tr>
+    <tr><td><strong>Total</strong></td><td>{currency} {total_price:,.2f}</td></tr>
+    <tr><td><strong>Expected Delivery</strong></td><td>{delivery_date}</td></tr>
+    <tr><td><strong>Approval Tier</strong></td><td>{approval_tier}</td></tr>
+  </table>
+
+  <p>
+    Please review the Purchase Order and complete the
+    <strong>digital-signature approval</strong> in ProcureFlow.
+  </p>
+
+  <p>
+    <a href="{approval_url}"
+       style="background:#2563eb;color:white;padding:12px 20px;
+              text-decoration:none;border-radius:6px;">
+      Review &amp; Sign Purchase Order
+    </a>
+  </p>
+
+  <p style="color:#64748b;font-size:12px;">
+    Automated approval request from ProcureFlow.
+  </p>
+</body>
+</html>
+"""
+
+    message = MIMEMultipart("alternative")
+    message["Subject"] = subject
+    message["From"] = SMTP_FROM
+    message["To"] = approver_email
+    message.attach(MIMEText(text, "plain"))
+    message.attach(MIMEText(html, "html"))
+
+    try:
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as smtp:
+            smtp.ehlo()
+            smtp.starttls()
+            smtp.ehlo()
+            smtp.login(SMTP_USER, SMTP_PASSWORD)
+            smtp.sendmail(SMTP_FROM, [approver_email], message.as_string())
+
+        log.info(
+            "Approval email sent: %s -> %s | %s | %s",
+            SMTP_FROM,
+            approver_email,
+            po_number,
+            approval_tier,
+        )
+
+    except Exception as e:
+        log.error(
+            "Failed to send approval email for %s to %s: %s",
+            po_number,
+            approver_email,
+            e,
+        )
+
+
+# ------------------------------------------------------------------ #
 # Core logic                                                           #
 # ------------------------------------------------------------------ #
 async def process_vendor_recommendation(vendor_rec: dict) -> dict:
@@ -160,15 +320,15 @@ async def process_vendor_recommendation(vendor_rec: dict) -> dict:
         if total > 200000:
             approval_tier = "TIER_3_DIRECTOR"
             approver_name = "Finance Director"
-            approver_email = "director.finance@procureflow.local"
+            approver_email = FINANCE_DIRECTOR_EMAIL
         elif total >= 50000:
             approval_tier = "TIER_2_MANAGER"
             approver_name = "Operations Manager"
-            approver_email = "manager.ops@procureflow.local"
+            approver_email = OPERATIONS_MANAGER_EMAIL
         else:
             approval_tier = "TIER_1_OFFICER"
             approver_name = "Procurement Officer"
-            approver_email = "officer.procurement@procureflow.local"
+            approver_email = PROCUREMENT_OFFICER_EMAIL
 
         po_payload = {
             "po_number":              po_number,
@@ -194,6 +354,16 @@ async def process_vendor_recommendation(vendor_rec: dict) -> dict:
 
         try:
             created = await create_purchase_order(po_payload)
+
+            # Send digital-signature approval request by email.
+            # Email failure does not undo the successfully-created PO.
+            await asyncio.to_thread(
+                send_approval_email,
+                created,
+                approver_name,
+                approver_email,
+                approval_tier,
+            )
             log.info(
                 f"  ✓ PO created: {po_number} | {item_desc} | "
                 f"{vendor_name} | ₹{total:,.2f} | [{approval_tier}] -> {approver_name}"

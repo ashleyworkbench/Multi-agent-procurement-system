@@ -14,19 +14,19 @@ const tierConfig: Record<string, { label: string; role: string; email: string; c
   TIER_1_OFFICER: {
     label: "Tier 1 (< ₹50,000)",
     role: "Procurement Officer",
-    email: "officer.procurement@procureflow.local",
+    email: "shindeishwari2010@gmail.com",
     cls: "bg-blue-50 text-blue-700 border-blue-200",
   },
   TIER_2_MANAGER: {
     label: "Tier 2 (₹50,000 – ₹2,00,000)",
     role: "Operations Manager",
-    email: "manager.ops@procureflow.local",
+    email: "shindeishwari45@gmail.com",
     cls: "bg-amber-50 text-amber-700 border-amber-200",
   },
   TIER_3_DIRECTOR: {
     label: "Tier 3 (> ₹2,00,000)",
     role: "Finance Director",
-    email: "director.finance@procureflow.local",
+    email: "simplesalt7@gmail.com",
     cls: "bg-purple-50 text-purple-700 border-purple-200",
   },
 };
