@@ -27,7 +27,7 @@ import httpx
 import redis.asyncio as redis
 from fastapi import FastAPI, HTTPException, Header, Depends, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response
+from fastapi.responses import Response, JSONResponse
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -358,21 +358,27 @@ async def proxy_get_requests():
 
 @app.delete("/ocr/requests/{request_id}")
 async def proxy_delete_request(request_id: int):
-    async with httpx.AsyncClient(timeout=10.0) as client:
-        resp = await client.delete(
-            f"{OCR_SVC_URL}/requests/{request_id}",
-            headers={"X-API-KEY": "OCR-e4b9f8e7-0756-4938-45ab-8abc67890123"}
-        )
-        return resp.json()
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            resp = await client.delete(
+                f"{OCR_SVC_URL}/requests/{request_id}",
+                headers={"X-API-KEY": "OCR-e4b9f8e7-0756-4938-45ab-8abc67890123"}
+            )
+            return JSONResponse(status_code=resp.status_code, content=resp.json())
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"detail": str(e)})
 
 @app.delete("/ocr/requests")
 async def proxy_clear_requests():
-    async with httpx.AsyncClient(timeout=10.0) as client:
-        resp = await client.delete(
-            f"{OCR_SVC_URL}/requests",
-            headers={"X-API-KEY": "OCR-e4b9f8e7-0756-4938-45ab-8abc67890123"}
-        )
-        return resp.json()
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            resp = await client.delete(
+                f"{OCR_SVC_URL}/requests",
+                headers={"X-API-KEY": "OCR-e4b9f8e7-0756-4938-45ab-8abc67890123"}
+            )
+            return JSONResponse(status_code=resp.status_code, content=resp.json())
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"detail": str(e)})
 
 @app.get("/agent1/requests/{request_id}/items")
 async def proxy_request_items(request_id: int):

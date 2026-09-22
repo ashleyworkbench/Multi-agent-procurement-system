@@ -149,6 +149,7 @@ async def delete_request(request_id: int):
     conn = get_conn()
     cur = conn.cursor()
     try:
+        cur.execute("UPDATE document_processing SET request_id = NULL WHERE request_id = %s", (request_id,))
         cur.execute("DELETE FROM procurement_request_items WHERE request_id = %s", (request_id,))
         cur.execute("DELETE FROM procurement_requests WHERE id = %s RETURNING id", (request_id,))
         deleted = cur.fetchone()
@@ -156,6 +157,12 @@ async def delete_request(request_id: int):
         if not deleted:
             raise HTTPException(404, f"Request #{request_id} not found")
         return {"message": f"Request #{request_id} deleted successfully"}
+    except HTTPException:
+        conn.rollback()
+        raise
+    except Exception as e:
+        conn.rollback()
+        raise HTTPException(500, detail=str(e))
     finally:
         cur.close()
         conn.close()
@@ -171,10 +178,14 @@ async def clear_all_requests():
     conn = get_conn()
     cur = conn.cursor()
     try:
+        cur.execute("UPDATE document_processing SET request_id = NULL")
         cur.execute("DELETE FROM procurement_request_items")
         cur.execute("DELETE FROM procurement_requests")
         conn.commit()
         return {"message": "All procurement requests cleared successfully"}
+    except Exception as e:
+        conn.rollback()
+        raise HTTPException(500, detail=str(e))
     finally:
         cur.close()
         conn.close()

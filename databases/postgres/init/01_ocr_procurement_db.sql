@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS document_processing (
     gemini_status       VARCHAR(50)   NOT NULL DEFAULT 'pending',
     ocr_text            TEXT,
     structured_data     JSONB,
-    request_id          INTEGER       REFERENCES procurement_requests(id),
+    request_id          INTEGER       REFERENCES procurement_requests(id) ON DELETE SET NULL,
     error_message       TEXT,
     created_at          TIMESTAMP     NOT NULL DEFAULT NOW(),
     updated_at          TIMESTAMP     NOT NULL DEFAULT NOW()
