@@ -9,7 +9,7 @@ import {
   AlertTriangle, XCircle,
 } from "lucide-react";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDataSourceStore } from "@/store/dataSourceStore";
 import { INDUSTRIES } from "@/lib/api";
 
@@ -244,8 +244,17 @@ export function AgentMonitorView() {
   );
   const hasConnections = connectedIndustries.length > 0;
 
-  const { data: ocrData } = useQuery({ queryKey: ["ocr-requests"], queryFn: ocrApi.getRequests });
-  const requests = ocrData?.requests ?? [];
+  const { data: ocrData } = useQuery({
+    queryKey: ["ocr-procurement-requests"],
+    queryFn: ocrApi.getProcurementRequests
+  });
+  const requests = Array.isArray(ocrData) ? ocrData : (ocrData?.requests ?? []);
+
+  useEffect(() => {
+    if (requests.length > 0 && !requests.some((r: any) => r.id === selectedReqId)) {
+      setSelectedReqId(requests[0].id);
+    }
+  }, [requests, selectedReqId]);
 
   const run = async () => {
     if (!hasConnections) {

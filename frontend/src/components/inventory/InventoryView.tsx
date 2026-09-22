@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { inventoryApi, INDUSTRIES, type Industry, INDUSTRY_API_KEYS } from "@/lib/api";
+import { inventoryApi, onboardingApi, INDUSTRIES, type Industry, INDUSTRY_API_KEYS } from "@/lib/api";
 import { useDataSourceStore } from "@/store/dataSourceStore";
 import { formatCurrency, cn } from "@/lib/utils";
 import {
@@ -68,9 +68,7 @@ export function InventoryView() {
     queryKey: ["inventory", activeTab],
     queryFn: async () => {
       if (uploadedSource) {
-        const resp = await fetch(`http://localhost:8007/onboarding/data/${uploadedSource.id}`);
-        if (!resp.ok) throw new Error("Failed to fetch uploaded data");
-        return resp.json();
+        return onboardingApi.getData(uploadedSource.id);
       }
       return inventoryApi.getItems(activeTab as Industry);
     },

@@ -108,27 +108,6 @@ def ensure_onboarding_db():
         conn2.close()
     except Exception as e:
         print(f"[WARNING] DB init failed (may already exist): {e}")
-        conn2.autocommit = True
-        cur2 = conn2.cursor()
-        cur2.execute("""
-            CREATE TABLE IF NOT EXISTS upload_registry (
-                id           TEXT PRIMARY KEY,
-                filename     TEXT NOT NULL,
-                data_type    TEXT NOT NULL,
-                industry     TEXT NOT NULL,
-                display_name TEXT NOT NULL,
-                table_name   TEXT NOT NULL,
-                api_key      TEXT NOT NULL,
-                row_count    INT,
-                col_count    INT,
-                status       TEXT NOT NULL DEFAULT 'ready',
-                created_at   TIMESTAMP NOT NULL DEFAULT NOW()
-            )
-        """)
-        cur2.close()
-        conn2.close()
-    except Exception as e:
-        print(f"[WARNING] DB init failed (may already exist): {e}")
 
 
 # ------------------------------------------------------------------ #

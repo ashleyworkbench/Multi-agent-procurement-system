@@ -27,6 +27,7 @@ import httpx
 import redis.asyncio as redis
 from fastapi import FastAPI, HTTPException, Header, Depends, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -339,6 +340,21 @@ async def proxy_clear_documents():
 # ---- OCR & Procurement Clean-up & Demo Reset Proxies ------------- #
 OCR_SVC_URL = os.getenv("OCR_SERVICE_URL", "http://ocr-service:8001")
 PROC_SVC_URL = os.getenv("PROCUREMENT_SERVICE_URL", "http://procurement-service:8004")
+AGENT2_URL = os.getenv("AGENT2_URL", "http://agent2-inventory:8005")
+AGENT3_URL = os.getenv("AGENT3_URL", "http://agent3-vendor:8006")
+AGENT4_URL = os.getenv("AGENT4_URL", "http://agent4-procurement:8008")
+ONBOARDING_URL = os.getenv("ONBOARDING_SERVICE_URL", "http://onboarding-service:8000")
+OCR_KEY = os.getenv("OCR_SERVICE_KEY", "OCR-e4b9f8e7-0756-4938-45ab-8abc67890123")
+PROC_KEY = os.getenv("PROCUREMENT_KEY", "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012")
+
+@app.get("/ocr/requests")
+async def proxy_get_requests():
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.get(
+            f"{OCR_SVC_URL}/requests",
+            headers={"X-API-KEY": OCR_KEY},
+        )
+        return resp.json()
 
 @app.delete("/ocr/requests/{request_id}")
 async def proxy_delete_request(request_id: int):
@@ -358,6 +374,107 @@ async def proxy_clear_requests():
         )
         return resp.json()
 
+@app.get("/agent1/requests/{request_id}/items")
+async def proxy_request_items(request_id: int):
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.get(
+            f"{OCR_SVC_URL}/requests/{request_id}/items",
+            headers={"X-API-KEY": OCR_KEY},
+        )
+        return resp.json()
+
+@app.post("/agent2/trigger")
+async def proxy_agent2_trigger(request: Request):
+    return await proxy_json_request(AGENT2_URL, "/trigger", request)
+
+@app.post("/agent2/evaluate/{request_id}")
+async def proxy_agent2_evaluate(request_id: int):
+    async with httpx.AsyncClient(timeout=120.0) as client:
+        resp = await client.post(f"{AGENT2_URL}/evaluate/{request_id}")
+        return resp.json()
+
+@app.get("/agent2/{path:path}")
+async def proxy_agent2(path: str):
+    return await proxy_get(AGENT2_URL, f"/{path}")
+
+@app.get("/agent3/{path:path}")
+async def proxy_agent3(path: str):
+    return await proxy_get(AGENT3_URL, f"/{path}")
+
+@app.post("/agent3/recommend")
+async def proxy_agent3_recommend(request: Request):
+    return await proxy_json_request(AGENT3_URL, "/recommend", request)
+
+@app.get("/agent4/{path:path}")
+async def proxy_agent4(path: str):
+    return await proxy_get(AGENT4_URL, f"/{path}")
+
+@app.post("/agent4/process")
+async def proxy_agent4_process(request: Request):
+    return await proxy_json_request(AGENT4_URL, "/process", request)
+
+async def proxy_get(base_url: str, path: str):
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        resp = await client.get(f"{base_url}{path}")
+        return resp.json()
+
+async def proxy_json_request(base_url: str, path: str, request: Request):
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        resp = await client.post(f"{base_url}{path}", json=await request.json())
+        return resp.json()
+
+@app.get("/connections/industries")
+async def proxy_connected_industries():
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.get(f"{ONBOARDING_URL}/connections/industries")
+        return resp.json()
+
+@app.get("/connections")
+async def proxy_connections():
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.get(f"{ONBOARDING_URL}/connections")
+        return resp.json()
+
+@app.post("/connections/connect")
+async def proxy_connect(request: Request):
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        resp = await client.post(f"{ONBOARDING_URL}/connections/connect", json=await request.json())
+        return resp.json()
+
+@app.delete("/connections/disconnect")
+async def proxy_disconnect(industry: str, data_type: str):
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        resp = await client.delete(f"{ONBOARDING_URL}/connections/disconnect", params={"industry": industry, "data_type": data_type})
+        return resp.json()
+
+@app.post("/onboarding/upload")
+async def proxy_onboarding_upload(request: Request):
+    async with httpx.AsyncClient(timeout=120.0) as client:
+        resp = await client.post(
+            f"{ONBOARDING_URL}/onboarding/upload",
+            content=await request.body(),
+            headers={k: v for k, v in request.headers.items() if k.lower() != "host"},
+        )
+        return resp.json()
+
+@app.get("/onboarding/uploads")
+async def proxy_onboarding_uploads():
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        resp = await client.get(f"{ONBOARDING_URL}/onboarding/uploads")
+        return resp.json()
+
+@app.get("/onboarding/data/{upload_id}")
+async def proxy_onboarding_data(upload_id: str):
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        resp = await client.get(f"{ONBOARDING_URL}/onboarding/data/{upload_id}")
+        return resp.json()
+
+@app.delete("/onboarding/uploads/{upload_id}")
+async def proxy_delete_onboarding_upload(upload_id: str):
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        resp = await client.delete(f"{ONBOARDING_URL}/onboarding/uploads/{upload_id}")
+        return resp.json()
+
 @app.delete("/procurement/purchase-orders/{po_id}")
 async def proxy_delete_po(po_id: int):
     async with httpx.AsyncClient(timeout=10.0) as client:
@@ -372,6 +489,127 @@ async def proxy_clear_pos():
     async with httpx.AsyncClient(timeout=10.0) as client:
         resp = await client.delete(
             f"{PROC_SVC_URL}/purchase-orders",
+            headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+        )
+        return resp.json()
+
+@app.get("/procurement/summary")
+async def proxy_summary():
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.get(
+            f"{PROC_SVC_URL}/dashboard/summary",
+            headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+        )
+        return resp.json()
+
+@app.get("/procurement/po")
+async def proxy_purchase_orders_list(status: Optional[str] = None, request_id: Optional[int] = None, limit: int = 100, offset: int = 0):
+    params = {}
+    if status:
+        params["status"] = status
+    if request_id is not None:
+        params["request_id"] = request_id
+    if limit != 100:
+        params["limit"] = limit
+    if offset != 0:
+        params["offset"] = offset
+
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.get(
+            f"{PROC_SVC_URL}/purchase-orders",
+            params=params,
+            headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+        )
+        return resp.json()
+@app.get("/procurement/purchase-orders/{po_id}/pdf")
+async def proxy_po_pdf(po_id: int):
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        resp = await client.get(
+            f"{PROC_SVC_URL}/purchase-orders/{po_id}/pdf",
+            headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+        )
+        return Response(
+            content=resp.content,
+            status_code=resp.status_code,
+            media_type=resp.headers.get("content-type", "application/pdf"),
+            headers={
+                "Content-Disposition": resp.headers.get(
+                    "content-disposition",
+                    f'inline; filename="PO_{po_id}.pdf"'
+                )
+            }
+        )
+
+
+@app.get("/procurement/purchase-orders/{po_id}/download")
+async def proxy_po_download(po_id: int):
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        resp = await client.get(
+            f"{PROC_SVC_URL}/purchase-orders/{po_id}/download",
+            headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+        )
+        return Response(
+            content=resp.content,
+            status_code=resp.status_code,
+            media_type=resp.headers.get("content-type", "application/pdf"),
+            headers={
+                "Content-Disposition": resp.headers.get(
+                    "content-disposition",
+                    f'attachment; filename="PO_{po_id}.pdf"'
+                )
+            }
+        )
+
+@app.post("/procurement/purchase-orders/{po_id}/sign")
+async def proxy_sign_po(po_id: int, request: Request):
+    body = await request.json()
+    async with httpx.AsyncClient(timeout=20.0) as client:
+        resp = await client.post(
+            f"{PROC_SVC_URL}/purchase-orders/{po_id}/sign",
+            json=body,
+            headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+        )
+        return resp.json()
+
+@app.patch("/procurement/purchase-orders/{po_id}/status")
+async def proxy_update_po_status(po_id: int, request: Request):
+    body = await request.json()
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.patch(
+            f"{PROC_SVC_URL}/purchase-orders/{po_id}/status",
+            json=body,
+            headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+        )
+        return resp.json()
+
+@app.get("/agent-logs")
+async def proxy_agent_logs(limit: int = 100, source_agent: Optional[str] = None):
+    params = {"limit": limit}
+    if source_agent:
+        params["source_agent"] = source_agent
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.get(
+            f"{PROC_SVC_URL}/agent-logs",
+            params=params,
+            headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+        )
+        return resp.json()
+
+@app.get("/events")
+async def proxy_events(limit: int = 100):
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.get(
+            f"{PROC_SVC_URL}/events",
+            params={"limit": limit},
+            headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+        )
+        return resp.json()
+
+@app.post("/demo/reset")
+async def proxy_demo_reset_via_frontend():
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        resp = await client.post(
+            f"{PROC_SVC_URL}/demo/reset",
             headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
         )
         return resp.json()

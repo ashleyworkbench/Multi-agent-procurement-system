@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { vendorApi, INDUSTRIES, type Industry, INDUSTRY_API_KEYS } from "@/lib/api";
+import { vendorApi, onboardingApi, INDUSTRIES, type Industry, INDUSTRY_API_KEYS } from "@/lib/api";
 import { useDataSourceStore } from "@/store/dataSourceStore";
 import { formatCurrency, cn } from "@/lib/utils";
 import {
@@ -161,9 +161,7 @@ export function VendorsView() {
     queryKey: ["vendors", activeTab],
     queryFn: async () => {
       if (uploadedSource) {
-        const resp = await fetch(`http://localhost:8007/onboarding/data/${uploadedSource.id}`);
-        if (!resp.ok) throw new Error("Failed to fetch uploaded data");
-        return resp.json();
+        return onboardingApi.getData(uploadedSource.id);
       }
       return vendorApi.getVendors(activeTab as Industry);
     },

@@ -19,18 +19,18 @@ export interface DataSource {
   rowCount?: number;
 }
 
-const ONBOARDING_URL = "http://localhost:8007";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 async function syncConnection(industry: string, dataType: string, apiKey: string, connected: boolean) {
   try {
     if (connected) {
-      await fetch(`${ONBOARDING_URL}/connections/connect`, {
+      await fetch(`${API_BASE}/connections/connect`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ industry, data_type: dataType, api_key: apiKey }),
       });
     } else {
-      await fetch(`${ONBOARDING_URL}/connections/disconnect?industry=${industry}&data_type=${dataType}`, {
+      await fetch(`${API_BASE}/connections/disconnect?industry=${industry}&data_type=${dataType}`, {
         method: "DELETE",
       });
     }

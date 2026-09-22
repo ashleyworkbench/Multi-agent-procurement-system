@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { useDataSourceStore, type DataSource, type ConnectionType } from "@/store/dataSourceStore";
+import { onboardingApi } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import {
   Plug, Upload, CheckCircle2, XCircle, Loader2, Trash2,
@@ -361,10 +362,7 @@ function AddFileForm({ onDone }: { onDone: () => void }) {
       form.append("industry", industry);
       form.append("display_name", file.name.replace(/\.[^.]+$/, ""));
 
-      const resp = await axios.post(`http://localhost:8007/onboarding/upload`, form, {
-        headers: { "Content-Type": "multipart/form-data" },
-        timeout: 120000,
-      });
+      const resp = { data: await onboardingApi.upload(file, dataType, industry, file.name.replace(/\.[^.]+$/, "")) };
 
       const source: DataSource = {
         id:        resp.data.upload_id ?? generateId(),

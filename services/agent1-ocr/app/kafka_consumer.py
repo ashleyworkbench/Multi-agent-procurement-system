@@ -126,7 +126,8 @@ def process_message(event: dict, db):
         crud.update_ocr_status(db, processing_id, "completed", ocr_text)
         log.info(f"OCR done for {processing_id}")
 
-        # Docling Document Structure Extraction
+        # Docling handles both PDF and image formats through its native
+        # format detection. OCR text remains available as LLM input.
         document_structure = ""
         try:
             crud.update_docling_status(db, processing_id, "processing")
@@ -211,6 +212,8 @@ def consumer_loop():
                 auto_offset_reset="earliest",
                 enable_auto_commit=True,
                 group_id="document-intelligence-agent",
+                max_poll_interval_ms=900000,
+                max_poll_records=1,
                 value_deserializer=lambda v: json.loads(v.decode("utf-8")),
             )
             log.info("Kafka consumer connected, waiting for messages...")
