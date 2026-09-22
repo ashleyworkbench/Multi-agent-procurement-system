@@ -105,6 +105,10 @@ def process_message(event: dict, db):
         log.warning(f"Processing {processing_id} not ready")
         return
 
+    if processing.status == "cancelled":
+        log.info(f"Processing {processing_id} was cancelled by user prior to starting, skipping.")
+        return
+
     crud.update_processing_status(db, processing_id, "processing")
     temporary_file_path = None
 
@@ -117,6 +121,11 @@ def process_message(event: dict, db):
             temporary_file_path = tmp.name
 
         # OCR
+        db.refresh(processing)
+        if processing.status == "cancelled":
+            log.info(f"Processing {processing_id} cancelled mid-way before OCR, aborting.")
+            return
+
         crud.update_ocr_status(db, processing_id, "processing")
         ocr_text = extract_text(temporary_file_path)
         if not ocr_text or not ocr_text.strip():
@@ -125,6 +134,12 @@ def process_message(event: dict, db):
             return
         crud.update_ocr_status(db, processing_id, "completed", ocr_text)
         log.info(f"OCR done for {processing_id}")
+
+        # Check for cancellation after OCR
+        db.refresh(processing)
+        if processing.status == "cancelled":
+            log.info(f"Processing {processing_id} cancelled mid-way after OCR, aborting.")
+            return
 
         # Docling handles both PDF and image formats through its native
         # format detection. OCR text remains available as LLM input.
@@ -138,6 +153,12 @@ def process_message(event: dict, db):
         except Exception as docling_err:
             log.warning(f"Docling extraction failed for {processing_id} ({docling_err}). Proceeding with OCR text.")
             crud.update_docling_status(db, processing_id, "failed")
+
+        # Check for cancellation before LLM
+        db.refresh(processing)
+        if processing.status == "cancelled":
+            log.info(f"Processing {processing_id} cancelled mid-way before LLM, aborting.")
+            return
 
         # LLM
         crud.update_gemini_status(db, processing_id, "processing")
@@ -164,6 +185,12 @@ def process_message(event: dict, db):
             log.error(f"Processing {processing_id} blocked: {error_msg}")
             crud.update_gemini_status(db, processing_id, "failed")
             crud.save_processing_error(db, processing_id, error_msg)
+            return
+
+        # Check for cancellation before saving request & triggering pipeline
+        db.refresh(processing)
+        if processing.status == "cancelled":
+            log.info(f"Processing {processing_id} cancelled mid-way before DB save, aborting.")
             return
 
         # Validate & save
