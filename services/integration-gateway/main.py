@@ -605,14 +605,6 @@ async def proxy_events(limit: int = 100):
         )
         return resp.json()
 
-@app.post("/demo/reset")
-async def proxy_demo_reset_via_frontend():
-    async with httpx.AsyncClient(timeout=15.0) as client:
-        resp = await client.post(
-            f"{PROC_SVC_URL}/demo/reset",
-            headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
-        )
-        return resp.json()
 
 @app.post("/demo/reset")
 async def proxy_demo_reset():
