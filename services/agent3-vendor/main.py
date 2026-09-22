@@ -1,12 +1,12 @@
-"""
-Agent 3 — Vendor Intelligence Agent
+﻿"""
+Agent 3 â€” Vendor Intelligence Agent
 =====================================
 Listens on: inventory-evaluation-topic
 Publishes to: vendor-recommendation-topic
 
 Workflow:
   1. Consume inventory evaluation event from Kafka
-  2. For each shortage item → call Integration Gateway → GET /vendors/item/{name}
+  2. For each shortage item â†’ call Integration Gateway â†’ GET /vendors/item/{name}
   3. Score and rank vendors by: rating (40%), price (35%), lead time (25%)
   4. Select best vendor per item
   5. Cache vendor responses in Redis
@@ -42,7 +42,7 @@ logging.basicConfig(
 log = logging.getLogger("agent3-vendor")
 
 app = FastAPI(
-    title="Agent 3 — Vendor Intelligence Agent",
+    title="Agent 3 â€” Vendor Intelligence Agent",
     description="Finds and ranks best vendors for shortage items. "
                 "Communicates only via APIs and Kafka.",
     version="1.0.0",
@@ -64,7 +64,7 @@ REDIS_PORT          = int(os.getenv("REDIS_PORT",                "6379"))
 REDIS_PASSWORD      = os.getenv("REDIS_PASSWORD",                "RedisPass@2024")
 CACHE_TTL           = int(os.getenv("CACHE_TTL_SECONDS",         "600"))
 
-# Scoring weights — must sum to 1.0
+# Scoring weights â€” must sum to 1.0
 WEIGHT_RATING    = float(os.getenv("WEIGHT_RATING", "0.40"))
 WEIGHT_PRICE     = float(os.getenv("WEIGHT_PRICE", "0.35"))
 WEIGHT_LEAD_TIME = float(os.getenv("WEIGHT_LEAD_TIME", "0.25"))
@@ -404,7 +404,7 @@ async def recommend_vendors(inventory_eval: dict) -> dict:
                 json.dumps(out_event).encode(),
                 key=str(request_id).encode(),
             )
-            log.info(f"Published vendor recommendation for request {request_id} → {TOPIC_OUT}")
+            log.info(f"Published vendor recommendation for request {request_id} â†’ {TOPIC_OUT}")
         except Exception as e:
             log.warning(f"Failed to publish event to Kafka: {e}")
 
@@ -470,7 +470,7 @@ async def kafka_supervisor():
             log.warning(f"Kafka connection attempt failed: {e}. Retrying in 5 seconds...")
             producer = None
             consumer = None
-            agent_status["status"] = "running"
+            agent_status["status"] = "degraded"
             await asyncio.sleep(5)
 
 
@@ -503,7 +503,7 @@ async def shutdown():
 
 
 # ------------------------------------------------------------------ #
-# REST API — for frontend and monitoring                              #
+# REST API â€” for frontend and monitoring                              #
 # ------------------------------------------------------------------ #
 @app.get("/health")
 async def health():
@@ -538,3 +538,4 @@ async def get_recommendation(request_id: int):
     if not cached:
         raise HTTPException(404, f"No cached recommendation for request {request_id}")
     return json.loads(cached)
+

@@ -223,7 +223,7 @@ function DocumentCard({
           </div>
           <div>
             <p className="text-sm font-semibold text-slate-800 truncate max-w-[200px]">{d.filename}</p>
-            <p className="text-[11px] text-slate-400">{d.created_at ? new Date(d.created_at).toLocaleString() : "—"}</p>
+            <p className="text-[11px] text-slate-400">{d.created_at ? new Date(d.created_at).toLocaleString() : "-"}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -272,7 +272,7 @@ function DocumentCard({
       {d.request_id && (
         <div className="mt-3 px-3 py-2 bg-emerald-50 border border-emerald-100 rounded-lg text-xs text-emerald-700">
           <CheckCircle2 size={11} className="inline mr-1" />
-          Request #{d.request_id} created — forwarded to Agent 2
+          Request #{d.request_id} created - forwarded to Agent 2
         </div>
       )}
 
@@ -302,66 +302,116 @@ function DocumentCard({
 // Upload zone                                                          //
 // ------------------------------------------------------------------ //
 function UploadZone({ onUploaded }: { onUploaded: () => void }) {
-  const [dragging, setDragging] = useState(false);
-  const [file, setFile]         = useState<File | null>(null);
-  const [uploading, setUploading] = useState(false);
-  const abortRef = useRef<AbortController | null>(null);
+const [dragging, setDragging] = useState(false);
+const [files, setFiles] = useState<File[]>([]);
+const [uploading, setUploading] = useState(false);
+const abortRef = useRef<AbortController | null>(null);
 
-  const handleSelect = (f: File) => {
-    setFile(f);
-  };
+const handleSelect = (selectedFiles: FileList | File[]) => {
+  const validFiles = Array.from(selectedFiles).filter(file =>
+    /\.(pdf|png|jpg|jpeg)$/i.test(file.name)
+  );
 
-  const handleCancelSelection = (e?: React.MouseEvent) => {
-    if (e) e.stopPropagation();
-    if (uploading && abortRef.current) {
-      abortRef.current.abort();
-      toast.info("Invoice extraction cancelled by user");
-    }
-    setUploading(false);
-    setFile(null);
-    abortRef.current = null;
-  };
+  if (validFiles.length === 0) {
+    toast.error("Please select PDF, PNG, JPG, or JPEG invoice files.");
+    return;
+  }
 
-  const startExtraction = async (e?: React.MouseEvent) => {
-    if (e) e.stopPropagation();
-    if (!file) return;
+  setFiles(validFiles);
+};
 
-    setUploading(true);
-    const controller = new AbortController();
-    abortRef.current = controller;
+const handleCancelSelection = (e?: React.MouseEvent) => {
+  if (e) e.stopPropagation();
 
-    try {
-      await uploadInvoice(file, controller.signal);
-      toast.success(`${file.name} extracted successfully — Agent 1 pipeline initiated!`);
-      setFile(null);
-      onUploaded();
-    } catch (err: any) {
-      if (err.name === "AbortError" || controller.signal.aborted) {
-        toast.info("Invoice extraction was cancelled");
+  if (uploading && abortRef.current) {
+    abortRef.current.abort();
+    toast.info("Invoice processing cancelled by user");
+  }
+
+  setUploading(false);
+  setFiles([]);
+  abortRef.current = null;
+};
+
+const startExtraction = async (e?: React.MouseEvent) => {
+  if (e) e.stopPropagation();
+
+  if (files.length === 0) {
+    toast.error("Please select at least one invoice.");
+    return;
+  }
+
+  setUploading(true);
+
+  const controller = new AbortController();
+  abortRef.current = controller;
+
+  let successful = 0;
+  let failed = 0;
+
+  try {
+    // Process invoices independently.
+    // Promise.allSettled ensures one failed invoice does not stop the others.
+    const results = await Promise.allSettled(
+      files.map(file => uploadInvoice(file, controller.signal))
+    );
+
+    results.forEach((result, index) => {
+      if (result.status === "fulfilled") {
+        successful++;
+        console.log(`[OK] ${files[index].name} uploaded successfully`);
       } else {
-        toast.error(`Extraction failed: ${err.message}`);
+        failed++;
+        console.error(`[FAIL] ${files[index].name} failed:`, result.reason);
       }
-    } finally {
-      setUploading(false);
-      abortRef.current = null;
-    }
-  };
+    });
 
-  const onDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setDragging(false);
-    const f = e.dataTransfer.files[0];
-    if (f) handleSelect(f);
-  }, []);
+    if (successful > 0) {
+      toast.success(
+        `${successful} invoice${successful !== 1 ? "s" : ""} uploaded successfully - Agent 1 pipeline initiated!`
+      );
+    }
+
+    if (failed > 0) {
+      toast.error(
+        `${failed} invoice${failed !== 1 ? "s" : ""} failed to upload.`
+      );
+    }
+
+    setFiles([]);
+    onUploaded();
+
+  } catch (err: any) {
+    if (err.name === "AbortError" || controller.signal.aborted) {
+      toast.info("Invoice processing was cancelled");
+    } else {
+      toast.error(`Bulk upload failed: ${err.message}`);
+    }
+  } finally {
+    setUploading(false);
+    abortRef.current = null;
+  }
+};
+
+const onDrop = useCallback((e: React.DragEvent) => {
+  e.preventDefault();
+  setDragging(false);
+
+  const droppedFiles = Array.from(e.dataTransfer.files);
+
+  if (droppedFiles.length > 0) {
+    handleSelect(droppedFiles);
+  }
+}, []);
 
   // 1. In-flight extraction state with Cancel Extraction button
-  if (uploading && file) {
+  if (uploading && files.length > 0) {
     return (
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 rounded-2xl border-2 border-brand-200 bg-brand-50/50">
         <div className="flex items-center gap-3">
           <Loader2 size={24} className="animate-spin text-brand-600 shrink-0" />
           <div>
-            <p className="text-sm font-semibold text-slate-800">Extracting invoice: {file.name}</p>
+            <p className="text-sm font-semibold text-slate-800">Extracting invoice: {files.length} invoice{files.length !== 1 ? "s" : ""}</p>
             <p className="text-xs text-slate-500">Agent 1 is running OCR & LLM data extraction...</p>
           </div>
         </div>
@@ -377,22 +427,20 @@ function UploadZone({ onUploaded }: { onUploaded: () => void }) {
     );
   }
 
-  // 2. Selected file preview state with Extract & Cancel buttons
-  if (file) {
-    const isPdf = file.name.endsWith(".pdf");
-    const fileSizeKb = (file.size / 1024).toFixed(1);
+  // 2. Selected files preview state
+  if (files.length > 0) {
     return (
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 rounded-2xl border-2 border-brand-300 bg-white shadow-sm">
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
-            {isPdf ? <FileText size={20} /> : <FileImage size={20} />}
+      <div className="flex flex-col gap-4 p-5 rounded-2xl border-2 border-brand-300 bg-white shadow-sm">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <p className="text-sm font-semibold text-slate-900">
+              {files.length} invoice{files.length !== 1 ? "s" : ""} selected
+            </p>
+            <p className="text-xs text-slate-400">
+              Ready for Agent 1 extraction
+            </p>
           </div>
-          <div className="min-w-0">
-            <p className="text-sm font-semibold text-slate-900 truncate">{file.name}</p>
-            <p className="text-xs text-slate-400">{fileSizeKb} KB &bull; Ready for Agent 1 extraction</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2 shrink-0">
+
           <button
             onClick={handleCancelSelection}
             type="button"
@@ -401,19 +449,46 @@ function UploadZone({ onUploaded }: { onUploaded: () => void }) {
             <Trash2 size={13} />
             Cancel
           </button>
-          <button
-            onClick={startExtraction}
-            type="button"
-            className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl transition-all shadow-sm"
-          >
-            <Play size={13} className="fill-white" />
-            Extract with Agent 1
-          </button>
         </div>
+
+        <div className="max-h-40 overflow-y-auto space-y-2">
+          {files.map((selectedFile, index) => {
+            const isPdf = selectedFile.name.toLowerCase().endsWith(".pdf");
+            const fileSizeKb = (selectedFile.size / 1024).toFixed(1);
+
+            return (
+              <div
+                key={`${selectedFile.name}-${index}`}
+                className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100"
+              >
+                <div className="w-9 h-9 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+                  {isPdf ? <FileText size={18} /> : <FileImage size={18} />}
+                </div>
+
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-slate-800 truncate">
+                    {selectedFile.name}
+                  </p>
+                  <p className="text-xs text-slate-400">
+                    {fileSizeKb} KB
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <button
+          onClick={startExtraction}
+          type="button"
+          className="self-end flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl transition-all shadow-sm"
+        >
+          <Play size={13} className="fill-white" />
+          Process {files.length} Invoice{files.length !== 1 ? "s" : ""}
+        </button>
       </div>
     );
   }
-
   // 3. Default dropzone state
   return (
     <label
@@ -429,11 +504,17 @@ function UploadZone({ onUploaded }: { onUploaded: () => void }) {
         type="file"
         className="sr-only"
         accept=".pdf,.png,.jpg,.jpeg"
-        onChange={e => { const f = e.target.files?.[0]; if (f) handleSelect(f); }}
+        multiple
+        onChange={e => {
+          if (e.target.files) {
+            handleSelect(e.target.files);
+          }
+          e.target.value = "";
+        }}
       />
       <Upload size={22} className="text-slate-400" />
-      <p className="text-sm font-semibold text-slate-600">Drop invoice here or click to browse</p>
-      <p className="text-xs text-slate-400">PDF, PNG, JPG, JPEG</p>
+      <p className="text-sm font-semibold text-slate-600">Drop invoices here or click to browse</p>
+      <p className="text-xs text-slate-400">Upload multiple invoices - PDF, PNG, JPG, JPEG</p>
     </label>
   );
 }
@@ -515,7 +596,7 @@ export function RequestsView() {
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Procurement Requests</h1>
           <p className="text-sm text-slate-500 mt-0.5">
-            Upload invoices for Agent 1 to extract. Extracted requests flow automatically to Agents 2 → 3 → 4.
+            Upload invoices for Agent 1 to extract. Extracted requests flow automatically to Agents 2 to 3 to 4.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -559,7 +640,7 @@ export function RequestsView() {
       <div className="section-card p-5 space-y-3">
         <p className="text-sm font-semibold text-slate-800 flex items-center gap-2">
           <Upload size={14} className="text-brand-600" />
-          Upload Invoice — Agent 1 will OCR + extract
+          Upload Invoice - Agent 1 will OCR + extract
         </p>
         <UploadZone onUploaded={() => { refetchDocs(); setTimeout(refetchReqs, 5000); }} />
       </div>

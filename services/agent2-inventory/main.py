@@ -1,14 +1,14 @@
-"""
-Agent 2 — Inventory Intelligence Agent
+﻿"""
+Agent 2 Ã¢â‚¬â€ Inventory Intelligence Agent
 =======================================
 Listens on: ocr-request-topic
 Publishes to: inventory-evaluation-topic
 
 Workflow:
   1. Consume OCR request event from Kafka
-  2. Call OCR Service API → get request items
+  2. Call OCR Service API Ã¢â€ â€™ get request items
   3. Detect industry from item descriptions
-  4. For each item → call Integration Gateway → GET /inventory/item/{name}
+  4. For each item Ã¢â€ â€™ call Integration Gateway Ã¢â€ â€™ GET /inventory/item/{name}
   5. Calculate shortage (requested_qty - stock_qty)
   6. Cache results in Redis
   7. Publish inventory evaluation to Kafka
@@ -43,7 +43,7 @@ logging.basicConfig(
 log = logging.getLogger("agent2-inventory")
 
 app = FastAPI(
-    title="Agent 2 — Inventory Intelligence Agent",
+    title="Agent 2 Ã¢â‚¬â€ Inventory Intelligence Agent",
     description="Evaluates procurement requests against live inventory. "
                 "Communicates only via APIs and Kafka.",
     version="1.0.0",
@@ -69,7 +69,7 @@ CACHE_TTL           = int(os.getenv("CACHE_TTL_SECONDS",       "600"))
 ONBOARDING_URL      = os.getenv("ONBOARDING_SERVICE_URL",      "http://onboarding-service:8000")
 
 # ------------------------------------------------------------------ #
-# Industry detection — maps keywords to industry names               #
+# Industry detection Ã¢â‚¬â€ maps keywords to industry names               #
 # ------------------------------------------------------------------ #
 INDUSTRY_KEYWORDS = {
     "construction": [
@@ -158,7 +158,7 @@ async def get_connected_industries() -> set:
             resp.raise_for_status()
             return set(resp.json().get("connected_industries", []))
     except Exception as e:
-        log.warning(f"Could not fetch connected industries: {e} — blocking all requests for safety")
+        log.warning(f"Could not fetch connected industries: {e} Ã¢â‚¬â€ blocking all requests for safety")
         return set()  # empty set = block all if we can't reach the registry
 
 
@@ -184,7 +184,7 @@ async def evaluate_request(request_id: int) -> dict:
     Full inventory evaluation for a procurement request.
     Returns shortage analysis per item.
     """
-    # Check connected industries FIRST — before cache
+    # Check connected industries FIRST Ã¢â‚¬â€ before cache
     connected = await get_connected_industries()
 
     # Check cache (only valid if same industries are connected)
@@ -217,7 +217,7 @@ async def evaluate_request(request_id: int) -> dict:
 
         # Block items whose industry is not connected
         if industry not in connected:
-            log.warning(f"  {desc}: industry '{industry}' not connected — skipping item")
+            log.warning(f"  {desc}: industry '{industry}' not connected Ã¢â‚¬â€ skipping item")
             evaluation_items.append({
                 "item_description":   desc,
                 "requested_quantity": req_qty,
@@ -268,7 +268,7 @@ async def evaluate_request(request_id: int) -> dict:
             })
             log.info(
                 f"  {desc}: requested={req_qty}, stock={stock_qty}, "
-                f"shortage={shortage_qty} ({'⚠ SHORTAGE' if has_shortage else '✓ OK'})"
+                f"shortage={shortage_qty} ({'Ã¢Å¡Â  SHORTAGE' if has_shortage else 'Ã¢Å“â€œ OK'})"
             )
         else:
             # Item not found in any inventory
@@ -339,7 +339,7 @@ async def evaluate_request(request_id: int) -> dict:
                 json.dumps(out_event).encode(),
                 key=str(request_id).encode(),
             )
-            log.info(f"Published inventory evaluation for request {request_id} → {TOPIC_OUT}")
+            log.info(f"Published inventory evaluation for request {request_id} Ã¢â€ â€™ {TOPIC_OUT}")
         except Exception as e:
             log.warning(f"Failed to publish event to Kafka: {e}")
 
@@ -394,7 +394,7 @@ async def kafka_supervisor():
             log.warning(f"Kafka connection attempt failed: {e}. Retrying in 5 seconds...")
             producer = None
             consumer = None
-            agent_status["status"] = "running"
+            agent_status["status"] = "degraded"
             await asyncio.sleep(5)
 
 
@@ -432,7 +432,7 @@ async def shutdown():
 
 
 # ------------------------------------------------------------------ #
-# REST API — for frontend and monitoring                              #
+# REST API Ã¢â‚¬â€ for frontend and monitoring                              #
 # ------------------------------------------------------------------ #
 @app.get("/health")
 async def health():
@@ -485,3 +485,5 @@ async def trigger_event(event: TriggerEvent):
     }).encode()
     await producer.send_and_wait(TOPIC_IN, msg, key=str(event.request_id).encode())
     return {"message": f"Event published for request_id={event.request_id}", "topic": TOPIC_IN}
+
+
