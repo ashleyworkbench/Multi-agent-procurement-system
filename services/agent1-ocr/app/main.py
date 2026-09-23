@@ -1,4 +1,4 @@
-from fastapi import (
+﻿from fastapi import (
     FastAPI,
     UploadFile,
     File,
@@ -18,6 +18,8 @@ from .minio_client import (
     ensure_bucket_exists,
     upload_file
 )
+
+from .invoice_watcher import start_invoice_watcher
 
 
 # ============================================================
@@ -88,6 +90,15 @@ def startup_event():
         print("Kafka consumer thread initialization requested.")
     except Exception as e:
         print(f"ERROR: Failed to start Kafka consumer thread: {e}")
+        import traceback
+        traceback.print_exc()
+
+    # Start real-time invoice folder watcher
+    try:
+        start_invoice_watcher()
+        print("Invoice folder watcher started successfully.")
+    except Exception as e:
+        print(f"ERROR: Failed to start invoice folder watcher: {e}")
         import traceback
         traceback.print_exc()
 
@@ -256,7 +267,7 @@ async def upload_file_endpoint(
 
 
         # ----------------------------------------------------
-        # Publish Kafka event (non-blocking — file is safe in MinIO regardless)
+        # Publish Kafka event (non-blocking â€” file is safe in MinIO regardless)
         kafka_event = {}
         try:
             kafka_event = publish_to_invoice_topic(
@@ -665,3 +676,4 @@ def reprocess_document(
         "event":
             kafka_event
     }
+

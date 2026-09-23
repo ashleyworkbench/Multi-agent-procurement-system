@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
@@ -91,7 +91,7 @@ function SourceCard({ source }: { source: DataSource }) {
       error:      ok ? undefined : "Could not reach service. Check API key.",
     });
     setTesting(false);
-    ok ? toast.success(`${source.name} — connection verified`) : toast.error(`${source.name} — connection failed`);
+    ok ? toast.success(`${source.name} â€” connection verified`) : toast.error(`${source.name} â€” connection failed`);
   };
 
   const disconnect = () => {
@@ -157,7 +157,7 @@ function SourceCard({ source }: { source: DataSource }) {
               <div className="flex-1 flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg">
                 <Key size={12} className="text-slate-400 shrink-0" />
                 <code className="text-xs font-mono text-slate-600 flex-1 truncate">
-                  {showKey ? (source.apiKey ?? "—") : "•".repeat(Math.min(source.apiKey?.length ?? 0, 32))}
+                  {showKey ? (source.apiKey ?? "-") : "*".repeat(Math.min(source.apiKey?.length ?? 0, 32))}
                 </code>
               </div>
               <button onClick={() => setShowKey(s => !s)} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors">
@@ -176,7 +176,7 @@ function SourceCard({ source }: { source: DataSource }) {
         <div className="mb-4 flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg">
           <FileSpreadsheet size={12} className="text-slate-400" />
           <span className="text-xs text-slate-600">{source.fileName}</span>
-          {source.rowCount && <span className="text-xs text-slate-400">· {source.rowCount} rows</span>}
+          {source.rowCount && <span className="text-xs text-slate-400">Â· {source.rowCount} rows</span>}
         </div>
       )}
 
@@ -254,7 +254,7 @@ function AddApiForm({ onDone }: { onDone: () => void }) {
       toast.success(`${data.name} connected successfully!`);
       onDone();
     } else {
-      toast.error("Connection test failed — source saved but marked as error.");
+      toast.error("Connection test failed â€” source saved but marked as error.");
       onDone();
     }
   };
@@ -334,135 +334,9 @@ function AddApiForm({ onDone }: { onDone: () => void }) {
   );
 }
 
+// ------------------------------------------------------------------ //`r`n// Main view                                                            //
 // ------------------------------------------------------------------ //
-// Add file upload form                                                  //
-// ------------------------------------------------------------------ //
-function AddFileForm({ onDone }: { onDone: () => void }) {
-  const { addSource } = useDataSourceStore();
-  const [industry, setIndustry]   = useState("construction");
-  const [dataType, setDataType]   = useState<"inventory"|"vendor">("inventory");
-  const [file, setFile]           = useState<File | null>(null);
-  const [uploading, setUploading] = useState(false);
-  const [drag, setDrag]           = useState(false);
-
-  const onDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault(); setDrag(false);
-    const f = e.dataTransfer.files[0];
-    if (f && (f.name.endsWith(".csv") || f.name.endsWith(".xlsx") || f.name.endsWith(".xls"))) setFile(f);
-    else toast.error("Only CSV and Excel files supported");
-  }, []);
-
-  const upload = async () => {
-    if (!file) return;
-    setUploading(true);
-    try {
-      const form = new FormData();
-      form.append("file", file);
-      form.append("data_type", dataType);
-      form.append("industry", industry);
-      form.append("display_name", file.name.replace(/\.[^.]+$/, ""));
-
-      const resp = { data: await onboardingApi.upload(file, dataType, industry, file.name.replace(/\.[^.]+$/, "")) };
-
-      const source: DataSource = {
-        id:        resp.data.upload_id ?? generateId(),
-        name:      file.name,
-        type:      file.name.endsWith(".csv") ? "csv" : "xlsx",
-        industry,
-        dataType,
-        apiKey:    resp.data.api_key,
-        status:    "connected",
-        fileName:  file.name,
-        rowCount:  resp.data.row_count,
-        lastTested: new Date().toISOString(),
-      };
-      addSource(source);
-      toast.success(`${file.name} imported! API key: ${resp.data.api_key}`);
-      onDone();
-    } catch (e: any) {
-      toast.error(`Upload failed: ${e.message}`);
-    }
-    setUploading(false);
-  };
-
-  return (
-    <div className="section-card p-6 space-y-5">
-      <div>
-        <h3 className="text-base font-semibold text-slate-900">Upload File (CSV / Excel)</h3>
-        <p className="text-sm text-slate-500 mt-1">
-          Upload your own inventory or vendor data. We'll create a database table and generate an API key for you.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1.5">Industry</label>
-          <select value={industry} onChange={e => setIndustry(e.target.value)} className="form-input">
-            <option value="construction">Construction</option>
-            <option value="pharma">Pharmaceutical</option>
-            <option value="manufacturing">Manufacturing</option>
-            <option value="electronics">Electronics</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1.5">Data Type</label>
-          <div className="grid grid-cols-2 gap-2">
-            {(["inventory", "vendor"] as const).map(dt => (
-              <label key={dt} className={cn(
-                "flex items-center gap-2 p-3 rounded-xl border-2 cursor-pointer transition-all",
-                dataType === dt ? "border-brand-500 bg-brand-50" : "border-slate-200 hover:border-slate-300"
-              )}>
-                <input type="radio" checked={dataType === dt} onChange={() => setDataType(dt)} className="sr-only" />
-                <span className="text-sm font-semibold text-slate-800 capitalize">{dt}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Drop zone */}
-      <label
-        className={cn(
-          "flex flex-col items-center justify-center gap-3 w-full min-h-[180px] rounded-2xl border-2 border-dashed cursor-pointer transition-all",
-          drag ? "border-brand-400 bg-brand-50" : "border-slate-200 hover:border-brand-300 hover:bg-slate-50",
-          file && "border-emerald-400 bg-emerald-50"
-        )}
-        onDragOver={e => { e.preventDefault(); setDrag(true); }}
-        onDragLeave={() => setDrag(false)}
-        onDrop={onDrop}
-      >
-        <input type="file" className="sr-only" accept=".csv,.xlsx,.xls"
-          onChange={e => { const f = e.target.files?.[0]; if (f) setFile(f); }} />
-        {file ? (
-          <>
-            <CheckCircle2 size={28} className="text-emerald-500" />
-            <p className="text-sm font-semibold text-emerald-700">{file.name}</p>
-            <p className="text-xs text-emerald-600">{(file.size / 1024).toFixed(1)} KB</p>
-          </>
-        ) : (
-          <>
-            <Upload size={24} className="text-slate-400" />
-            <p className="text-sm font-semibold text-slate-600">Drag & drop or click to browse</p>
-            <p className="text-xs text-slate-400">CSV, Excel (.xlsx, .xls) · Max 50MB</p>
-          </>
-        )}
-      </label>
-
-      <div className="flex gap-3">
-        <button type="button" onClick={onDone} className="btn-secondary">Cancel</button>
-        <button onClick={upload} disabled={!file || uploading} className="btn-primary">
-          {uploading ? <><Loader2 size={14} className="animate-spin" /> Importing...</> : <><Upload size={14} /> Import & Generate API</>}
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// ------------------------------------------------------------------ //
-// Main view                                                            //
-// ------------------------------------------------------------------ //
-type AddMode = null | "api" | "file";
+type AddMode = null | "api";
 
 export function DataSourcesView() {
   const { sources, updateSource } = useDataSourceStore();
@@ -487,7 +361,7 @@ export function DataSourcesView() {
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Data Sources</h1>
           <p className="text-sm text-slate-500 mt-0.5">
-            Connect inventory and vendor databases using API keys, or import CSV/Excel files.
+            Connect inventory and vendor databases using API keys.
           </p>
         </div>
         {!addMode && (
@@ -497,9 +371,6 @@ export function DataSourcesView() {
             </button>
             <button onClick={() => setAddMode("api")} className="btn-primary">
               <Plug size={14} /> Connect API
-            </button>
-            <button onClick={() => setAddMode("file")} className="btn-secondary">
-              <Upload size={14} /> Upload File
             </button>
           </div>
         )}
@@ -512,15 +383,11 @@ export function DataSourcesView() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-brand-700">
             <div className="flex items-start gap-2">
               <Key size={13} className="shrink-0 mt-0.5" />
-              <span><strong>API Key</strong> — If your company already has an inventory/vendor API, paste the API key here. We connect directly.</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <Upload size={13} className="shrink-0 mt-0.5" />
-              <span><strong>File Upload</strong> — No API? Upload a CSV or Excel file. We auto-generate a database table and API key for it.</span>
+              <span><strong>API Key</strong> â€” If your company already has an inventory/vendor API, paste the API key here. We connect directly.</span>
             </div>
             <div className="flex items-start gap-2">
               <Database size={13} className="shrink-0 mt-0.5" />
-              <span><strong>Agents use it</strong> — Once connected, agents automatically query your data source for inventory checks and vendor recommendations.</span>
+              <span><strong>Agents use it</strong> â€” Once connected, agents automatically query your data source for inventory checks and vendor recommendations.</span>
             </div>
           </div>
         </div>
@@ -528,7 +395,6 @@ export function DataSourcesView() {
 
       {/* Add forms */}
       {addMode === "api"  && <AddApiForm  onDone={() => setAddMode(null)} />}
-      {addMode === "file" && <AddFileForm onDone={() => setAddMode(null)} />}
 
       {/* Summary */}
       {!addMode && (
@@ -594,3 +460,11 @@ export function DataSourcesView() {
     </div>
   );
 }
+
+
+
+
+
+
+
+

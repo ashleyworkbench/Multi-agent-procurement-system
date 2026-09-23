@@ -1,4 +1,4 @@
-# =============================================================
+﻿# =============================================================
 # FULL MULTI-AGENT PROCUREMENT SYSTEM
 # Agents 1-4 + Integration Layer + Kafka + Redis + DBs
 # =============================================================
@@ -112,7 +112,7 @@ services:
       start_period: 30s
 
   # -----------------------------------------------------------
-  # SERVICES — Python healthchecks (no curl in slim images)
+  # SERVICES â€” Python healthchecks (no curl in slim images)
   # -----------------------------------------------------------
 
   ocr-service:
@@ -244,7 +244,7 @@ services:
       start_period: 10s
 
   # -----------------------------------------------------------
-  # MINIO — Document Storage for Agent 1
+  # MINIO â€” Document Storage for Agent 1
   # -----------------------------------------------------------
 
   minio:
@@ -270,7 +270,7 @@ services:
       start_period: 10s
 
   # -----------------------------------------------------------
-  # AGENT 1 — Document Intelligence (OCR + LLM)
+  # AGENT 1 â€” Document Intelligence (OCR + LLM)
   # -----------------------------------------------------------
 
   agent1-ocr:
@@ -294,6 +294,8 @@ services:
       AGENT1_DATABASE_URL:     postgresql://procurement_admin:SecurePass%402024@postgres:5432/ocr_procurement_db
     ports:
       - "8009:8009"
+    volumes:
+      - ./invoices:/app/invoices
     networks:
       - procurement_network
     healthcheck:
@@ -426,3 +428,4 @@ networks:
   procurement_network:
     driver: bridge
     name: procurement_network
+
