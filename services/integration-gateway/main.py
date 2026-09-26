@@ -1,4 +1,4 @@
-"""
+﻿"""
 Integration API Gateway
 =======================
 Single entry point for all agent queries.
@@ -7,11 +7,11 @@ Handles Redis caching transparently.
 
 Architecture:
     Agent
-      ↓
+      â†“
     Integration Gateway  (this service)
-      ↓
+      â†“
     Industry Service API (inventory-service / vendor-service)
-      ↓
+      â†“
     Database (PostgreSQL / MySQL)
 
 Agents NEVER know which DB is behind the API.
@@ -59,7 +59,7 @@ CACHE_TTL      = int(os.getenv("CACHE_TTL_SECONDS", "600"))
 INVENTORY_SERVICE_URL = os.getenv("INVENTORY_SERVICE_URL", "http://localhost:8002")
 VENDOR_SERVICE_URL    = os.getenv("VENDOR_SERVICE_URL",    "http://localhost:8003")
 
-# API keys per industry — gateway holds them, agents never do
+# API keys per industry â€” gateway holds them, agents never do
 INDUSTRY_KEYS = {
     "construction":  os.getenv("CONSTRUCTION_KEY",  "CONST-a8f3d2e1-4b9c-4d7f-89ab-cdef01234567"),
     "pharma":        os.getenv("PHARMA_KEY",         "PHARM-b7e2c1d0-3a8b-4c6e-78ab-bcde90123456"),
@@ -521,6 +521,15 @@ async def proxy_purchase_orders_list(status: Optional[str] = None, request_id: O
             headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
         )
         return resp.json()
+
+@app.get("/procurement/contracts")
+async def proxy_contracts():
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.get(
+            f"{PROC_SVC_URL}/contracts",
+            headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+        )
+        return resp.json()
 @app.get("/procurement/purchase-orders/{po_id}/pdf")
 async def proxy_po_pdf(po_id: int):
     async with httpx.AsyncClient(timeout=30.0) as client:
@@ -622,4 +631,5 @@ async def proxy_demo_reset():
             headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
         )
         return resp.json()
+
 

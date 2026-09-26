@@ -1,5 +1,5 @@
-"""
-Procurement Service — FastAPI
+﻿"""
+Procurement Service â€” FastAPI
 ==============================
 The ONLY service that writes to procurement_db.
 Agent 4 calls this service to create POs, audit records, and log events.
@@ -157,7 +157,7 @@ async def get_approver_rules():
                 "max_amount": 50000.0,
                 "role": "Procurement Officer",
                 "email": "officer.procurement@procureflow.local",
-                "policy": "Standard single authorization for orders below ₹50,000",
+                "policy": "Standard single authorization for orders below â‚¹50,000",
             },
             {
                 "tier": "TIER_2_MANAGER",
@@ -166,7 +166,7 @@ async def get_approver_rules():
                 "max_amount": 200000.0,
                 "role": "Operations / Department Manager",
                 "email": "manager.ops@procureflow.local",
-                "policy": "Departmental operational approval for orders ₹50,000 – ₹2,00,000",
+                "policy": "Departmental operational approval for orders â‚¹50,000 â€“ â‚¹2,00,000",
             },
             {
                 "tier": "TIER_3_DIRECTOR",
@@ -174,7 +174,7 @@ async def get_approver_rules():
                 "min_amount": 200000.0,
                 "role": "Finance Director / VP",
                 "email": "director.finance@procureflow.local",
-                "policy": "Executive sign-off & digital certification for orders above ₹2,00,000",
+                "policy": "Executive sign-off & digital certification for orders above â‚¹2,00,000",
             },
         ]
     }
@@ -357,7 +357,7 @@ async def update_po_status(po_id: int, body: UpdateStatus):
         """, (po_id, po["po_number"], old_status, body.status,
               body.performed_by, body.notes))
         conn.commit()
-        log.info(f"PO {po['po_number']}: {old_status} → {body.status}")
+        log.info(f"PO {po['po_number']}: {old_status} â†’ {body.status}")
         return {"po_id": po_id, "po_number": po["po_number"],
                 "old_status": old_status, "new_status": body.status}
     finally:
@@ -440,6 +440,62 @@ async def reset_demo_data():
 
 
 # ------------------------------------------------------------------ #
+
+# ------------------------------------------------------------------ #
+# Contracts — Signed Documents
+# ------------------------------------------------------------------ #
+@app.get("/contracts", dependencies=[Depends(verify_key_flexible)])
+async def get_contracts():
+    """
+    Return all DocuSign-completed purchase orders that have
+    a signed document stored in MinIO.
+    """
+    conn = get_conn()
+    cur = conn.cursor()
+
+    try:
+        cur.execute("""
+            SELECT
+                id,
+                po_number,
+                request_id,
+                vendor_id,
+                vendor_name,
+                item_name,
+                quantity,
+                unit_price,
+                total_price,
+                currency,
+                status,
+                delivery_date_expected,
+                docusign_envelope_id,
+                docusign_status,
+                signed_document_url,
+                updated_at
+            FROM purchase_orders
+            WHERE docusign_status = 'COMPLETED'
+              AND signed_document_url IS NOT NULL
+            ORDER BY updated_at DESC
+        """)
+
+        contracts = [dict(row) for row in cur.fetchall()]
+
+        return {
+            "contracts": contracts,
+            "total": len(contracts),
+        }
+
+    except Exception as e:
+        log.error(f"Failed to fetch contracts: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to fetch signed contracts"
+        )
+
+    finally:
+        cur.close()
+        conn.close()
+
 # PDF Generation & Download Endpoints                                  #
 # ------------------------------------------------------------------ #
 @app.get("/purchase-orders/{po_id}/pdf")
@@ -608,7 +664,7 @@ async def sign_po(po_id: int, body: SignPORequest):
         """, (event_id, event_payload))
 
         conn.commit()
-        log.info(f"✓ Digital signature completed for PO {po_number} by {body.signer_email}. Stored in MinIO: {signed_minio_path}")
+        log.info(f"âœ“ Digital signature completed for PO {po_number} by {body.signer_email}. Stored in MinIO: {signed_minio_path}")
 
         return {
             "success": True,
@@ -771,3 +827,4 @@ async def get_agent_logs(limit: int = 100, source_agent: Optional[str] = None):
     finally:
         cur.close()
         conn.close()
+
