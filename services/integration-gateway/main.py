@@ -1,4 +1,4 @@
-﻿"""
+"""
 Integration API Gateway
 =======================
 Single entry point for all agent queries.
@@ -7,11 +7,11 @@ Handles Redis caching transparently.
 
 Architecture:
     Agent
-      â†“
+      ↓
     Integration Gateway  (this service)
-      â†“
+      ↓
     Industry Service API (inventory-service / vendor-service)
-      â†“
+      ↓
     Database (PostgreSQL / MySQL)
 
 Agents NEVER know which DB is behind the API.
@@ -59,7 +59,7 @@ CACHE_TTL      = int(os.getenv("CACHE_TTL_SECONDS", "600"))
 INVENTORY_SERVICE_URL = os.getenv("INVENTORY_SERVICE_URL", "http://localhost:8002")
 VENDOR_SERVICE_URL    = os.getenv("VENDOR_SERVICE_URL",    "http://localhost:8003")
 
-# API keys per industry â€” gateway holds them, agents never do
+# API keys per industry — gateway holds them, agents never do
 INDUSTRY_KEYS = {
     "construction":  os.getenv("CONSTRUCTION_KEY",  "CONST-a8f3d2e1-4b9c-4d7f-89ab-cdef01234567"),
     "pharma":        os.getenv("PHARMA_KEY",         "PHARM-b7e2c1d0-3a8b-4c6e-78ab-bcde90123456"),
@@ -132,6 +132,55 @@ def verify_gateway_key(x_api_key: str = Header(...)):
     if x_api_key != GATEWAY_KEY:
         raise HTTPException(401, "Invalid gateway API key")
     return x_api_key
+# ------------------------------------------------------------------ #
+# User authentication proxy                                           #
+# ------------------------------------------------------------------ #
+
+@app.post("/auth/login")
+async def auth_login(request: Request):
+    body = await request.json()
+
+    async with httpx.AsyncClient() as client:
+        response = await client.post(
+            f"{PROC_SVC_URL}/auth/login",
+            json=body,
+            headers={
+                "X-API-KEY": GATEWAY_KEY,
+            },
+        )
+
+    return Response(
+        content=response.content,
+        status_code=response.status_code,
+        media_type=response.headers.get("content-type", "application/json"),
+    )
+
+
+@app.get("/auth/me")
+async def auth_me(
+    request: Request,
+    x_api_key: str = Depends(verify_gateway_key),
+):
+    authorization = request.headers.get("Authorization")
+
+    if not authorization:
+        raise HTTPException(401, "Authentication required")
+
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            f"{PROC_SVC_URL}/auth/me",
+            headers={
+                "X-API-KEY": GATEWAY_KEY,
+                "Authorization": authorization,
+            },
+        )
+
+    return Response(
+        content=response.content,
+        status_code=response.status_code,
+        media_type=response.headers.get("content-type", "application/json"),
+    )
+
 
 
 # ------------------------------------------------------------------ #
@@ -503,7 +552,14 @@ async def proxy_summary():
         return resp.json()
 
 @app.get("/procurement/po")
-async def proxy_purchase_orders_list(status: Optional[str] = None, request_id: Optional[int] = None, limit: int = 100, offset: int = 0):
+async def proxy_purchase_orders_list(
+    status: Optional[str] = None,
+    request_id: Optional[int] = None,
+    limit: int = 100,
+    offset: int = 0,
+    assigned_to_me: bool = False,
+    request: Request = None,
+):
     params = {}
     if status:
         params["status"] = status
@@ -513,83 +569,165 @@ async def proxy_purchase_orders_list(status: Optional[str] = None, request_id: O
         params["limit"] = limit
     if offset != 0:
         params["offset"] = offset
+    if assigned_to_me:
+        params["assigned_to_me"] = "true"
+
+    headers = {
+        "X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"
+    }
+
+    authorization = request.headers.get("Authorization") if request else None
+    if authorization:
+        headers["Authorization"] = authorization
 
     async with httpx.AsyncClient(timeout=10.0) as client:
         resp = await client.get(
             f"{PROC_SVC_URL}/purchase-orders",
             params=params,
-            headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+            headers=headers,
         )
-        return resp.json()
+        return Response(
+            content=resp.content,
+            status_code=resp.status_code,
+            media_type=resp.headers.get("content-type", "application/json"),
+        )
 
 @app.get("/procurement/contracts")
-async def proxy_contracts():
+async def proxy_contracts(
+    assigned_to_me: bool = False,
+    request: Request = None,
+):
+    params = {}
+
+    if assigned_to_me:
+        params["assigned_to_me"] = "true"
+
+    headers = {
+        "X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"
+    }
+
+    authorization = request.headers.get("Authorization") if request else None
+    if authorization:
+        headers["Authorization"] = authorization
+
     async with httpx.AsyncClient(timeout=10.0) as client:
         resp = await client.get(
             f"{PROC_SVC_URL}/contracts",
-            headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+            params=params,
+            headers=headers,
         )
-        return resp.json()
+
+    return Response(
+        content=resp.content,
+        status_code=resp.status_code,
+        media_type=resp.headers.get("content-type", "application/json"),
+    )
 @app.get("/procurement/purchase-orders/{po_id}/pdf")
-async def proxy_po_pdf(po_id: int):
+async def proxy_po_pdf(po_id: int, request: Request):
+    headers = {
+        "X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"
+    }
+
+    authorization = request.headers.get("Authorization")
+    if authorization:
+        headers["Authorization"] = authorization
+
     async with httpx.AsyncClient(timeout=30.0) as client:
         resp = await client.get(
             f"{PROC_SVC_URL}/purchase-orders/{po_id}/pdf",
-            headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+            headers=headers,
         )
-        return Response(
-            content=resp.content,
-            status_code=resp.status_code,
-            media_type=resp.headers.get("content-type", "application/pdf"),
-            headers={
-                "Content-Disposition": resp.headers.get(
-                    "content-disposition",
-                    f'inline; filename="PO_{po_id}.pdf"'
-                )
-            }
-        )
+
+    return Response(
+        content=resp.content,
+        status_code=resp.status_code,
+        media_type=resp.headers.get("content-type", "application/pdf"),
+        headers={
+            "Content-Disposition": resp.headers.get(
+                "content-disposition",
+                f'inline; filename="PO_{po_id}.pdf"'
+            )
+        },
+    )
 
 
 @app.get("/procurement/purchase-orders/{po_id}/download")
-async def proxy_po_download(po_id: int):
+async def proxy_po_download(po_id: int, request: Request):
+    headers = {
+        "X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"
+    }
+
+    authorization = request.headers.get("Authorization")
+    if authorization:
+        headers["Authorization"] = authorization
+
     async with httpx.AsyncClient(timeout=30.0) as client:
         resp = await client.get(
             f"{PROC_SVC_URL}/purchase-orders/{po_id}/download",
-            headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
-        )
-        return Response(
-            content=resp.content,
-            status_code=resp.status_code,
-            media_type=resp.headers.get("content-type", "application/pdf"),
-            headers={
-                "Content-Disposition": resp.headers.get(
-                    "content-disposition",
-                    f'attachment; filename="PO_{po_id}.pdf"'
-                )
-            }
+            headers=headers,
         )
 
+    return Response(
+        content=resp.content,
+        status_code=resp.status_code,
+        media_type=resp.headers.get("content-type", "application/pdf"),
+        headers={
+            "Content-Disposition": resp.headers.get(
+                "content-disposition",
+                f'attachment; filename="PO_{po_id}.pdf"'
+            )
+        },
+    )
 @app.post("/procurement/purchase-orders/{po_id}/sign")
 async def proxy_sign_po(po_id: int, request: Request):
     body = await request.json()
+
+    headers = {
+        "X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"
+    }
+
+    authorization = request.headers.get("Authorization")
+    if authorization:
+        headers["Authorization"] = authorization
+
     async with httpx.AsyncClient(timeout=20.0) as client:
         resp = await client.post(
             f"{PROC_SVC_URL}/purchase-orders/{po_id}/sign",
             json=body,
-            headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+            headers=headers,
         )
-        return resp.json()
+
+    return Response(
+        content=resp.content,
+        status_code=resp.status_code,
+        media_type=resp.headers.get("content-type", "application/json"),
+    )
+
 
 @app.patch("/procurement/purchase-orders/{po_id}/status")
 async def proxy_update_po_status(po_id: int, request: Request):
     body = await request.json()
+
+    headers = {
+        "X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"
+    }
+
+    authorization = request.headers.get("Authorization")
+    if authorization:
+        headers["Authorization"] = authorization
+
     async with httpx.AsyncClient(timeout=10.0) as client:
         resp = await client.patch(
             f"{PROC_SVC_URL}/purchase-orders/{po_id}/status",
             json=body,
-            headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+            headers=headers,
         )
-        return resp.json()
+
+    return Response(
+        content=resp.content,
+        status_code=resp.status_code,
+        media_type=resp.headers.get("content-type", "application/json"),
+    )
 
 @app.get("/agent-logs")
 async def proxy_agent_logs(limit: int = 100, source_agent: Optional[str] = None):
@@ -631,5 +769,11 @@ async def proxy_demo_reset():
             headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
         )
         return resp.json()
+
+
+
+
+
+
 
 
