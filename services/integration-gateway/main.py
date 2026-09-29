@@ -159,7 +159,6 @@ async def auth_login(request: Request):
 @app.get("/auth/me")
 async def auth_me(
     request: Request,
-    x_api_key: str = Depends(verify_gateway_key),
 ):
     authorization = request.headers.get("Authorization")
 

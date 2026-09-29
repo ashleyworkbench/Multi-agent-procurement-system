@@ -75,6 +75,7 @@ export const authApi = {
     const res = await axios.get(`${GATEWAY_URL}/auth/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
+        "X-API-KEY": GATEWAY_KEY,
       },
     });
     if (res.data && typeof window !== "undefined") {
