@@ -53,6 +53,12 @@ JWT_ALGORITHM = "HS256"
 JWT_EXPIRE_MINUTES = 480
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+ROLE_TO_TIER = {
+    "Procurement Officer": "TIER_1_OFFICER",
+    "Operations Manager": "TIER_2_MANAGER",
+    "Finance Director": "TIER_3_DIRECTOR",
+}
 bearer_scheme = HTTPBearer(auto_error=False)
 
 
@@ -488,6 +494,9 @@ async def list_pos(
             filters.append("request_id = %s")
             filter_params.append(int(request_id))
 
+        user_role = current_user.get("role") if current_user else None
+        user_email = current_user.get("email", "").strip().lower() if current_user else ""
+
         if assigned_to_me:
             if not current_user:
                 raise HTTPException(
@@ -495,20 +504,21 @@ async def list_pos(
                     detail="Authentication required for assigned approval records",
                 )
 
-            allowed_roles = {
-                "Procurement Officer",
-                "Operations Manager",
-                "Finance Director",
-            }
-
-            if current_user["role"] not in allowed_roles:
+            if user_role == "Admin":
+                pass
+            elif user_role in ROLE_TO_TIER:
+                expected_tier = ROLE_TO_TIER[user_role]
+                filters.append("(approval_tier = %s OR LOWER(assigned_approver_email) = %s)")
+                filter_params.extend([expected_tier, user_email])
+            else:
                 raise HTTPException(
                     status_code=403,
                     detail="This account does not have approval access",
                 )
-
-            filters.append("LOWER(assigned_approver_email) = LOWER(%s)")
-            filter_params.append(current_user["email"])
+        elif current_user and user_role in ROLE_TO_TIER:
+            expected_tier = ROLE_TO_TIER[user_role]
+            filters.append("(approval_tier = %s OR LOWER(assigned_approver_email) = %s)")
+            filter_params.extend([expected_tier, user_email])
 
         where = ("WHERE " + " AND ".join(filters)) if filters else ""
 
@@ -608,22 +618,23 @@ async def update_po_status(
                 "Finance Director",
             }
 
-            if current_user["role"] not in allowed_roles:
-                raise HTTPException(
-                    status_code=403,
-                    detail="This account is not authorized to approve or reject purchase orders",
-                )
+            user_role = current_user.get("role")
+            user_email = current_user.get("email", "").strip().lower()
+            expected_tier = ROLE_TO_TIER.get(user_role)
+            po_tier = po.get("approval_tier")
+            assigned_email = (po.get("assigned_approver_email") or "").strip().lower()
 
-            assigned_email = po["assigned_approver_email"]
-
-            if (
-                not assigned_email
-                or assigned_email.lower() != current_user["email"].lower()
-            ):
-                raise HTTPException(
-                    status_code=403,
-                    detail="This purchase order is not assigned to your account",
-                )
+            if user_role != "Admin":
+                if user_role not in allowed_roles:
+                    raise HTTPException(
+                        status_code=403,
+                        detail="This account is not authorized to approve or reject purchase orders",
+                    )
+                if po_tier != expected_tier and assigned_email != user_email:
+                    raise HTTPException(
+                        status_code=403,
+                        detail="This purchase order is not assigned to your tier or account",
+                    )
 
         old_status = po["status"]
         cur.execute(
@@ -752,31 +763,30 @@ async def get_contracts(
             "Finance Director",
         }
 
+        user_role = current_user.get("role") if current_user else None
+        user_email = current_user.get("email", "").strip().lower() if current_user else ""
+
         if assigned_to_me:
             if not current_user:
                 raise HTTPException(
                     status_code=401,
                     detail="Authentication required for assigned contracts",
                 )
-
-            if current_user["role"] not in approver_roles:
+            if user_role == "Admin":
+                pass
+            elif user_role in ROLE_TO_TIER:
+                expected_tier = ROLE_TO_TIER[user_role]
+                where_clauses.append("(approval_tier = %s OR LOWER(assigned_approver_email) = %s)")
+                params.extend([expected_tier, user_email])
+            else:
                 raise HTTPException(
                     status_code=403,
                     detail="This account does not have approval access",
                 )
-
-            where_clauses.append(
-                "LOWER(assigned_approver_email) = LOWER(%s)"
-            )
-            params.append(current_user["email"])
-
-        elif current_user and current_user["role"] in approver_roles:
-            # Defense in depth: approvers are never allowed to retrieve
-            # another user's contracts by omitting assigned_to_me.
-            where_clauses.append(
-                "LOWER(assigned_approver_email) = LOWER(%s)"
-            )
-            params.append(current_user["email"])
+        elif current_user and user_role in ROLE_TO_TIER:
+            expected_tier = ROLE_TO_TIER[user_role]
+            where_clauses.append("(approval_tier = %s OR LOWER(assigned_approver_email) = %s)")
+            params.extend([expected_tier, user_email])
 
         where = " AND ".join(where_clauses)
 
@@ -850,10 +860,14 @@ async def view_po_pdf(
             "Finance Director",
         }
 
-        if current_user and current_user["role"] in approver_roles:
-            assigned_email = po_dict.get("assigned_approver_email")
+        user_role = current_user.get("role") if current_user else None
+        user_email = current_user.get("email", "").strip().lower() if current_user else ""
+        expected_tier = ROLE_TO_TIER.get(user_role)
+        po_tier = po_dict.get("approval_tier")
+        assigned_email = (po_dict.get("assigned_approver_email") or "").strip().lower()
 
-            if not assigned_email or assigned_email.lower() != current_user["email"].lower():
+        if user_role != "Admin" and user_role in ROLE_TO_TIER:
+            if po_tier != expected_tier and assigned_email != user_email:
                 raise HTTPException(
                     status_code=403,
                     detail="You are not authorized to view this purchase order",
@@ -911,10 +925,14 @@ async def download_po(
             "Finance Director",
         }
 
-        if current_user and current_user["role"] in approver_roles:
-            assigned_email = po_dict.get("assigned_approver_email")
+        user_role = current_user.get("role") if current_user else None
+        user_email = current_user.get("email", "").strip().lower() if current_user else ""
+        expected_tier = ROLE_TO_TIER.get(user_role)
+        po_tier = po_dict.get("approval_tier")
+        assigned_email = (po_dict.get("assigned_approver_email") or "").strip().lower()
 
-            if not assigned_email or assigned_email.lower() != current_user["email"].lower():
+        if user_role != "Admin" and user_role in ROLE_TO_TIER:
+            if po_tier != expected_tier and assigned_email != user_email:
                 raise HTTPException(
                     status_code=403,
                     detail="You are not authorized to download this purchase order",
@@ -993,16 +1011,18 @@ async def sign_po(
                 detail="This account is not authorized to sign purchase orders",
             )
 
-        assigned_email = po_dict.get("assigned_approver_email")
+        user_role = current_user.get("role")
+        user_email = current_user.get("email", "").strip().lower()
+        expected_tier = ROLE_TO_TIER.get(user_role)
+        po_tier = po_dict.get("approval_tier")
+        assigned_email = (po_dict.get("assigned_approver_email") or "").strip().lower()
 
-        if (
-            not assigned_email
-            or assigned_email.lower() != current_user["email"].lower()
-        ):
-            raise HTTPException(
-                status_code=403,
-                detail="This purchase order is not assigned to your account",
-            )
+        if user_role != "Admin":
+            if po_tier != expected_tier and assigned_email != user_email:
+                raise HTTPException(
+                    status_code=403,
+                    detail=f"This purchase order is not assigned to your tier ({user_role}). It requires {po_dict.get('assigned_approver_name', 'an approver')} approval.",
+                )
 
         old_status = po_dict["status"]
         po_number  = po_dict["po_number"]
