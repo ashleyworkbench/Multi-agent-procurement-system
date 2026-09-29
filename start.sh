@@ -11,23 +11,32 @@ if [ ! -f .env ]; then
     cp .env.example .env
 fi
 
+# Ensure invoices directory exists on host (for Agent 1 folder watcher)
+mkdir -p invoices
+
+BUILD_FLAG=""
+if [[ "$*" == *"--build"* ]]; then
+    echo "🔨 Build flag detected. Rebuilding modified Docker images..."
+    BUILD_FLAG="--build"
+fi
+
 echo "🚀 [1/4] Starting Infrastructure (Databases, Kafka, Redis, MinIO)..."
-docker compose up -d postgres mysql redis zookeeper kafka minio
+docker compose up -d $BUILD_FLAG postgres mysql redis zookeeper kafka minio
 
 echo "⏳ Waiting 20 seconds for infrastructure initialization..."
 sleep 20
 
 echo "🚀 [2/4] Starting Core Backend Microservices..."
-docker compose up -d api-gateway ocr-service inventory-service vendor-service procurement-service onboarding-service
+docker compose up -d $BUILD_FLAG api-gateway ocr-service inventory-service vendor-service procurement-service onboarding-service
 
 echo "⏳ Waiting 10 seconds for backend microservices..."
 sleep 10
 
 echo "🚀 [3/4] Starting Autonomous AI Agents (1, 2, 3, 4)..."
-docker compose up -d agent1-ocr agent2-inventory agent3-vendor agent4-procurement
+docker compose up -d $BUILD_FLAG agent1-ocr agent2-inventory agent3-vendor agent4-procurement
 
 echo "🚀 [4/4] Starting Frontend Dashboard..."
-docker compose up -d frontend
+docker compose up -d $BUILD_FLAG frontend
 
 echo ""
 echo "================================================="
