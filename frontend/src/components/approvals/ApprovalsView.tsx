@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { procurementApi } from "@/lib/api";
@@ -13,19 +13,19 @@ import { useEffect, useState } from "react";
 
 const tierConfig: Record<string, { label: string; role: string; email: string; cls: string }> = {
   TIER_1_OFFICER: {
-    label: "Tier 1 (< â‚¹50,000)",
+    label: "Tier 1 (< ₹50,000)",
     role: "Procurement Officer",
     email: "shindeishwari2010@gmail.com",
     cls: "bg-blue-50 text-blue-700 border-blue-200",
   },
   TIER_2_MANAGER: {
-    label: "Tier 2 (â‚¹50,000 â€“ â‚¹2,00,000)",
+    label: "Tier 2 (₹50,000 – ₹2,00,000)",
     role: "Operations Manager",
     email: "shindeishwari45@gmail.com",
     cls: "bg-amber-50 text-amber-700 border-amber-200",
   },
   TIER_3_DIRECTOR: {
-    label: "Tier 3 (> â‚¹2,00,000)",
+    label: "Tier 3 (> ₹2,00,000)",
     role: "Finance Director",
     email: "simplesalt7@gmail.com",
     cls: "bg-purple-50 text-purple-700 border-purple-200",
@@ -65,7 +65,7 @@ function DocuSignModal({
         notes: `DocuSign digital signature applied by ${signerName} (${tierInfo.role})`,
       });
       toast.success(
-        `âœ“ PO ${po.po_number} digitally signed via DocuSign! Archived in MinIO.`
+        `✓ PO ${po.po_number} digitally signed via DocuSign! Archived in MinIO.`
       );
       onSigned();
     } catch (err: any) {

@@ -122,7 +122,7 @@ function LoginForm() {
               </div>
             )}
 
-            <button
+<button
               type="submit"
               disabled={loading}
               className="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
@@ -130,6 +130,42 @@ function LoginForm() {
               {loading ? "Signing in..." : "Sign In"}
             </button>
           </form>
+
+          <div className="mt-6 pt-6 border-t border-gray-100">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider text-center mb-3">
+              Quick Demo Accounts (Password: Password@123)
+            </p>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <button
+                type="button"
+                onClick={() => { setEmail("admin@procureflow.local"); setPassword("Password@123"); }}
+                className="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-700 text-left transition font-medium"
+              >
+                🛠️ Admin
+              </button>
+              <button
+                type="button"
+                onClick={() => { setEmail("officer.procurement@procureflow.local"); setPassword("Password@123"); }}
+                className="p-2 border border-blue-200 rounded-lg bg-blue-50/50 hover:bg-blue-100/50 text-blue-800 text-left transition font-medium"
+              >
+                📋 Officer (&lt; ₹50k)
+              </button>
+              <button
+                type="button"
+                onClick={() => { setEmail("manager.ops@procureflow.local"); setPassword("Password@123"); }}
+                className="p-2 border border-amber-200 rounded-lg bg-amber-50/50 hover:bg-amber-100/50 text-amber-800 text-left transition font-medium"
+              >
+                👔 Manager (₹50k-₹2L)
+              </button>
+              <button
+                type="button"
+                onClick={() => { setEmail("director.finance@procureflow.local"); setPassword("Password@123"); }}
+                className="p-2 border border-purple-200 rounded-lg bg-purple-50/50 hover:bg-purple-100/50 text-purple-800 text-left transition font-medium"
+              >
+                💼 Director (&gt; ₹2L)
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </main>

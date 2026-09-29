@@ -33,7 +33,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+/lib/
 lib64/
 parts/
 sdist/
@@ -296,7 +296,7 @@ $RECYCLE.BIN/
 # ============================================================================
 # UPLOADS & USER DATA
 # ============================================================================
-uploads/
+/uploads/
 upload/
 user-uploads/
 uploaded-files/
@@ -432,3 +432,7 @@ api-docs/generated/
 # ============================================================================
 # END OF FILE
 # ============================================================================
+
+# Whitelist frontend source folders
+!frontend/src/lib/
+!frontend/src/components/uploads/

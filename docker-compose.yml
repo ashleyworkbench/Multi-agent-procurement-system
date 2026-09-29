@@ -1,4 +1,4 @@
-﻿# =============================================================
+# =============================================================
 # FULL MULTI-AGENT PROCUREMENT SYSTEM
 # Agents 1-4 + Integration Layer + Kafka + Redis + DBs
 # =============================================================
@@ -112,7 +112,7 @@ services:
       start_period: 30s
 
   # -----------------------------------------------------------
-  # SERVICES â€” Python healthchecks (no curl in slim images)
+  # SERVICES — Python healthchecks (no curl in slim images)
   # -----------------------------------------------------------
 
   ocr-service:
@@ -244,7 +244,7 @@ services:
       start_period: 10s
 
   # -----------------------------------------------------------
-  # MINIO â€” Document Storage for Agent 1
+  # MINIO — Document Storage for Agent 1
   # -----------------------------------------------------------
 
   minio:
@@ -270,7 +270,7 @@ services:
       start_period: 10s
 
   # -----------------------------------------------------------
-  # AGENT 1 â€” Document Intelligence (OCR + LLM)
+  # AGENT 1 — Document Intelligence (OCR + LLM)
   # -----------------------------------------------------------
 
   agent1-ocr:

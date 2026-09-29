@@ -637,6 +637,8 @@ async def proxy_po_pdf(po_id: int, request: Request):
     authorization = request.headers.get("Authorization")
     if authorization:
         headers["Authorization"] = authorization
+    elif request.query_params.get("token"):
+        headers["Authorization"] = f"Bearer {request.query_params.get('token')}" 
 
     async with httpx.AsyncClient(timeout=30.0) as client:
         resp = await client.get(
@@ -666,6 +668,8 @@ async def proxy_po_download(po_id: int, request: Request):
     authorization = request.headers.get("Authorization")
     if authorization:
         headers["Authorization"] = authorization
+    elif request.query_params.get("token"):
+        headers["Authorization"] = f"Bearer {request.query_params.get('token')}" 
 
     async with httpx.AsyncClient(timeout=30.0) as client:
         resp = await client.get(

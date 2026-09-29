@@ -1,4 +1,4 @@
-﻿import os
+import os
 import time
 import logging
 import threading
@@ -241,8 +241,15 @@ def get_content_type(file_name):
 
 
 def start_invoice_watcher():
+    global WATCH_FOLDER
+    WATCH_FOLDER = get_watch_folder()
 
-    if not os.path.exists(WATCH_FOLDER):
+    try:
+        if not os.path.exists(WATCH_FOLDER):
+            os.makedirs(WATCH_FOLDER, exist_ok=True)
+    except Exception as e:
+        log.warning(f"Could not create WATCH_FOLDER '{WATCH_FOLDER}': {e}. Falling back to ./invoices")
+        WATCH_FOLDER = os.path.abspath("invoices")
         os.makedirs(WATCH_FOLDER, exist_ok=True)
 
     # First process files that already exist

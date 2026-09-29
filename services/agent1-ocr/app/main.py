@@ -1,4 +1,4 @@
-﻿from fastapi import (
+from fastapi import (
     FastAPI,
     UploadFile,
     File,
@@ -267,7 +267,7 @@ async def upload_file_endpoint(
 
 
         # ----------------------------------------------------
-        # Publish Kafka event (non-blocking â€” file is safe in MinIO regardless)
+        # Publish Kafka event (non-blocking — file is safe in MinIO regardless)
         kafka_event = {}
         try:
             kafka_event = publish_to_invoice_topic(

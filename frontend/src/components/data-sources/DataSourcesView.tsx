@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
@@ -91,7 +91,7 @@ function SourceCard({ source }: { source: DataSource }) {
       error:      ok ? undefined : "Could not reach service. Check API key.",
     });
     setTesting(false);
-    ok ? toast.success(`${source.name} â€” connection verified`) : toast.error(`${source.name} â€” connection failed`);
+    ok ? toast.success(`${source.name} — connection verified`) : toast.error(`${source.name} — connection failed`);
   };
 
   const disconnect = () => {
@@ -254,7 +254,7 @@ function AddApiForm({ onDone }: { onDone: () => void }) {
       toast.success(`${data.name} connected successfully!`);
       onDone();
     } else {
-      toast.error("Connection test failed â€” source saved but marked as error.");
+      toast.error("Connection test failed — source saved but marked as error.");
       onDone();
     }
   };
@@ -383,11 +383,11 @@ export function DataSourcesView() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-brand-700">
             <div className="flex items-start gap-2">
               <Key size={13} className="shrink-0 mt-0.5" />
-              <span><strong>API Key</strong> â€” If your company already has an inventory/vendor API, paste the API key here. We connect directly.</span>
+              <span><strong>API Key</strong> — If your company already has an inventory/vendor API, paste the API key here. We connect directly.</span>
             </div>
             <div className="flex items-start gap-2">
               <Database size={13} className="shrink-0 mt-0.5" />
-              <span><strong>Agents use it</strong> â€” Once connected, agents automatically query your data source for inventory checks and vendor recommendations.</span>
+              <span><strong>Agents use it</strong> — Once connected, agents automatically query your data source for inventory checks and vendor recommendations.</span>
             </div>
           </div>
         </div>
