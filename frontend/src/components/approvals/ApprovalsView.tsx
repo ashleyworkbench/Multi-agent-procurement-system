@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { procurementApi } from "@/lib/api";
@@ -8,23 +8,24 @@ import {
   Download, Eye, ShieldCheck, PenTool, X, FileText, Lock,
 } from "lucide-react";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const tierConfig: Record<string, { label: string; role: string; email: string; cls: string }> = {
   TIER_1_OFFICER: {
-    label: "Tier 1 (< ₹50,000)",
+    label: "Tier 1 (< â‚¹50,000)",
     role: "Procurement Officer",
     email: "shindeishwari2010@gmail.com",
     cls: "bg-blue-50 text-blue-700 border-blue-200",
   },
   TIER_2_MANAGER: {
-    label: "Tier 2 (₹50,000 – ₹2,00,000)",
+    label: "Tier 2 (â‚¹50,000 â€“ â‚¹2,00,000)",
     role: "Operations Manager",
     email: "shindeishwari45@gmail.com",
     cls: "bg-amber-50 text-amber-700 border-amber-200",
   },
   TIER_3_DIRECTOR: {
-    label: "Tier 3 (> ₹2,00,000)",
+    label: "Tier 3 (> â‚¹2,00,000)",
     role: "Finance Director",
     email: "simplesalt7@gmail.com",
     cls: "bg-purple-50 text-purple-700 border-purple-200",
@@ -64,7 +65,7 @@ function DocuSignModal({
         notes: `DocuSign digital signature applied by ${signerName} (${tierInfo.role})`,
       });
       toast.success(
-        `✓ PO ${po.po_number} digitally signed via DocuSign! Archived in MinIO.`
+        `âœ“ PO ${po.po_number} digitally signed via DocuSign! Archived in MinIO.`
       );
       onSigned();
     } catch (err: any) {
@@ -236,11 +237,25 @@ function DocuSignModal({
 // ------------------------------------------------------------------ //
 export function ApprovalsView() {
   const qc = useQueryClient();
+  const router = useRouter();
+  const [requestedPoId, setRequestedPoId] = useState<number | null>(null);
+
+  const [signRequested, setSignRequested] = useState(false);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const poId = Number(params.get("po_id"));
+
+    if (Number.isFinite(poId) && poId > 0) {
+      setRequestedPoId(poId);
+    }
+
+    setSignRequested(params.get("sign") === "true");
+  }, []);
   const [signingPO, setSigningPO] = useState<any | null>(null);
 
   const { data, isLoading, isError, refetch, isFetching } = useQuery({
     queryKey: ["pending-pos"],
-    queryFn:  () => procurementApi.getPOs({ status: "PENDING_APPROVAL" }),
+    queryFn:  () => procurementApi.getPOs({ status: "PENDING_APPROVAL", assigned_to_me: true }),
     refetchInterval: 8000,
   });
 
@@ -257,6 +272,20 @@ export function ApprovalsView() {
   });
 
   const pending = data?.purchase_orders ?? [];
+
+  useEffect(() => {
+    if (!signRequested || !requestedPoId || isLoading || isError) return;
+
+    const targetPO = pending.find((po: any) => Number(po.id) === requestedPoId);
+
+    if (targetPO) {
+      setSigningPO(targetPO);
+      return;
+    }
+
+    toast.error("This Purchase Order is not assigned to your account.");
+    router.replace("/approvals");
+  }, [signRequested, requestedPoId, pending, isLoading, isError, router]);
 
   return (
     <div className="space-y-6">
@@ -394,3 +423,11 @@ export function ApprovalsView() {
     </div>
   );
 }
+
+
+
+
+
+
+
+

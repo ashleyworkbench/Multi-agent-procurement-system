@@ -1,5 +1,5 @@
 """
-Procurement Service — FastAPI
+Procurement Service â€” FastAPI
 ==============================
 The ONLY service that writes to procurement_db.
 Agent 4 calls this service to create POs, audit records, and log events.
@@ -18,6 +18,9 @@ from fastapi import FastAPI, HTTPException, Header, Query, Depends, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from pdf_generator import generate_po_pdf
 from minio_storage import upload_pdf_bytes, download_pdf_bytes, get_download_url
@@ -44,6 +47,14 @@ PG_USER         = os.getenv("POSTGRES_USER",  "procurement_admin")
 PG_PASS         = os.getenv("POSTGRES_PASSWORD", "SecurePass@2024")
 PROCUREMENT_KEY = os.getenv("PROCUREMENT_KEY", "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012")
 
+# JWT authentication for human users
+JWT_SECRET = os.getenv("JWT_SECRET", "change-this-secret-in-production")
+JWT_ALGORITHM = "HS256"
+JWT_EXPIRE_MINUTES = 480
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+bearer_scheme = HTTPBearer(auto_error=False)
+
 
 # ------------------------------------------------------------------ #
 # Auth + DB                                                            #
@@ -67,6 +78,125 @@ def get_conn():
         cursor_factory=RealDictCursor,
     )
 
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+
+def verify_password(plain_password: str, password_hash: str) -> bool:
+    return pwd_context.verify(plain_password, password_hash)
+
+
+def create_access_token(user: dict) -> str:
+    from datetime import timedelta
+
+    expire = datetime.utcnow() + timedelta(minutes=JWT_EXPIRE_MINUTES)
+
+    payload = {
+        "sub": str(user["id"]),
+        "email": user["email"],
+        "name": user["name"],
+        "role": user["role"],
+        "exp": expire,
+    }
+
+    return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
+
+
+def get_current_user(
+    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
+):
+    if not credentials:
+        raise HTTPException(status_code=401, detail="Authentication required")
+
+    try:
+        payload = jwt.decode(
+            credentials.credentials,
+            JWT_SECRET,
+            algorithms=[JWT_ALGORITHM],
+        )
+
+        user_id = payload.get("sub")
+        email = payload.get("email")
+        role = payload.get("role")
+
+        if not user_id or not email or not role:
+            raise HTTPException(status_code=401, detail="Invalid authentication token")
+
+        conn = get_conn()
+        cur = conn.cursor()
+
+        cur.execute(
+            """
+            SELECT id, name, email, role, is_active
+            FROM users
+            WHERE id = %s AND email = %s
+            """,
+            (int(user_id), email),
+        )
+
+        user = cur.fetchone()
+        cur.close()
+        conn.close()
+
+        if not user or not user["is_active"]:
+            raise HTTPException(status_code=401, detail="User account is inactive or invalid")
+
+        return user
+
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid or expired authentication token")
+
+@app.post("/auth/login")
+def login(request: LoginRequest):
+    conn = get_conn()
+    cur = conn.cursor()
+
+    try:
+        cur.execute(
+            """
+            SELECT id, name, email, password_hash, role, is_active
+            FROM users
+            WHERE LOWER(email) = LOWER(%s)
+            """,
+            (request.email.strip(),),
+        )
+
+        user = cur.fetchone()
+
+        if not user or not user["is_active"]:
+            raise HTTPException(status_code=401, detail="Invalid email or password")
+
+        if not verify_password(request.password, user["password_hash"]):
+            raise HTTPException(status_code=401, detail="Invalid email or password")
+
+        token = create_access_token(user)
+
+        return {
+            "access_token": token,
+            "token_type": "bearer",
+            "user": {
+                "id": user["id"],
+                "name": user["name"],
+                "email": user["email"],
+                "role": user["role"],
+            },
+        }
+
+    finally:
+        cur.close()
+        conn.close()
+
+
+@app.get("/auth/me")
+def get_me(current_user: dict = Depends(get_current_user)):
+    return {
+        "id": current_user["id"],
+        "name": current_user["name"],
+        "email": current_user["email"],
+        "role": current_user["role"],
+    }
 
 def ensure_schema():
     """Migrates schema to support approval tiers, DocuSign status, and MinIO paths."""
@@ -157,7 +287,7 @@ async def get_approver_rules():
                 "max_amount": 50000.0,
                 "role": "Procurement Officer",
                 "email": "officer.procurement@procureflow.local",
-                "policy": "Standard single authorization for orders below ₹50,000",
+                "policy": "Standard single authorization for orders below â‚¹50,000",
             },
             {
                 "tier": "TIER_2_MANAGER",
@@ -166,7 +296,7 @@ async def get_approver_rules():
                 "max_amount": 200000.0,
                 "role": "Operations / Department Manager",
                 "email": "manager.ops@procureflow.local",
-                "policy": "Departmental operational approval for orders ₹50,000 – ₹2,00,000",
+                "policy": "Departmental operational approval for orders â‚¹50,000 â€“ â‚¹2,00,000",
             },
             {
                 "tier": "TIER_3_DIRECTOR",
@@ -174,7 +304,7 @@ async def get_approver_rules():
                 "min_amount": 200000.0,
                 "role": "Finance Director / VP",
                 "email": "director.finance@procureflow.local",
-                "policy": "Executive sign-off & digital certification for orders above ₹2,00,000",
+                "policy": "Executive sign-off & digital certification for orders above â‚¹2,00,000",
             },
         ]
     }
@@ -199,15 +329,15 @@ async def create_po(po: CreatePO):
             if po.total_price > 200000:
                 tier = "TIER_3_DIRECTOR"
                 approver_name = "Finance Director"
-                approver_email = os.getenv("FINANCE_DIRECTOR_EMAIL") or default_email or "director.finance@procureflow.local"
+approver_email = os.getenv("FINANCE_DIRECTOR_EMAIL") or default_email or "simplesalt7@gmail.com"
             elif po.total_price >= 50000:
                 tier = "TIER_2_MANAGER"
                 approver_name = "Operations Manager"
-                approver_email = os.getenv("OPERATIONS_MANAGER_EMAIL") or default_email or "manager.ops@procureflow.local"
+                approver_email = os.getenv("OPERATIONS_MANAGER_EMAIL") or default_email or "shindeishwari45@gmail.com"
             else:
                 tier = "TIER_1_OFFICER"
                 approver_name = "Procurement Officer"
-                approver_email = os.getenv("PROCUREMENT_OFFICER_EMAIL") or default_email or "officer.procurement@procureflow.local"
+                approver_email = os.getenv("PROCUREMENT_OFFICER_EMAIL") or default_email or "shindeishwari2010@gmail.com"
 
         cur.execute("""
             INSERT INTO purchase_orders
@@ -274,16 +404,46 @@ async def list_pos(
     request_id: Optional[int] = None,
     limit: int = 100,
     offset: int = 0,
+    assigned_to_me: bool = False,
+    current_user: Optional[dict] = Depends(get_current_user),
 ):
     conn = get_conn()
-    cur  = conn.cursor()
+    cur = conn.cursor()
+
     try:
-        filters       = []
+        filters = []
         filter_params = []
+
         if status:
-            filters.append("status = %s"); filter_params.append(status)
+            filters.append("status = %s")
+            filter_params.append(status)
+
         if request_id is not None:
-            filters.append("request_id = %s"); filter_params.append(int(request_id))
+            filters.append("request_id = %s")
+            filter_params.append(int(request_id))
+
+        if assigned_to_me:
+            if not current_user:
+                raise HTTPException(
+                    status_code=401,
+                    detail="Authentication required for assigned approval records",
+                )
+
+            allowed_roles = {
+                "Procurement Officer",
+                "Operations Manager",
+                "Finance Director",
+            }
+
+            if current_user["role"] not in allowed_roles:
+                raise HTTPException(
+                    status_code=403,
+                    detail="This account does not have approval access",
+                )
+
+            filters.append("LOWER(assigned_approver_email) = LOWER(%s)")
+            filter_params.append(current_user["email"])
+
         where = ("WHERE " + " AND ".join(filters)) if filters else ""
 
         cur.execute(f"""
@@ -298,11 +458,20 @@ async def list_pos(
             ORDER BY id DESC
             LIMIT %s OFFSET %s
         """, filter_params + [limit, offset])
+
         rows = [dict(r) for r in cur.fetchall()]
 
-        cur.execute(f"SELECT COUNT(*) AS total FROM purchase_orders {where}", filter_params)
+        cur.execute(
+            f"SELECT COUNT(*) AS total FROM purchase_orders {where}",
+            filter_params,
+        )
         total = cur.fetchone()["total"]
-        return {"purchase_orders": rows, "total": total}
+
+        return {
+            "purchase_orders": rows,
+            "total": total,
+        }
+
     finally:
         cur.close()
         conn.close()
@@ -332,7 +501,11 @@ async def get_po(po_id: int):
 
 
 @app.patch("/purchase-orders/{po_id}/status", dependencies=[Depends(verify_key_flexible)])
-async def update_po_status(po_id: int, body: UpdateStatus):
+async def update_po_status(
+    po_id: int,
+    body: UpdateStatus,
+    current_user: Optional[dict] = Depends(get_current_user),
+):
     """Update PO status and write immutable audit record."""
     valid_statuses = {"PENDING_APPROVAL", "APPROVED", "REJECTED", "ORDERED", "DELIVERED"}
     if body.status not in valid_statuses:
@@ -341,10 +514,50 @@ async def update_po_status(po_id: int, body: UpdateStatus):
     conn = get_conn()
     cur  = conn.cursor()
     try:
-        cur.execute("SELECT id, po_number, status FROM purchase_orders WHERE id = %s", (po_id,))
+        cur.execute(
+            """
+            SELECT id, po_number, status,
+                   assigned_approver_name, assigned_approver_email
+            FROM purchase_orders
+            WHERE id = %s
+            """,
+            (po_id,),
+        )
         po = cur.fetchone()
         if not po:
             raise HTTPException(404, f"PO {po_id} not found")
+
+        # Approval decisions may only be made by the approver
+        # assigned to this purchase order.
+        if body.status in {"APPROVED", "REJECTED"}:
+            if not current_user:
+                raise HTTPException(
+                    status_code=401,
+                    detail="Authentication required for approval actions",
+                )
+
+            allowed_roles = {
+                "Procurement Officer",
+                "Operations Manager",
+                "Finance Director",
+            }
+
+            if current_user["role"] not in allowed_roles:
+                raise HTTPException(
+                    status_code=403,
+                    detail="This account is not authorized to approve or reject purchase orders",
+                )
+
+            assigned_email = po["assigned_approver_email"]
+
+            if (
+                not assigned_email
+                or assigned_email.lower() != current_user["email"].lower()
+            ):
+                raise HTTPException(
+                    status_code=403,
+                    detail="This purchase order is not assigned to your account",
+                )
 
         old_status = po["status"]
         cur.execute(
@@ -358,7 +571,7 @@ async def update_po_status(po_id: int, body: UpdateStatus):
         """, (po_id, po["po_number"], old_status, body.status,
               body.performed_by, body.notes))
         conn.commit()
-        log.info(f"PO {po['po_number']}: {old_status} → {body.status}")
+        log.info(f"PO {po['po_number']}: {old_status} â†’ {body.status}")
         return {"po_id": po_id, "po_number": po["po_number"],
                 "old_status": old_status, "new_status": body.status}
     finally:
@@ -441,31 +654,156 @@ async def reset_demo_data():
 
 
 # ------------------------------------------------------------------ #
+
+# ------------------------------------------------------------------ #
+# Contracts — Signed Documents
+# ------------------------------------------------------------------ #
+@app.get("/contracts", dependencies=[Depends(verify_key_flexible)])
+async def get_contracts(
+    assigned_to_me: bool = False,
+    current_user: Optional[dict] = Depends(get_current_user),
+):
+    """
+    Return DocuSign-completed purchase orders with signed documents.
+
+    Admin users can see all signed contracts.
+    Approver roles only see contracts assigned to their own email.
+    Service-to-service calls without a human JWT retain system-wide access.
+    """
+    conn = get_conn()
+    cur = conn.cursor()
+
+    try:
+        where_clauses = [
+            "docusign_status = 'COMPLETED'",
+            "signed_document_url IS NOT NULL",
+        ]
+        params = []
+
+        approver_roles = {
+            "Procurement Officer",
+            "Operations Manager",
+            "Finance Director",
+        }
+
+        if assigned_to_me:
+            if not current_user:
+                raise HTTPException(
+                    status_code=401,
+                    detail="Authentication required for assigned contracts",
+                )
+
+            if current_user["role"] not in approver_roles:
+                raise HTTPException(
+                    status_code=403,
+                    detail="This account does not have approval access",
+                )
+
+            where_clauses.append(
+                "LOWER(assigned_approver_email) = LOWER(%s)"
+            )
+            params.append(current_user["email"])
+
+        elif current_user and current_user["role"] in approver_roles:
+            # Defense in depth: approvers are never allowed to retrieve
+            # another user's contracts by omitting assigned_to_me.
+            where_clauses.append(
+                "LOWER(assigned_approver_email) = LOWER(%s)"
+            )
+            params.append(current_user["email"])
+
+        where = " AND ".join(where_clauses)
+
+        cur.execute(
+            f"""
+            SELECT
+                id,
+                po_number,
+                request_id,
+                vendor_id,
+                vendor_name,
+                item_name,
+                quantity,
+                unit_price,
+                total_price,
+                currency,
+                status,
+                delivery_date_expected,
+                docusign_envelope_id,
+                docusign_status,
+                signed_document_url,
+                updated_at
+            FROM purchase_orders
+            WHERE {where}
+            ORDER BY updated_at DESC
+            """,
+            params,
+        )
+
+        contracts = [dict(row) for row in cur.fetchall()]
+
+        return {
+            "contracts": contracts,
+            "total": len(contracts),
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        log.error(f"Failed to fetch contracts: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to fetch signed contracts"
+        )
+    finally:
+        cur.close()
+        conn.close()
 # PDF Generation & Download Endpoints                                  #
 # ------------------------------------------------------------------ #
 @app.get("/purchase-orders/{po_id}/pdf")
-async def view_po_pdf(po_id: int):
-    """Stream PO PDF for in-browser preview."""
+async def view_po_pdf(
+    po_id: int,
+    current_user: Optional[dict] = Depends(get_current_user),
+):
+    """Stream PO PDF for in-browser preview with role-based access."""
     conn = get_conn()
-    cur  = conn.cursor()
+    cur = conn.cursor()
+
     try:
         cur.execute("SELECT * FROM purchase_orders WHERE id = %s", (po_id,))
         po = cur.fetchone()
+
         if not po:
             raise HTTPException(404, f"PO {po_id} not found")
+
         po_dict = dict(po)
+
+        approver_roles = {
+            "Procurement Officer",
+            "Operations Manager",
+            "Finance Director",
+        }
+
+        if current_user and current_user["role"] in approver_roles:
+            assigned_email = po_dict.get("assigned_approver_email")
+
+            if not assigned_email or assigned_email.lower() != current_user["email"].lower():
+                raise HTTPException(
+                    status_code=403,
+                    detail="You are not authorized to view this purchase order",
+                )
     finally:
         cur.close()
         conn.close()
 
-    # If signed, retrieve signed PDF from MinIO if available
     pdf_bytes = None
+
     if po_dict.get("signed_document_url"):
         pdf_bytes = download_pdf_bytes(po_dict["signed_document_url"])
 
-    # Fallback or draft generation
     if not pdf_bytes:
         is_signed = po_dict.get("status") == "APPROVED"
+
         pdf_bytes = generate_po_pdf(
             po_dict,
             is_signed=is_signed,
@@ -477,33 +815,58 @@ async def view_po_pdf(po_id: int):
     return Response(
         content=pdf_bytes,
         media_type="application/pdf",
-        headers={"Content-Disposition": f"inline; filename={po_dict['po_number']}.pdf"},
+        headers={
+            "Content-Disposition": f"inline; filename={po_dict['po_number']}.pdf"
+        },
     )
 
 
 @app.get("/purchase-orders/{po_id}/download")
-async def download_po(po_id: int):
-    """Download official PO PDF (or signed PDF from MinIO) as attachment."""
+async def download_po(
+    po_id: int,
+    current_user: Optional[dict] = Depends(get_current_user),
+):
+    """Download official PO PDF with role-based access."""
     conn = get_conn()
-    cur  = conn.cursor()
+    cur = conn.cursor()
+
     try:
         cur.execute("SELECT * FROM purchase_orders WHERE id = %s", (po_id,))
         po = cur.fetchone()
+
         if not po:
             raise HTTPException(404, f"PO {po_id} not found")
+
         po_dict = dict(po)
+
+        approver_roles = {
+            "Procurement Officer",
+            "Operations Manager",
+            "Finance Director",
+        }
+
+        if current_user and current_user["role"] in approver_roles:
+            assigned_email = po_dict.get("assigned_approver_email")
+
+            if not assigned_email or assigned_email.lower() != current_user["email"].lower():
+                raise HTTPException(
+                    status_code=403,
+                    detail="You are not authorized to download this purchase order",
+                )
     finally:
         cur.close()
         conn.close()
 
     pdf_bytes = None
     filename = f"{po_dict['po_number']}.pdf"
+
     if po_dict.get("signed_document_url"):
         pdf_bytes = download_pdf_bytes(po_dict["signed_document_url"])
         filename = f"{po_dict['po_number']}_signed.pdf"
 
     if not pdf_bytes:
         is_signed = po_dict.get("status") == "APPROVED"
+
         pdf_bytes = generate_po_pdf(
             po_dict,
             is_signed=is_signed,
@@ -515,15 +878,20 @@ async def download_po(po_id: int):
     return Response(
         content=pdf_bytes,
         media_type="application/pdf",
-        headers={"Content-Disposition": f"attachment; filename={filename}"},
+        headers={
+            "Content-Disposition": f"attachment; filename={filename}"
+        },
     )
 
-
-# ------------------------------------------------------------------ #
+#
 # DocuSign & Digital Signature Endpoints                             #
 # ------------------------------------------------------------------ #
 @app.post("/purchase-orders/{po_id}/sign")
-async def sign_po(po_id: int, body: SignPORequest):
+async def sign_po(
+    po_id: int,
+    body: SignPORequest,
+    current_user: Optional[dict] = Depends(get_current_user),
+):
     """
     Digitally sign a Purchase Order via DocuSign workflow.
     Generates cryptographically certified signed PDF, archives in MinIO,
@@ -538,6 +906,38 @@ async def sign_po(po_id: int, body: SignPORequest):
             raise HTTPException(404, f"PO {po_id} not found")
         po_dict = dict(po)
 
+        # Only the approver assigned to this PO can complete the signature.
+        allowed_roles = {
+            "Procurement Officer",
+            "Operations Manager",
+            "Finance Director",
+        }
+
+        # The signer must be authenticated through the human-user JWT.
+        # Do not trust signer identity supplied by the frontend.
+        if not current_user:
+            raise HTTPException(
+                status_code=401,
+                detail="Authentication required for DocuSign approval",
+            )
+
+        if current_user["role"] not in allowed_roles:
+            raise HTTPException(
+                status_code=403,
+                detail="This account is not authorized to sign purchase orders",
+            )
+
+        assigned_email = po_dict.get("assigned_approver_email")
+
+        if (
+            not assigned_email
+            or assigned_email.lower() != current_user["email"].lower()
+        ):
+            raise HTTPException(
+                status_code=403,
+                detail="This purchase order is not assigned to your account",
+            )
+
         old_status = po_dict["status"]
         po_number  = po_dict["po_number"]
         timestamp  = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
@@ -547,8 +947,8 @@ async def sign_po(po_id: int, body: SignPORequest):
         signed_pdf_bytes = generate_po_pdf(
             po_dict,
             is_signed=True,
-            signer_name=body.signer_name,
-            signer_email=body.signer_email,
+            signer_name=current_user["name"],
+            signer_email=current_user["email"],
             signed_at=timestamp,
             signature_id=envelope_id,
         )
@@ -572,8 +972,8 @@ async def sign_po(po_id: int, body: SignPORequest):
         """, (
             envelope_id,
             signed_minio_path or minio_object_name,
-            body.signer_name,
-            body.signer_email,
+            current_user["name"],
+            current_user["email"],
             po_id,
         ))
         updated_row = dict(cur.fetchone())
@@ -587,7 +987,7 @@ async def sign_po(po_id: int, body: SignPORequest):
             po_id,
             po_number,
             old_status,
-            f"{body.signer_name} <{body.signer_email}>",
+            f"{current_user['name']} <{current_user['email']}>",
             f"Digitally signed via DocuSign (Envelope: {envelope_id}). Archived in MinIO at {signed_minio_path or minio_object_name}.",
         ))
 
@@ -596,8 +996,8 @@ async def sign_po(po_id: int, body: SignPORequest):
         event_payload = json.dumps({
             "po_id": po_id,
             "po_number": po_number,
-            "signer": body.signer_name,
-            "signer_email": body.signer_email,
+            "signer": current_user["name"],
+            "signer_email": current_user["email"],
             "minio_path": signed_minio_path or minio_object_name,
             "signed_at": timestamp,
         })
@@ -609,7 +1009,7 @@ async def sign_po(po_id: int, body: SignPORequest):
         """, (event_id, event_payload))
 
         conn.commit()
-        log.info(f"✓ Digital signature completed for PO {po_number} by {body.signer_email}. Stored in MinIO: {signed_minio_path}")
+        log.info(f"âœ“ Digital signature completed for PO {po_number} by {current_user['email']}. Stored in MinIO: {signed_minio_path}")
 
         return {
             "success": True,
@@ -772,3 +1172,17 @@ async def get_agent_logs(limit: int = 100, source_agent: Optional[str] = None):
     finally:
         cur.close()
         conn.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+

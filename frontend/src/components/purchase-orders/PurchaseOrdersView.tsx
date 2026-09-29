@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
-import { procurementApi } from "@/lib/api";
+import { procurementApi, getStoredUser } from "@/lib/api";
 import { formatCurrency, cn } from "@/lib/utils";
 import {
   ShoppingCart, CheckCircle2, XCircle, Truck, Clock, Package,
@@ -39,7 +39,10 @@ export function PurchaseOrdersView() {
 
   const { data, isLoading, isError, refetch, isFetching } = useQuery({
     queryKey: ["purchase-orders", filter],
-    queryFn: () => procurementApi.getPOs(filter !== "ALL" ? { status: filter } : {}),
+    queryFn: () => procurementApi.getPOs({
+      ...(filter !== "ALL" ? { status: filter } : {}),
+      ...(getStoredUser()?.role !== "Admin" ? { assigned_to_me: true } : {}),
+    }),
     refetchInterval: 10000,
   });
 
@@ -306,3 +309,5 @@ export function PurchaseOrdersView() {
     </div>
   );
 }
+
+

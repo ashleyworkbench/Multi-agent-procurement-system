@@ -41,7 +41,9 @@ def send_po_approval_email(po_data: dict, pdf_bytes: Optional[bytes] = None) -> 
     quantity        = po_data.get("quantity", 1)
     po_id           = po_data.get("id", "")
 
-    signing_url = f"{APP_URL}/approvals?po_id={po_id}&sign=true"
+    approval_path = f"/approvals?po_id={po_id}&sign=true"
+    from urllib.parse import quote
+    signing_url = f"{APP_URL}/login?redirect={quote(approval_path, safe='')}"
 
     subject = f"ACTION REQUIRED: Purchase Order Approval Needed — {po_number} (₹{total_price:,.2f})"
 
@@ -150,3 +152,4 @@ def send_po_approval_email(po_data: dict, pdf_bytes: Optional[bytes] = None) -> 
         "signing_url": signing_url,
         "status": "SENT",
     }
+
