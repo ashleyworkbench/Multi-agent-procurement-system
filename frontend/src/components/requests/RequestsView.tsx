@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useCallback, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -7,10 +7,11 @@ import {
   Upload, FileText, FileImage, Loader2, CheckCircle2,
   AlertTriangle, RefreshCw, ChevronDown, ChevronUp,
   Clock, Cpu, Brain, Package, Plus, X, Trash2, Play,
-  XCircle, RotateCcw,
+  XCircle, RotateCcw, Store, ShoppingCart, BarChart3,
 } from "lucide-react";
 import { toast } from "sonner";
-import { ocrApi } from "@/lib/api";
+import { ocrApi, agent2Api, agent3Api, procurementApi } from "@/lib/api";
+import { ProcessingDetails } from "./ProcessingDetails";
 
 const GATEWAY_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 const OCR_URL    = process.env.NEXT_PUBLIC_OCR_URL  || "http://localhost:8001";
@@ -718,12 +719,17 @@ export function RequestsView() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {documents.map((d: any) => (
-              <DocumentCard
-                key={d.id}
-                doc={d}
-                onDelete={(id) => deleteDocMut.mutate(id)}
-                onCancel={(id) => cancelDocMut.mutate(id)}
-              />
+              <div key={d.id} className="space-y-3">
+                <DocumentCard
+                  doc={d}
+                  onDelete={(id) => deleteDocMut.mutate(id)}
+                  onCancel={(id) => cancelDocMut.mutate(id)}
+                />
+
+                {d.request_id && (
+                  <ProcessingDetails requestId={Number(d.request_id)} />
+                )}
+              </div>
             ))}
           </div>
         )
@@ -731,3 +737,6 @@ export function RequestsView() {
     </div>
   );
 }
+
+
+

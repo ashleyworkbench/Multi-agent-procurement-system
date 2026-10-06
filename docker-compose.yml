@@ -1,4 +1,4 @@
-﻿# =============================================================
+# =============================================================
 # FULL MULTI-AGENT PROCUREMENT SYSTEM
 # Agents 1-4 + Integration Layer + Kafka + Redis + DBs
 # =============================================================
@@ -209,6 +209,7 @@ services:
       INVENTORY_SERVICE_URL: http://inventory-service:8002
       VENDOR_SERVICE_URL:    http://vendor-service:8003
       AGENT1_OCR_URL:        http://agent1-ocr:8009
+      AGENT_RISK_URL:        http://agent-risk:8010
     ports:
       - "8000:8000"
     networks:
@@ -417,6 +418,33 @@ services:
       - procurement_network
     depends_on:
       - api-gateway
+
+
+  agent-risk:
+    build:
+      context: ./services/agent-risk
+      dockerfile: Dockerfile
+    container_name: procurement_agent_risk
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      POSTGRES_HOST: postgres
+      REDIS_HOST:    redis
+    ports:
+      - "8010:8010"
+    networks:
+      - procurement_network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8010/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
 volumes:
   postgres_data:

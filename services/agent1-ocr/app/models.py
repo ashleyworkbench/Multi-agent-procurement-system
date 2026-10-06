@@ -236,3 +236,32 @@ class DocumentProcessing(Base):
         TIMESTAMP,
         server_default=text("CURRENT_TIMESTAMP")
     )
+# ============================================================
+# Folder Invoice Tracking
+# ============================================================
+
+class FolderInvoiceFile(Base):
+    __tablename__ = "folder_invoice_files"
+
+    id = Column(Integer, primary_key=True, index=True)
+    file_path = Column(String(500), nullable=False, unique=True)
+    fingerprint = Column(String(64), nullable=False)
+    status = Column(String(30), nullable=False, default="processing")
+
+    processing_id = Column(
+        Integer,
+        ForeignKey("document_processing.id"),
+        nullable=True,
+    )
+
+    error_message = Column(Text, nullable=True)
+
+    created_at = Column(
+        TIMESTAMP,
+        server_default=text("CURRENT_TIMESTAMP"),
+    )
+
+    updated_at = Column(
+        TIMESTAMP,
+        server_default=text("CURRENT_TIMESTAMP"),
+    )
