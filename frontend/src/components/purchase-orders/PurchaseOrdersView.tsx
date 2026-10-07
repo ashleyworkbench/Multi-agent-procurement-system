@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
-import { procurementApi, getStoredUser } from "@/lib/api";
+import { procurementApi, getStoredUser, type AuthUser } from "@/lib/api";
 import { formatCurrency, cn } from "@/lib/utils";
 import {
   ShoppingCart, CheckCircle2, XCircle, Truck, Clock, Package,
@@ -10,7 +10,7 @@ import {
   ShieldCheck, FileText, Trash2, X,
 } from "lucide-react";
 import { toast } from "sonner";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 const statusConfig: Record<string, { label: string; cls: string; icon: React.ElementType }> = {
   PENDING_APPROVAL: { label: "Pending Approval", cls: "badge-yellow", icon: Clock },
@@ -35,19 +35,24 @@ export function PurchaseOrdersView() {
 
   const [filter, setFilter] = useState("ALL");
   const [page, setPage]     = useState(1);
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(() => getStoredUser());
   const qc = useQueryClient();
 
+  useEffect(() => {
+    setCurrentUser(getStoredUser());
+  }, []);
+
   const { data, isLoading, isError, refetch, isFetching } = useQuery({
-    queryKey: ["purchase-orders", filter],
+    queryKey: ["purchase-orders", filter, currentUser?.id, currentUser?.role],
     queryFn: () => procurementApi.getPOs({
       ...(filter !== "ALL" ? { status: filter } : {}),
-      ...(getStoredUser()?.role !== "Admin" ? { assigned_to_me: true } : {}),
+      ...(currentUser?.role !== "Admin" ? { assigned_to_me: true } : {}),
     }),
     refetchInterval: 10000,
   });
 
   const { data: summary } = useQuery({
-    queryKey: ["po-summary"],
+    queryKey: ["po-summary", currentUser?.id],
     queryFn: procurementApi.getSummary,
     refetchInterval: 15000,
   });

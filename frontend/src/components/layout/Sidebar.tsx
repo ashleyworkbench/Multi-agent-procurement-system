@@ -29,6 +29,7 @@ import { useSidebarStore } from "@/store/sidebarStore";
 import { authApi, getStoredUser, type UserRole } from "@/lib/api";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 const navigation = [
   {
@@ -89,13 +90,14 @@ const APPROVER_ROLES: UserRole[] = [
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const qc = useQueryClient();
   const { collapsed, toggle } = useSidebarStore();
 
   const [user, setUser] = useState(getStoredUser());
 
   useEffect(() => {
     setUser(getStoredUser());
-  }, []);
+  }, [pathname]);
 
   const isApprover =
     user?.role !== undefined && APPROVER_ROLES.includes(user.role);
@@ -118,7 +120,8 @@ export function Sidebar() {
 
   function handleLogout() {
     authApi.logout();
-    router.replace("/login");
+    qc.clear();
+    window.location.href = "/login";
   }
 
   const initials =

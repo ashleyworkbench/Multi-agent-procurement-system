@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { procurementApi } from "@/lib/api";
+import { procurementApi, getStoredUser, type AuthUser } from "@/lib/api";
 import { formatCurrency, cn } from "@/lib/utils";
 import {
   CheckCircle2, XCircle, Clock, AlertCircle, Loader2, RefreshCw,
@@ -251,10 +251,14 @@ export function ApprovalsView() {
 
     setSignRequested(params.get("sign") === "true");
   }, []);
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(() => getStoredUser());
+  useEffect(() => {
+    setCurrentUser(getStoredUser());
+  }, []);
   const [signingPO, setSigningPO] = useState<any | null>(null);
 
   const { data, isLoading, isError, refetch, isFetching } = useQuery({
-    queryKey: ["pending-pos"],
+    queryKey: ["pending-pos", currentUser?.id, currentUser?.role],
     queryFn:  () => procurementApi.getPOs({ status: "PENDING_APPROVAL", assigned_to_me: true }),
     refetchInterval: 8000,
   });

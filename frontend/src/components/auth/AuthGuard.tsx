@@ -4,6 +4,18 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { authApi, getStoredUser, type AuthUser } from "@/lib/api";
 
+const APPROVER_ROLES = [
+  "Procurement Officer",
+  "Operations Manager",
+  "Finance Director",
+];
+
+const APPROVER_ALLOWED_ROUTES = [
+  "/purchase-orders",
+  "/approvals",
+  "/contracts",
+];
+
 export function AuthGuard({
   children,
 }: {
@@ -28,6 +40,16 @@ export function AuthGuard({
 
       try {
         const currentUser = await authApi.me();
+
+        if (APPROVER_ROLES.includes(currentUser.role)) {
+          const isAllowed = APPROVER_ALLOWED_ROUTES.some(
+            (route) => pathname === route || pathname.startsWith(`${route}/`)
+          );
+          if (!isAllowed) {
+            router.replace("/purchase-orders");
+            return;
+          }
+        }
 
         if (mounted) {
           setUser(currentUser);

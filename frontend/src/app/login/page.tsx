@@ -3,11 +3,13 @@
 import { FormEvent, Suspense, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { authApi, getStoredUser } from "@/lib/api";
 
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const qc = useQueryClient();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,6 +25,7 @@ function LoginForm() {
 
     try {
       await authApi.login(email.trim(), password);
+      qc.clear();
 
       const user = getStoredUser();
       const requestedRedirect = searchParams.get("redirect");
@@ -34,8 +37,7 @@ function LoginForm() {
             ? "/"
             : "/purchase-orders";
 
-      router.replace(destination);
-      router.refresh();
+      window.location.href = destination;
     } catch (err: any) {
       setError(
         err?.message ||
