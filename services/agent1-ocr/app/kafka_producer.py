@@ -1,12 +1,12 @@
-import json
+﻿import json
 import os
 import logging
 
 log = logging.getLogger("agent1-kafka-producer")
 
 KAFKA_SERVER      = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "kafka:9092")
-INVOICE_TOPIC     = "invoice-topic"           # agent1 internal: upload → consumer
-OCR_REQUEST_TOPIC = os.getenv("KAFKA_TOPIC_OCR_REQUESTS", "ocr-request-topic")  # consumer → agent2
+INVOICE_TOPIC     = "invoice-topic"           # agent1 internal: upload â†’ consumer
+OCR_REQUEST_TOPIC = os.getenv("KAFKA_TOPIC_OCR_REQUESTS", "ocr-request-topic")  # consumer â†’ agent2
 
 _producer = None
 
@@ -23,26 +23,31 @@ def get_producer():
 
 
 def publish_to_invoice_topic(processing_id: int, filename: str, file_path: str):
-    """Called by upload endpoint — queues document for OCR processing."""
+    """Publish an invoice event and raise if Kafka delivery fails."""
     event = {
-        "event":         "invoice.received",
+        "event": "invoice.received",
         "processing_id": processing_id,
-        "filename":      filename,
-        "file_path":     file_path,
+        "filename": filename,
+        "file_path": file_path,
     }
+
     try:
         producer = get_producer()
         future = producer.send(INVOICE_TOPIC, value=event)
         future.get(timeout=10)
         producer.flush()
-        log.info(f"Published to {INVOICE_TOPIC}: processing_id={processing_id}")
+        log.info(
+            f"Published to {INVOICE_TOPIC}: processing_id={processing_id}"
+        )
+        return event
     except Exception as e:
-        log.warning(f"Kafka publish to invoice-topic failed: {e}")
-    return event
-
+        log.exception(
+            f"Kafka publish to invoice-topic failed: {e}"
+        )
+        raise
 
 def publish_invoice_event(processing_id: int, filename: str, file_path: str, request_id: int = None):
-    """Called by consumer after processing — notifies Agent 2."""
+    """Called by consumer after processing â€” notifies Agent 2."""
     event = {
         "event_type":    "OCR_REQUEST_CREATED",
         "source_agent":  "agent_1",
@@ -60,3 +65,4 @@ def publish_invoice_event(processing_id: int, filename: str, file_path: str, req
     except Exception as e:
         log.warning(f"Kafka publish to ocr-request-topic failed: {e}")
     return event
+

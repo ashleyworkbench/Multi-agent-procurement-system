@@ -214,6 +214,15 @@ async def evaluate_request(request_id: int) -> dict:
         req_qty     = item["quantity"]
         est_cost    = float(item["estimated_cost"])
         industry    = detect_industry(desc)
+        optional_requirements = {
+            key: item[key]
+            for key in (
+                "delivery_deadline", "required_delivery_date", "max_delivery_days",
+                "max_unit_price", "po_budget", "budget", "minimum_quality_score",
+                "minimum_compliance_score", "required_certifications",
+            )
+            if item.get(key) is not None
+        }
 
         # Block items whose industry is not connected
         if industry not in connected:
@@ -234,6 +243,7 @@ async def evaluate_request(request_id: int) -> dict:
                 "source":             "industry_not_connected",
                 "skipped":            True,
                 "skip_reason":        f"Industry '{industry}' is not connected in Data Sources",
+                **optional_requirements,
             })
             continue
 
@@ -265,6 +275,8 @@ async def evaluate_request(request_id: int) -> dict:
                 "reorder_level":     stock_info.get("reorder_level", 0),
                 "warehouse":         stock_info.get("warehouse_location", "Unknown"),
                 "source":            stock_data.get("source", "live"),
+                "category":           item.get("category") or stock_info.get("category"),
+                **optional_requirements,
             })
             log.info(
                 f"  {desc}: requested={req_qty}, stock={stock_qty}, "
@@ -286,6 +298,8 @@ async def evaluate_request(request_id: int) -> dict:
                 "reorder_level":      0,
                 "warehouse":          "N/A",
                 "source":             "not_found",
+                "category":           item.get("category"),
+                **optional_requirements,
             })
             total_shortage_cost += est_cost
             log.warning(f"  {desc}: NOT FOUND in {industry} inventory")

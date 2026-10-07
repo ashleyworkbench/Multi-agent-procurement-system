@@ -185,13 +185,13 @@ async def auth_me(
 # ------------------------------------------------------------------ #
 # HTTP client helper                                                   #
 # ------------------------------------------------------------------ #
-async def fetch(url: str, industry: str) -> dict:
+async def fetch(url: str, industry: str, params: Optional[dict] = None) -> dict:
     """Make authenticated request to an industry service."""
     key = INDUSTRY_KEYS.get(industry)
     if not key:
         raise HTTPException(400, f"Unknown industry: {industry}")
     async with httpx.AsyncClient(timeout=10.0) as client:
-        resp = await client.get(url, headers={"X-API-KEY": key})
+        resp = await client.get(url, headers={"X-API-KEY": key}, params=params)
         if resp.status_code == 404:
             raise HTTPException(404, f"Item not found at {url}")
         if resp.status_code != 200:
@@ -261,6 +261,106 @@ async def get_inventory_item(
     )
     await set_cached(ck, data)
     return {**data, "source": "live"}
+
+
+# ---- VENDOR PERFORMANCE endpoints ------------------------------- #
+
+@app.get(
+    "/vendor-performance/health",
+    dependencies=[Depends(verify_gateway_key)],
+)
+async def check_vendor_performance_connection(industry: str = Query(...)):
+    return await fetch(
+        f"{VENDOR_SERVICE_URL}/vendor-performance/health",
+        industry,
+        params={"industry": industry},
+    )
+
+
+@app.get(
+    "/vendor-performance/vendors",
+    dependencies=[Depends(verify_gateway_key)],
+)
+async def get_vendor_performance_vendors(industry: str = Query(...)):
+    return await fetch(
+        f"{VENDOR_SERVICE_URL}/vendor-performance/vendors",
+        industry,
+        params={"industry": industry},
+    )
+
+
+@app.get(
+    "/vendor-performance/history",
+    dependencies=[Depends(verify_gateway_key)],
+)
+async def get_vendor_performance_history(
+    industry: str = Query(...),
+    vendor_id: Optional[str] = Query(None),
+    start_date: Optional[str] = Query(None),
+    end_date: Optional[str] = Query(None),
+    product: Optional[str] = Query(None),
+    category: Optional[str] = Query(None),
+):
+    params = {
+        key: value
+        for key, value in {
+            "industry": industry,
+            "vendor_id": vendor_id,
+            "start_date": start_date,
+            "end_date": end_date,
+            "product": product,
+            "category": category,
+        }.items()
+        if value is not None
+    }
+    return await fetch(
+        f"{VENDOR_SERVICE_URL}/vendor-performance/history",
+        industry,
+        params=params,
+    )
+
+
+@app.get(
+    "/vendor-performance/history/{vendor_id}",
+    dependencies=[Depends(verify_gateway_key)],
+)
+async def get_vendor_performance_history_for_vendor(
+    vendor_id: str,
+    industry: str = Query(...),
+    start_date: Optional[str] = Query(None),
+    end_date: Optional[str] = Query(None),
+):
+    params = {"industry": industry}
+    if start_date is not None:
+        params["start_date"] = start_date
+    if end_date is not None:
+        params["end_date"] = end_date
+    return await fetch(
+        f"{VENDOR_SERVICE_URL}/vendor-performance/history/{vendor_id}",
+        industry,
+        params=params,
+    )
+
+
+@app.post(
+    "/risk/suitability",
+    dependencies=[Depends(verify_gateway_key)],
+)
+async def proxy_risk_suitability(request: Request):
+    try:
+        async with httpx.AsyncClient(timeout=45.0) as client:
+            response = await client.post(
+                f"{AGENT_RISK_URL}/api/v1/vendor-suitability",
+                json=await request.json(),
+                headers={"X-API-KEY": GATEWAY_KEY},
+            )
+    except httpx.RequestError as exc:
+        raise HTTPException(502, "Risk Analysis Agent is unavailable") from exc
+    return Response(
+        content=response.content,
+        status_code=response.status_code,
+        media_type=response.headers.get("content-type", "application/json"),
+    )
 
 
 # ---- VENDOR endpoints -------------------------------------------- #
@@ -391,6 +491,7 @@ PROC_SVC_URL = os.getenv("PROCUREMENT_SERVICE_URL", "http://procurement-service:
 AGENT2_URL = os.getenv("AGENT2_URL", "http://agent2-inventory:8005")
 AGENT3_URL = os.getenv("AGENT3_URL", "http://agent3-vendor:8006")
 AGENT4_URL = os.getenv("AGENT4_URL", "http://agent4-procurement:8008")
+AGENT_RISK_URL = os.getenv("AGENT_RISK_URL", "http://agent-risk:8010")
 ONBOARDING_URL = os.getenv("ONBOARDING_SERVICE_URL", "http://onboarding-service:8000")
 OCR_KEY = os.getenv("OCR_SERVICE_KEY", "OCR-e4b9f8e7-0756-4938-45ab-8abc67890123")
 PROC_KEY = os.getenv("PROCUREMENT_KEY", "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012")
@@ -466,6 +567,60 @@ async def proxy_agent4(path: str):
 @app.post("/agent4/process")
 async def proxy_agent4_process(request: Request):
     return await proxy_json_request(AGENT4_URL, "/process", request)
+
+@app.get("/agent-risk/{path:path}")
+async def proxy_agent_risk_get(path: str, request: Request):
+    headers = {}
+    authorization = request.headers.get("Authorization")
+    if authorization:
+        headers["Authorization"] = authorization
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        resp = await client.get(
+            f"{AGENT_RISK_URL}/{path}",
+            params=request.query_params,
+            headers=headers,
+        )
+    return Response(
+        content=resp.content,
+        status_code=resp.status_code,
+        media_type=resp.headers.get("content-type", "application/json"),
+    )
+
+@app.post("/agent-risk/{path:path}")
+async def proxy_agent_risk_post(path: str, request: Request):
+    headers = {}
+    authorization = request.headers.get("Authorization")
+    if authorization:
+        headers["Authorization"] = authorization
+    async with httpx.AsyncClient(timeout=120.0) as client:
+        resp = await client.post(
+            f"{AGENT_RISK_URL}/{path}",
+            json=await request.json(),
+            headers=headers,
+        )
+    return Response(
+        content=resp.content,
+        status_code=resp.status_code,
+        media_type=resp.headers.get("content-type", "application/json"),
+    )
+
+@app.put("/agent-risk/{path:path}")
+async def proxy_agent_risk_put(path: str, request: Request):
+    headers = {}
+    authorization = request.headers.get("Authorization")
+    if authorization:
+        headers["Authorization"] = authorization
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        resp = await client.put(
+            f"{AGENT_RISK_URL}/{path}",
+            json=await request.json(),
+            headers=headers,
+        )
+    return Response(
+        content=resp.content,
+        status_code=resp.status_code,
+        media_type=resp.headers.get("content-type", "application/json"),
+    )
 
 async def proxy_get(base_url: str, path: str):
     async with httpx.AsyncClient(timeout=15.0) as client:

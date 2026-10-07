@@ -23,6 +23,7 @@ import {
   ChevronLeft,
   Box,
   LogOut,
+  ShieldAlert,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSidebarStore } from "@/store/sidebarStore";
@@ -52,9 +53,10 @@ const navigation = [
   {
     section: "AGENTS & AUTOMATION",
     items: [
-      { label: "Agent Monitor", href: "/agents",     icon: Bot },
-      { label: "Agent Logs",    href: "/agent-logs", icon: ScrollText },
-      { label: "Workflows",     href: "/workflows",  icon: GitBranch },
+      { label: "Agent Monitor",  href: "/agents",          icon: Bot },
+      { label: "Agent Logs",     href: "/agent-logs",      icon: ScrollText },
+      { label: "Workflows",      href: "/workflows",       icon: GitBranch },
+      { label: "Risk Analysis",  href: "/risk-analysis",   icon: ShieldAlert },
     ],
   },
   {
