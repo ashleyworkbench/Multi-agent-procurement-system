@@ -265,6 +265,29 @@ def ensure_schema():
             ALTER TABLE purchase_orders ADD COLUMN IF NOT EXISTS docusign_status VARCHAR(50) DEFAULT 'NOT_SENT';
             ALTER TABLE purchase_orders ADD COLUMN IF NOT EXISTS signed_document_url TEXT;
             ALTER TABLE purchase_orders ADD COLUMN IF NOT EXISTS pdf_path TEXT;
+
+            CREATE TABLE IF NOT EXISTS defective_items (
+                id SERIAL PRIMARY KEY,
+                po_id INTEGER NOT NULL REFERENCES purchase_orders(id) ON DELETE CASCADE,
+                po_number VARCHAR(50) NOT NULL,
+                vendor_id INTEGER,
+                vendor_name VARCHAR(255) NOT NULL,
+                item_name VARCHAR(255) NOT NULL,
+                ordered_quantity INTEGER NOT NULL DEFAULT 0,
+                defective_quantity INTEGER NOT NULL DEFAULT 0,
+                defect_type VARCHAR(100) NOT NULL,
+                description TEXT,
+                inspection_date DATE NOT NULL DEFAULT CURRENT_DATE,
+                evidence_photo_url TEXT,
+                status VARCHAR(50) NOT NULL DEFAULT 'REPORTED',
+                resolution_notes TEXT,
+                reported_by VARCHAR(255) DEFAULT 'Quality Inspector',
+                created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+                updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+            );
+            CREATE INDEX IF NOT EXISTS idx_defective_po_id ON defective_items(po_id);
+            CREATE INDEX IF NOT EXISTS idx_defective_status ON defective_items(status);
+            CREATE INDEX IF NOT EXISTS idx_defective_vendor ON defective_items(vendor_name);
         """)
 
         default_pwd_hash = pwd_context.hash("Password@123")
@@ -338,6 +361,26 @@ class CreateEvent(BaseModel):
     topic:       str
     source_agent: str
     payload:     dict
+
+class CreateDefectiveItem(BaseModel):
+    po_id: int
+    po_number: Optional[str] = None
+    vendor_id: Optional[int] = None
+    vendor_name: Optional[str] = None
+    item_name: Optional[str] = None
+    ordered_quantity: Optional[int] = 0
+    defective_quantity: int
+    defect_type: str
+    description: Optional[str] = None
+    inspection_date: Optional[str] = None
+    evidence_photo_url: Optional[str] = None
+    reported_by: Optional[str] = None
+
+class UpdateDefectiveItemStatus(BaseModel):
+    status: str
+    resolution_notes: Optional[str] = None
+    performed_by: Optional[str] = None
+
 
 
 # ------------------------------------------------------------------ #
@@ -1305,6 +1348,243 @@ async def get_agent_logs(
     finally:
         cur.close()
         conn.close()
+
+
+# ------------------------------------------------------------------ #
+# Defective Items & Quality Inspection Endpoints                     #
+# ------------------------------------------------------------------ #
+
+def get_defective_stats_helper(cur):
+    cur.execute("""
+        SELECT
+            COUNT(*)                                                          AS total_reports,
+            COALESCE(SUM(defective_quantity), 0)                              AS total_defective_units,
+            COALESCE(SUM(defective_quantity) FILTER (
+                WHERE status IN ('REPORTED', 'UNDER_REVIEW', 'AWAITING_VENDOR')
+            ), 0)                                                             AS quarantine_units,
+            COUNT(*) FILTER (
+                WHERE status IN ('REPORTED', 'UNDER_REVIEW', 'AWAITING_VENDOR', 'RESOLUTION_IN_PROGRESS')
+            )                                                                 AS pending_resolution,
+            COUNT(*) FILTER (WHERE status = 'RESOLVED')                       AS resolved,
+            COUNT(*) FILTER (WHERE status = 'REJECTED')                       AS rejected
+        FROM defective_items;
+    """)
+    row = cur.fetchone()
+    return {
+        "total_reports": int(row["total_reports"] or 0),
+        "total_defective_units": int(row["total_defective_units"] or 0),
+        "quarantine_units": int(row["quarantine_units"] or 0),
+        "pending_resolution": int(row["pending_resolution"] or 0),
+        "resolved": int(row["resolved"] or 0),
+        "rejected": int(row["rejected"] or 0),
+    }
+
+
+@app.get("/defective-items/summary", dependencies=[Depends(verify_key_flexible)])
+async def get_defective_items_summary():
+    conn = get_conn()
+    cur = conn.cursor()
+    try:
+        stats = get_defective_stats_helper(cur)
+        return {"stats": stats}
+    finally:
+        cur.close()
+        conn.close()
+
+
+@app.get("/defective-items", dependencies=[Depends(verify_key_flexible)])
+async def get_defective_items(
+    status: Optional[str] = None,
+    defect_type: Optional[str] = None,
+    search: Optional[str] = None,
+    limit: int = 50,
+    offset: int = 0,
+):
+    conn = get_conn()
+    cur = conn.cursor()
+    try:
+        conditions = []
+        params = []
+
+        if status and status != "ALL":
+            conditions.append("status = %s")
+            params.append(status)
+
+        if defect_type and defect_type != "ALL":
+            conditions.append("defect_type = %s")
+            params.append(defect_type)
+
+        if search:
+            conditions.append("(po_number ILIKE %s OR vendor_name ILIKE %s OR item_name ILIKE %s OR defect_type ILIKE %s)")
+            s_val = f"%{search}%"
+            params.extend([s_val, s_val, s_val, s_val])
+
+        where_clause = f"WHERE {' AND '.join(conditions)}" if conditions else ""
+
+        count_query = f"SELECT COUNT(*) AS total FROM defective_items {where_clause}"
+        cur.execute(count_query, tuple(params))
+        total = cur.fetchone()["total"]
+
+        query = f"""
+            SELECT id, po_id, po_number, vendor_id, vendor_name, item_name,
+                   ordered_quantity, defective_quantity, defect_type, description,
+                   inspection_date::text, evidence_photo_url, status, resolution_notes,
+                   reported_by, created_at::text, updated_at::text
+            FROM defective_items
+            {where_clause}
+            ORDER BY created_at DESC
+            LIMIT %s OFFSET %s
+        """
+        params_with_paging = list(params) + [limit, offset]
+        cur.execute(query, tuple(params_with_paging))
+        items = [dict(r) for r in cur.fetchall()]
+
+        stats = get_defective_stats_helper(cur)
+
+        return {
+            "defective_items": items,
+            "total": total,
+            "stats": stats,
+        }
+    finally:
+        cur.close()
+        conn.close()
+
+
+@app.get("/defective-items/{item_id}", dependencies=[Depends(verify_key_flexible)])
+async def get_defective_item(item_id: int):
+    conn = get_conn()
+    cur = conn.cursor()
+    try:
+        cur.execute("""
+            SELECT id, po_id, po_number, vendor_id, vendor_name, item_name,
+                   ordered_quantity, defective_quantity, defect_type, description,
+                   inspection_date::text, evidence_photo_url, status, resolution_notes,
+                   reported_by, created_at::text, updated_at::text
+            FROM defective_items
+            WHERE id = %s
+        """, (item_id,))
+        row = cur.fetchone()
+        if not row:
+            raise HTTPException(status_code=404, detail="Defective item record not found")
+        return dict(row)
+    finally:
+        cur.close()
+        conn.close()
+
+
+@app.post("/defective-items", dependencies=[Depends(verify_key_flexible)])
+async def create_defective_item(payload: CreateDefectiveItem):
+    conn = get_conn()
+    cur = conn.cursor()
+    try:
+        po_number = payload.po_number
+        vendor_name = payload.vendor_name
+        item_name = payload.item_name
+        vendor_id = payload.vendor_id
+        ordered_quantity = payload.ordered_quantity or 0
+
+        # Backfill from purchase_orders if missing
+        if not po_number or not vendor_name or not item_name:
+            cur.execute("""
+                SELECT po_number, vendor_name, item_name, vendor_id, quantity
+                FROM purchase_orders WHERE id = %s
+            """, (payload.po_id,))
+            po_row = cur.fetchone()
+            if po_row:
+                po_number = po_number or po_row["po_number"]
+                vendor_name = vendor_name or po_row["vendor_name"]
+                item_name = item_name or po_row["item_name"]
+                vendor_id = vendor_id or po_row["vendor_id"]
+                if not ordered_quantity:
+                    ordered_quantity = po_row["quantity"]
+
+        cur.execute("""
+            INSERT INTO defective_items (
+                po_id, po_number, vendor_id, vendor_name, item_name,
+                ordered_quantity, defective_quantity, defect_type,
+                description, inspection_date, evidence_photo_url,
+                reported_by, status
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                COALESCE(%s::date, CURRENT_DATE), %s,
+                COALESCE(%s, 'Quality Inspector'), 'REPORTED'
+            )
+            RETURNING id, po_id, po_number, vendor_id, vendor_name, item_name,
+                      ordered_quantity, defective_quantity, defect_type, description,
+                      inspection_date::text, evidence_photo_url, status, resolution_notes,
+                      reported_by, created_at::text, updated_at::text
+        """, (
+            payload.po_id,
+            po_number or f"PO-{payload.po_id}",
+            vendor_id,
+            vendor_name or "Unknown Vendor",
+            item_name or "Unknown Item",
+            ordered_quantity,
+            payload.defective_quantity,
+            payload.defect_type,
+            payload.description,
+            payload.inspection_date,
+            payload.evidence_photo_url,
+            payload.reported_by,
+        ))
+        row = dict(cur.fetchone())
+        conn.commit()
+        return row
+    except Exception as e:
+        conn.rollback()
+        raise HTTPException(status_code=500, detail=f"Failed to record defective item: {str(e)}")
+    finally:
+        cur.close()
+        conn.close()
+
+
+@app.patch("/defective-items/{item_id}/status", dependencies=[Depends(verify_key_flexible)])
+async def update_defective_item_status(item_id: int, payload: UpdateDefectiveItemStatus):
+    conn = get_conn()
+    cur = conn.cursor()
+    try:
+        cur.execute("""
+            UPDATE defective_items
+            SET status = %s,
+                resolution_notes = COALESCE(%s, resolution_notes),
+                updated_at = NOW()
+            WHERE id = %s
+            RETURNING id, po_id, po_number, vendor_id, vendor_name, item_name,
+                      ordered_quantity, defective_quantity, defect_type, description,
+                      inspection_date::text, evidence_photo_url, status, resolution_notes,
+                      reported_by, created_at::text, updated_at::text
+        """, (payload.status, payload.resolution_notes, item_id))
+        row = cur.fetchone()
+        if not row:
+            raise HTTPException(status_code=404, detail="Defective item record not found")
+        conn.commit()
+        return dict(row)
+    except HTTPException:
+        raise
+    except Exception as e:
+        conn.rollback()
+        raise HTTPException(status_code=500, detail=f"Failed to update defective item status: {str(e)}")
+    finally:
+        cur.close()
+        conn.close()
+
+
+@app.delete("/defective-items/{item_id}", dependencies=[Depends(verify_key_flexible)])
+async def delete_defective_item(item_id: int):
+    conn = get_conn()
+    cur = conn.cursor()
+    try:
+        cur.execute("DELETE FROM defective_items WHERE id = %s RETURNING id", (item_id,))
+        row = cur.fetchone()
+        if not row:
+            raise HTTPException(status_code=404, detail="Defective item record not found")
+        conn.commit()
+        return {"message": "Defective item deleted successfully", "id": item_id}
+    finally:
+        cur.close()
+        conn.close()
+
 
 
 

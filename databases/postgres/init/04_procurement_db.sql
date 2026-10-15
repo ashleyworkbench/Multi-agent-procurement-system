@@ -151,3 +151,43 @@ INSERT INTO procurement_audit (po_id, po_number, action, old_status, new_status,
     (3, 'PO-2024-0003', 'STATUS_CHANGE', 'APPROVED',         'ORDERED',          'manager_01'),
     (4, 'PO-2024-0004', 'CREATED',        NULL,              'PENDING_APPROVAL', 'agent_4'),
     (5, 'PO-2024-0005', 'STATUS_CHANGE', 'PENDING_APPROVAL', 'APPROVED',         'manager_02');
+
+-- -------------------------------------------------------
+-- Table: defective_items
+-- Tracking damaged/defective shipments, quarantine, and resolution
+-- -------------------------------------------------------
+CREATE TABLE IF NOT EXISTS defective_items (
+    id                 SERIAL         PRIMARY KEY,
+    po_id              INTEGER        NOT NULL REFERENCES purchase_orders(id) ON DELETE CASCADE,
+    po_number          VARCHAR(50)    NOT NULL,
+    vendor_id          INTEGER,
+    vendor_name        VARCHAR(255)   NOT NULL,
+    item_name          VARCHAR(255)   NOT NULL,
+    ordered_quantity   INTEGER        NOT NULL DEFAULT 0,
+    defective_quantity INTEGER        NOT NULL DEFAULT 0,
+    defect_type        VARCHAR(100)   NOT NULL,
+    description        TEXT,
+    inspection_date    DATE           NOT NULL DEFAULT CURRENT_DATE,
+    evidence_photo_url TEXT,
+    status             VARCHAR(50)    NOT NULL DEFAULT 'REPORTED',
+    resolution_notes   TEXT,
+    reported_by        VARCHAR(255)   DEFAULT 'Quality Inspector',
+    created_at         TIMESTAMP      NOT NULL DEFAULT NOW(),
+    updated_at         TIMESTAMP      NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_defective_po_id ON defective_items(po_id);
+CREATE INDEX IF NOT EXISTS idx_defective_status ON defective_items(status);
+CREATE INDEX IF NOT EXISTS idx_defective_vendor ON defective_items(vendor_name);
+
+CREATE TRIGGER trg_defective_updated_at
+    BEFORE UPDATE ON defective_items
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+-- Seed initial defective shipment for demonstration
+INSERT INTO defective_items (po_id, po_number, vendor_id, vendor_name, item_name, ordered_quantity, defective_quantity, defect_type, description, inspection_date, status, reported_by)
+VALUES
+    (1, 'PO-2024-0001', 1, 'ACC Cement Ltd', 'Cement (50kg bags)', 200, 15, 'Packaging Damaged', 'Moisture exposure damaged bags during freight transit.', CURRENT_DATE - 1, 'REPORTED', 'Quality Inspector')
+ON CONFLICT DO NOTHING;
+

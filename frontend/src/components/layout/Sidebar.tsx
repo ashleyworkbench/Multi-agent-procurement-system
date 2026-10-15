@@ -25,6 +25,7 @@ import {
   LogOut,
   ShieldAlert,
   Radio,
+  PackageX,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSidebarStore } from "@/store/sidebarStore";
@@ -49,6 +50,7 @@ const navigation = [
     items: [
       { label: "Inventory", href: "/inventory", icon: Package },
       { label: "Vendors",   href: "/vendors",   icon: Store },
+      { label: "Defective Items", href: "/defective-items", icon: PackageX },
     ],
   },
   {
@@ -113,7 +115,7 @@ export function Sidebar() {
           items: navigation
             .flatMap((group) => group.items)
             .filter((item) =>
-              ["/purchase-orders", "/approvals", "/contracts"].includes(item.href)
+              ["/purchase-orders", "/approvals", "/contracts", "/defective-items"].includes(item.href)
             ),
         },
       ]

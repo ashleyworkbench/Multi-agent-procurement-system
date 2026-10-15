@@ -994,6 +994,76 @@ async def proxy_demo_reset():
         return resp.json()
 
 
+# ------------------------------------------------------------------ #
+# Defective Items Proxy Routes                                       #
+# ------------------------------------------------------------------ #
+@app.get("/defective-items/summary")
+async def proxy_defective_items_summary(request: Request):
+    headers = {"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+    if request.headers.get("Authorization"):
+        headers["Authorization"] = request.headers["Authorization"]
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.get(f"{PROC_SVC_URL}/defective-items/summary", headers=headers)
+        return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
+
+
+@app.get("/defective-items")
+async def proxy_defective_items(request: Request):
+    headers = {"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+    if request.headers.get("Authorization"):
+        headers["Authorization"] = request.headers["Authorization"]
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.get(
+            f"{PROC_SVC_URL}/defective-items",
+            params=dict(request.query_params),
+            headers=headers
+        )
+        return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
+
+
+@app.get("/defective-items/{item_id}")
+async def proxy_get_defective_item(item_id: int, request: Request):
+    headers = {"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+    if request.headers.get("Authorization"):
+        headers["Authorization"] = request.headers["Authorization"]
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.get(f"{PROC_SVC_URL}/defective-items/{item_id}", headers=headers)
+        return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
+
+
+@app.post("/defective-items")
+async def proxy_create_defective_item(request: Request):
+    body = await request.json()
+    headers = {"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+    if request.headers.get("Authorization"):
+        headers["Authorization"] = request.headers["Authorization"]
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        resp = await client.post(f"{PROC_SVC_URL}/defective-items", json=body, headers=headers)
+        return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
+
+
+@app.patch("/defective-items/{item_id}/status")
+async def proxy_update_defective_item_status(item_id: int, request: Request):
+    body = await request.json()
+    headers = {"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+    if request.headers.get("Authorization"):
+        headers["Authorization"] = request.headers["Authorization"]
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.patch(f"{PROC_SVC_URL}/defective-items/{item_id}/status", json=body, headers=headers)
+        return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
+
+
+@app.delete("/defective-items/{item_id}")
+async def proxy_delete_defective_item(item_id: int, request: Request):
+    headers = {"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+    if request.headers.get("Authorization"):
+        headers["Authorization"] = request.headers["Authorization"]
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.delete(f"{PROC_SVC_URL}/defective-items/{item_id}", headers=headers)
+        return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
+
+
+
 
 
 
