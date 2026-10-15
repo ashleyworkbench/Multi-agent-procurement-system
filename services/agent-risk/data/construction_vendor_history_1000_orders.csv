@@ -1,0 +1,1001 @@
+order_id,order_date,vendor_id,vendor_name,company_id,on_time_rate,delay_days,lead_time,defect_rate,return_rate,price_variance,compliance_score,violations,iso_certified,spend_tier,actual_order_outcome,rating,ground_truth_risk
+PO-CONST-00001,2023-12-09,V-CONST-001,ACC Cement Ltd,construction,0.937,0.2,2,0.0105,0.0071,-0.016,93.8,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00001,2023-09-07,V-CONST-001,ACC Cement Ltd,construction,0.97,0.8,5,0.0041,0.0047,0.02,90.1,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00003,2023-06-04,V-CONST-001,ACC Cement Ltd,construction,0.926,0.1,4,0.0095,0.0065,0.016,94.8,0,False,Medium,on_time_delivery,4.7,Low
+PO-CONST-00004,2025-06-19,V-CONST-001,ACC Cement Ltd,construction,0.933,0.1,7,0.0042,0.0023,-0.016,92.1,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00005,2024-03-12,V-CONST-001,ACC Cement Ltd,construction,0.945,0.8,7,0.0141,0.0052,0.01,91.5,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00006,2025-12-18,V-CONST-001,ACC Cement Ltd,construction,0.935,0.4,2,0.0042,0.0003,-0.004,92.4,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00007,2025-08-13,V-CONST-001,ACC Cement Ltd,construction,0.982,0.8,3,0.0047,0.002,0.008,92.4,0,False,High,on_time_delivery,4.6,Low
+PO-CONST-00008,2023-09-16,V-CONST-001,ACC Cement Ltd,construction,0.926,0.1,2,0.0031,0.0013,0.014,95.4,0,False,High,on_time_delivery,4.7,Low
+PO-CONST-00009,2024-09-28,V-CONST-001,ACC Cement Ltd,construction,0.986,0.8,2,0.0105,0.0043,-0.007,95.8,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00010,2025-12-09,V-CONST-001,ACC Cement Ltd,construction,0.988,0.9,6,0.0138,0.007,-0.005,95.8,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00011,2025-01-20,V-CONST-001,ACC Cement Ltd,construction,0.943,0.0,4,0.0133,0.0067,-0.005,90.5,0,True,Medium,on_time_delivery,4.8,Low
+PO-CONST-00012,2025-03-05,V-CONST-001,ACC Cement Ltd,construction,0.966,1.1,3,0.0047,0.007,0.001,91.9,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00013,2025-06-15,V-CONST-001,ACC Cement Ltd,construction,0.671,8.4,13,0.0696,0.0502,0.196,49.4,2,False,Low,delayed_delivery,2.4,High
+PO-CONST-00014,2024-02-17,V-CONST-001,ACC Cement Ltd,construction,0.781,3.5,8,0.0326,0.023,0.084,80.1,0,False,Medium,delayed_delivery,3.5,Medium
+PO-CONST-00015,2024-07-14,V-CONST-001,ACC Cement Ltd,construction,0.953,0.9,7,0.0101,0.0052,-0.017,96.6,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00016,2023-07-06,V-CONST-001,ACC Cement Ltd,construction,0.939,,2,,0.0069,0.008,90.5,0,True,Medium,on_time_delivery,4.9,Low
+PO-CONST-00017,2023-07-16,V-CONST-001,ACC Cement Ltd,construction,0.954,1.0,2,0.0033,0.0,-0.0,98.3,0,False,High,on_time_delivery,4.6,Low
+PO-CONST-00018,2025-11-23,V-CONST-001,ACC Cement Ltd,construction,0.813,2.1,8,0.0442,0.0204,0.067,82.5,0,True,Medium,delayed_delivery,3.4,Medium
+PO-CONST-00019,2023-02-20,V-CONST-001,ACC Cement Ltd,construction,0.925,1.0,5,0.0027,0.0071,-0.008,95.4,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00020,2024-05-07,V-CONST-001,ACC Cement Ltd,construction,0.967,0.4,4,0.0065,0.0054,-0.005,92.8,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00021,2023-02-18,V-CONST-001,ACC Cement Ltd,construction,0.54,7.2,15,0.1123,0.0746,0.168,48.0,4,True,Medium,delayed_delivery,2.8,High
+PO-CONST-00022,2025-02-05,V-CONST-001,ACC Cement Ltd,construction,0.939,1.1,7,0.0087,0.0022,0.01,96.5,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00023,2024-05-28,V-CONST-001,ACC Cement Ltd,construction,1.35,0.8,4,0.0016,0.0027,-0.013,115.0,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00024,2025-01-04,V-CONST-001,ACC Cement Ltd,construction,0.925,1.1,3,0.0086,0.0067,0.009,91.3,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00025,2023-06-07,V-CONST-001,ACC Cement Ltd,construction,0.839,3.5,10,0.0391,0.0259,0.06,80.7,0,True,Low,delayed_delivery,4.1,Medium
+PO-CONST-00026,2025-06-26,V-CONST-001,ACC Cement Ltd,construction,0.985,1.0,7,0.0124,0.0021,0.019,91.0,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00027,2024-06-10,V-CONST-001,ACC Cement Ltd,construction,0.977,1.0,3,0.0013,0.0015,-0.004,97.8,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00028,2025-06-01,V-CONST-001,ACC Cement Ltd,construction,0.928,1.2,3,0.0091,0.0079,-0.018,95.4,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00029,2025-02-13,V-CONST-001,ACC Cement Ltd,construction,0.983,0.2,2,0.0109,0.0,0.026,94.8,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00030,2024-10-11,V-CONST-001,ACC Cement Ltd,construction,0.836,1.9,9,0.0317,0.022,0.056,81.8,1,True,Low,on_time_delivery,3.9,Medium
+PO-CONST-00031,2025-03-20,V-CONST-001,ACC Cement Ltd,construction,0.96,0.5,2,0.0053,0.0017,0.019,95.5,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00032,2025-08-26,V-CONST-001,ACC Cement Ltd,construction,0.983,1.0,3,0.0102,0.0023,0.013,95.6,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00033,2023-03-01,V-CONST-001,ACC Cement Ltd,construction,0.923,1.2,6,0.0129,0.0006,0.001,95.7,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00034,2023-03-21,V-CONST-001,ACC Cement Ltd,construction,0.968,1.1,2,0.0119,0.0018,0.02,96.3,0,False,Medium,on_time_delivery,4.7,Low
+PO-CONST-00035,2023-08-05,V-CONST-001,ACC Cement Ltd,construction,0.854,3.5,10,0.0437,0.026,0.071,82.1,1,False,Medium,delayed_delivery,4.0,Medium
+PO-CONST-00036,2024-04-27,V-CONST-001,ACC Cement Ltd,construction,0.965,0.9,6,0.0078,0.0019,0.002,96.4,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00037,2023-03-05,V-CONST-001,ACC Cement Ltd,construction,0.78,3.6,8,0.0197,0.0173,0.067,77.8,0,False,Medium,delayed_delivery,4.1,Medium
+PO-CONST-00038,2024-08-01,V-CONST-001,ACC Cement Ltd,construction,0.986,0.4,5,0.0129,0.0076,0.001,96.7,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00039,2023-07-11,V-CONST-001,ACC Cement Ltd,construction,0.967,1.0,7,0.0033,0.0037,-0.014,95.6,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00040,2023-11-14,V-CONST-001,ACC Cement Ltd,construction,0.929,0.6,2,0.0046,0.0026,0.003,93.0,0,False,High,on_time_delivery,4.8,Low
+PO-CONST-00041,2024-02-16,V-CONST-001,ACC Cement Ltd,construction,0.921,0.6,4,0.0041,0.0005,0.028,90.4,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00042,2023-04-05,V-CONST-001,ACC Cement Ltd,construction,0.953,0.1,3,0.0075,0.002,-0.002,95.5,0,True,Medium,on_time_delivery,4.9,Low
+PO-CONST-00043,2023-05-19,V-CONST-001,ACC Cement Ltd,construction,0.967,1.1,5,0.0142,0.0016,0.01,97.5,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00044,2025-10-26,V-CONST-001,ACC Cement Ltd,construction,0.928,1.2,2,0.0059,0.0034,-0.001,94.6,0,True,Medium,on_time_delivery,4.8,Low
+PO-CONST-00045,2023-07-12,V-CONST-001,ACC Cement Ltd,construction,0.964,1.0,7,0.0031,0.0014,0.006,95.9,0,False,High,on_time_delivery,4.6,Low
+PO-CONST-00046,2024-06-28,V-CONST-001,ACC Cement Ltd,construction,0.937,1.1,4,0.0133,0.002,0.003,95.5,0,False,High,on_time_delivery,4.4,Low
+PO-CONST-00047,2023-08-07,V-CONST-001,ACC Cement Ltd,construction,0.796,2.3,9,0.0418,0.0226,0.054,72.1,0,True,Low,on_time_delivery,3.8,Medium
+PO-CONST-00048,2025-08-21,V-CONST-001,ACC Cement Ltd,construction,0.97,0.5,2,0.0023,0.0018,0.015,92.8,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00049,2025-09-11,V-CONST-001,ACC Cement Ltd,construction,0.945,0.5,4,0.0045,0.001,-0.01,91.1,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00050,2025-10-25,V-CONST-001,ACC Cement Ltd,construction,0.957,0.3,2,0.0127,0.0024,-0.002,92.7,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00051,2024-12-05,V-CONST-001,ACC Cement Ltd,construction,0.965,0.9,2,0.0132,0.0046,0.003,94.0,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00052,2023-02-13,V-CONST-001,ACC Cement Ltd,construction,0.814,3.2,5,0.0221,0.0246,0.087,73.2,0,True,Medium,delayed_delivery,4.0,Medium
+PO-CONST-00053,2024-05-28,V-CONST-001,ACC Cement Ltd,construction,0.961,0.5,6,0.0097,0.0049,0.017,98.5,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00054,2023-04-06,V-CONST-001,ACC Cement Ltd,construction,0.959,0.2,5,0.0073,0.0048,-0.005,92.1,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00055,2023-05-26,V-CONST-001,ACC Cement Ltd,construction,0.975,0.7,3,0.007,0.0044,0.012,98.2,0,True,Medium,on_time_delivery,4.4,Low
+PO-CONST-00056,2025-12-27,V-CONST-001,ACC Cement Ltd,construction,0.96,0.3,2,0.0076,0.0024,0.0,92.5,0,False,High,on_time_delivery,4.4,Low
+PO-CONST-00057,2024-12-11,V-CONST-001,ACC Cement Ltd,construction,0.962,0.0,3,0.0145,0.0067,0.009,98.6,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00058,2024-09-21,V-CONST-001,ACC Cement Ltd,construction,0.951,0.3,6,0.0071,0.0065,0.028,94.2,0,False,High,on_time_delivery,4.6,Low
+PO-CONST-00059,2023-06-14,V-CONST-001,ACC Cement Ltd,construction,0.969,0.3,5,0.0124,0.0044,0.003,92.8,0,True,Medium,on_time_delivery,4.9,Low
+PO-CONST-00060,2025-01-22,V-CONST-001,ACC Cement Ltd,construction,0.981,0.6,2,0.0036,0.0029,0.018,95.6,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00061,2024-08-23,V-CONST-001,ACC Cement Ltd,construction,0.954,0.0,7,0.0095,0.0019,-0.012,95.0,0,False,Medium,on_time_delivery,4.5,Low
+PO-CONST-00062,2023-08-04,V-CONST-001,ACC Cement Ltd,construction,0.965,0.2,7,0.0051,0.0056,0.001,94.3,0,False,Medium,on_time_delivery,4.6,Low
+PO-CONST-00063,2023-10-17,V-CONST-001,ACC Cement Ltd,construction,0.972,0.2,2,0.0049,0.0063,0.001,98.4,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00064,2025-10-22,V-CONST-001,ACC Cement Ltd,construction,0.954,0.2,6,0.0078,0.0027,0.018,93.4,0,True,Medium,on_time_delivery,4.9,Low
+PO-CONST-00065,2024-04-28,V-CONST-001,ACC Cement Ltd,construction,0.974,0.1,7,0.0076,0.0073,-0.001,98.9,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00066,2025-06-28,V-CONST-001,ACC Cement Ltd,construction,0.927,1.0,2,0.0084,0.0037,0.016,93.7,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00067,2024-10-23,V-CONST-001,ACC Cement Ltd,construction,0.802,1.7,10,0.041,0.0255,0.059,76.4,1,False,Low,delayed_delivery,3.6,Medium
+PO-CONST-00068,2024-04-24,V-CONST-001,ACC Cement Ltd,construction,0.926,1.2,7,0.0109,0.0008,-0.012,92.7,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00069,2024-06-14,V-CONST-001,ACC Cement Ltd,construction,0.93,0.6,6,0.0105,0.0014,-0.011,95.5,0,False,High,on_time_delivery,4.7,Low
+PO-CONST-00070,2025-03-08,V-CONST-001,ACC Cement Ltd,construction,0.952,0.3,4,0.0103,0.0072,0.003,92.6,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00071,2025-05-21,V-CONST-001,ACC Cement Ltd,construction,0.987,0.8,5,0.0128,0.0016,-0.001,94.3,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00072,2025-05-01,V-CONST-001,ACC Cement Ltd,construction,0.988,0.8,4,0.0011,0.0069,0.019,98.8,0,False,High,on_time_delivery,4.8,Low
+PO-CONST-00073,2024-04-21,V-CONST-001,ACC Cement Ltd,construction,0.933,0.3,7,0.0117,0.0054,-0.013,90.9,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00074,2024-12-05,V-CONST-001,ACC Cement Ltd,construction,0.926,0.4,7,0.0068,0.0016,0.019,97.9,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00075,2023-05-27,V-CONST-001,ACC Cement Ltd,construction,0.986,1.2,4,0.0115,0.0027,-0.014,98.7,0,True,Medium,on_time_delivery,4.8,Low
+PO-CONST-00076,2024-09-12,V-CONST-001,ACC Cement Ltd,construction,0.926,,4,,0.0036,0.014,96.1,0,False,High,on_time_delivery,4.9,Low
+PO-CONST-00077,2023-08-01,V-CONST-001,ACC Cement Ltd,construction,0.963,1.1,4,0.0138,0.0018,-0.017,97.4,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00078,2023-05-16,V-CONST-001,ACC Cement Ltd,construction,0.928,0.3,6,0.0029,0.0036,0.014,96.7,0,False,High,on_time_delivery,4.8,Low
+PO-CONST-00079,2024-11-04,V-CONST-001,ACC Cement Ltd,construction,0.978,0.7,4,0.0015,0.003,0.002,98.6,0,True,Medium,on_time_delivery,4.9,Low
+PO-CONST-00080,2025-06-02,V-CONST-001,ACC Cement Ltd,construction,0.948,0.2,2,0.0143,0.0066,-0.015,91.9,0,True,Medium,on_time_delivery,4.8,Low
+PO-CONST-00081,2023-10-07,V-CONST-001,ACC Cement Ltd,construction,0.925,0.9,3,0.0092,0.0065,-0.008,97.0,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00082,2023-09-09,V-CONST-001,ACC Cement Ltd,construction,0.976,0.1,2,0.0028,0.0029,0.019,95.3,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00083,2024-09-04,V-CONST-001,ACC Cement Ltd,construction,0.972,0.6,4,0.0082,0.0009,0.005,98.5,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00084,2025-05-15,V-CONST-001,ACC Cement Ltd,construction,0.834,1.6,12,0.0409,0.0177,0.045,82.0,1,True,Low,on_time_delivery,3.9,Medium
+PO-CONST-00085,2024-10-21,V-CONST-001,ACC Cement Ltd,construction,0.961,0.9,5,0.0149,0.0042,0.003,95.4,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00086,2025-12-28,V-CONST-001,ACC Cement Ltd,construction,0.935,0.5,3,0.0068,0.0066,-0.0,96.6,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00087,2023-11-16,V-CONST-001,ACC Cement Ltd,construction,0.925,1.0,2,0.007,0.006,-0.001,91.2,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00088,2025-02-14,V-CONST-001,ACC Cement Ltd,construction,0.945,0.8,5,0.0132,0.0058,0.028,95.4,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00089,2025-08-08,V-CONST-001,ACC Cement Ltd,construction,0.979,0.4,6,0.0061,0.0061,0.009,97.3,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00090,2024-01-06,V-CONST-001,ACC Cement Ltd,construction,0.939,0.9,4,0.0059,0.0015,-0.013,95.9,0,True,Medium,on_time_delivery,4.8,Low
+PO-CONST-00091,2023-12-17,V-CONST-001,ACC Cement Ltd,construction,0.541,8.2,15,0.0652,0.049,0.162,62.9,4,False,Low,delayed_delivery,2.3,High
+PO-CONST-00092,2025-02-09,V-CONST-001,ACC Cement Ltd,construction,0.951,0.5,6,0.0072,0.0022,0.018,91.0,0,False,Medium,on_time_delivery,4.5,Low
+PO-CONST-00093,2024-09-22,V-CONST-001,ACC Cement Ltd,construction,0.942,0.3,6,0.0018,0.0016,0.027,96.9,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00094,2025-07-06,V-CONST-001,ACC Cement Ltd,construction,0.929,0.6,3,0.008,0.0067,0.02,90.6,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00095,2024-10-14,V-CONST-001,ACC Cement Ltd,construction,0.825,3.6,11,0.0258,0.0173,0.088,74.4,1,False,Medium,delayed_delivery,3.7,Medium
+PO-CONST-00096,2024-10-13,V-CONST-001,ACC Cement Ltd,construction,0.957,0.5,4,0.0114,0.0018,0.019,90.7,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00097,2024-06-24,V-CONST-001,ACC Cement Ltd,construction,0.875,3.4,7,0.0244,0.0126,0.05,80.4,1,True,Low,on_time_delivery,3.8,Medium
+PO-CONST-00098,2025-08-22,V-CONST-001,ACC Cement Ltd,construction,0.985,0.7,7,0.0148,0.0026,0.029,92.8,0,False,Medium,on_time_delivery,4.6,Low
+PO-CONST-00099,2024-10-02,V-CONST-001,ACC Cement Ltd,construction,0.945,0.1,5,0.0073,0.0005,0.022,90.7,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00100,2025-09-26,V-CONST-001,ACC Cement Ltd,construction,0.972,0.0,6,0.0101,0.0026,0.004,91.4,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00101,2024-12-03,V-CONST-002,UltraTech Cement,construction,0.816,2.0,8,0.0371,0.0278,0.066,80.5,1,False,Medium,on_time_delivery,3.7,Medium
+PO-CONST-00101,2025-01-26,V-CONST-002,UltraTech Cement,construction,0.964,0.4,4,0.0023,0.0054,-0.006,96.5,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00103,2024-05-21,V-CONST-002,UltraTech Cement,construction,0.969,0.5,6,0.0109,0.0007,0.008,95.8,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00104,2025-11-17,V-CONST-002,UltraTech Cement,construction,0.927,0.8,6,0.0061,0.0029,-0.011,91.9,0,False,Medium,on_time_delivery,4.5,Low
+PO-CONST-00105,2023-05-28,V-CONST-002,UltraTech Cement,construction,0.975,0.6,6,0.0127,0.0071,-0.018,93.0,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00106,2025-10-26,V-CONST-002,UltraTech Cement,construction,0.983,0.9,2,0.0068,0.0054,-0.008,94.0,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00107,2023-05-26,V-CONST-002,UltraTech Cement,construction,0.975,1.1,3,0.0061,0.0076,0.029,94.2,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00108,2023-04-26,V-CONST-002,UltraTech Cement,construction,0.962,1.0,2,0.01,0.007,0.008,90.9,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00109,2024-09-05,V-CONST-002,UltraTech Cement,construction,0.978,0.1,3,0.0124,0.0071,0.027,93.7,0,False,High,on_time_delivery,4.6,Low
+PO-CONST-00110,2023-06-08,V-CONST-002,UltraTech Cement,construction,0.922,1.1,7,0.0101,0.0063,-0.013,92.6,0,False,High,on_time_delivery,4.8,Low
+PO-CONST-00111,2024-08-20,V-CONST-002,UltraTech Cement,construction,1.35,0.1,4,0.004,0.0012,0.027,115.0,0,False,Medium,on_time_delivery,4.8,Low
+PO-CONST-00112,2023-01-08,V-CONST-002,UltraTech Cement,construction,0.949,1.0,5,0.0019,0.0067,0.005,94.8,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00113,2025-06-08,V-CONST-002,UltraTech Cement,construction,0.96,0.2,7,0.0022,0.0078,-0.017,94.7,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00114,2024-06-09,V-CONST-002,UltraTech Cement,construction,0.972,0.4,2,0.0058,0.0059,0.011,96.9,0,True,Medium,on_time_delivery,4.4,Low
+PO-CONST-00115,2025-03-27,V-CONST-002,UltraTech Cement,construction,0.975,0.6,7,0.0077,0.0015,-0.013,96.4,0,False,Medium,on_time_delivery,4.5,Low
+PO-CONST-00116,2023-01-11,V-CONST-002,UltraTech Cement,construction,0.985,0.6,6,0.0076,0.0003,0.012,92.6,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00117,2024-07-13,V-CONST-002,UltraTech Cement,construction,0.972,1.1,5,0.0057,0.0015,0.015,93.3,0,True,Medium,on_time_delivery,4.8,Low
+PO-CONST-00118,2025-03-18,V-CONST-002,UltraTech Cement,construction,0.941,0.1,4,0.0103,0.0025,0.01,93.8,0,False,High,on_time_delivery,4.6,Low
+PO-CONST-00119,2024-10-14,V-CONST-002,UltraTech Cement,construction,0.939,1.2,2,0.0021,0.0051,-0.002,97.2,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00120,2024-01-05,V-CONST-002,UltraTech Cement,construction,0.925,0.9,4,0.0061,0.0076,-0.018,91.4,0,False,High,on_time_delivery,4.6,Low
+PO-CONST-00121,2025-03-17,V-CONST-002,UltraTech Cement,construction,0.946,0.4,4,0.0045,0.0009,0.017,94.5,0,False,High,on_time_delivery,4.5,Low
+PO-CONST-00122,2025-08-07,V-CONST-002,UltraTech Cement,construction,0.99,0.3,5,0.0038,0.0011,-0.016,91.6,0,False,Medium,on_time_delivery,4.8,Low
+PO-CONST-00123,2024-11-12,V-CONST-002,UltraTech Cement,construction,0.842,3.1,9,0.0421,0.0253,0.076,85.0,1,True,Medium,delayed_delivery,3.5,Medium
+PO-CONST-00124,2023-04-26,V-CONST-002,UltraTech Cement,construction,0.955,0.4,6,0.0062,0.0064,0.008,95.5,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00125,2025-08-17,V-CONST-002,UltraTech Cement,construction,0.578,8.2,19,0.0598,0.0788,0.204,53.5,4,True,Medium,delayed_delivery,3.1,High
+PO-CONST-00126,2025-10-06,V-CONST-002,UltraTech Cement,construction,0.974,0.2,6,0.0137,0.0004,-0.014,91.4,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00127,2024-09-10,V-CONST-002,UltraTech Cement,construction,0.979,0.3,7,0.0144,0.0022,0.011,95.5,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00128,2025-03-06,V-CONST-002,UltraTech Cement,construction,0.966,0.9,6,0.0057,0.0074,-0.018,97.8,0,True,Medium,on_time_delivery,4.9,Low
+PO-CONST-00129,2024-11-07,V-CONST-002,UltraTech Cement,construction,0.974,0.5,7,0.0014,0.0071,0.007,95.8,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00130,2024-05-15,V-CONST-002,UltraTech Cement,construction,0.925,0.1,5,0.0068,0.0037,-0.003,91.3,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00131,2024-03-25,V-CONST-002,UltraTech Cement,construction,0.946,0.7,4,0.0044,0.001,0.002,91.3,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00132,2024-04-28,V-CONST-002,UltraTech Cement,construction,0.867,3.9,10,0.0231,0.0129,0.09,78.5,1,False,Low,delayed_delivery,4.2,Medium
+PO-CONST-00133,2023-04-19,V-CONST-002,UltraTech Cement,construction,0.945,0.1,5,0.0094,0.0067,0.014,92.6,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00134,2025-06-25,V-CONST-002,UltraTech Cement,construction,0.802,1.6,5,0.0334,0.0135,0.068,73.0,1,False,Medium,delayed_delivery,3.5,Medium
+PO-CONST-00135,2024-06-18,V-CONST-002,UltraTech Cement,construction,0.986,0.9,3,0.0094,0.0032,-0.018,90.4,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00136,2025-03-11,V-CONST-002,UltraTech Cement,construction,0.985,0.4,5,0.0149,0.0059,-0.005,93.0,0,False,High,on_time_delivery,4.7,Low
+PO-CONST-00137,2023-06-11,V-CONST-002,UltraTech Cement,construction,0.967,1.2,6,0.0053,0.0072,0.024,95.7,0,False,High,on_time_delivery,4.9,Low
+PO-CONST-00138,2025-10-08,V-CONST-002,UltraTech Cement,construction,0.97,0.7,3,0.0083,0.0058,0.019,93.4,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00139,2023-01-15,V-CONST-002,UltraTech Cement,construction,0.942,0.2,7,0.0039,0.004,0.011,94.2,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00140,2024-11-16,V-CONST-002,UltraTech Cement,construction,0.957,0.4,3,0.0074,0.0043,0.007,96.1,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00141,2024-09-10,V-CONST-002,UltraTech Cement,construction,0.779,4.4,9,0.0388,0.0227,0.075,78.8,1,False,Medium,on_time_delivery,3.5,Medium
+PO-CONST-00142,2024-07-27,V-CONST-002,UltraTech Cement,construction,0.944,0.9,3,0.0051,0.0023,0.016,93.1,0,False,High,on_time_delivery,4.5,Low
+PO-CONST-00143,2023-09-09,V-CONST-002,UltraTech Cement,construction,0.985,0.8,3,0.0025,0.0059,-0.008,90.5,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00144,2024-12-16,V-CONST-002,UltraTech Cement,construction,0.927,0.9,2,0.0145,0.0078,-0.012,95.9,0,False,High,on_time_delivery,4.7,Low
+PO-CONST-00145,2024-06-10,V-CONST-002,UltraTech Cement,construction,0.965,1.1,2,0.0101,0.0019,0.017,97.7,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00146,2023-07-26,V-CONST-002,UltraTech Cement,construction,0.955,1.1,4,0.0133,0.0001,0.008,91.0,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00147,2025-08-05,V-CONST-002,UltraTech Cement,construction,0.98,0.6,3,0.0123,0.0026,0.017,95.8,0,True,Medium,on_time_delivery,4.8,Low
+PO-CONST-00148,2025-11-25,V-CONST-002,UltraTech Cement,construction,0.934,0.7,7,0.0136,0.0066,0.006,90.8,0,True,Medium,on_time_delivery,4.9,Low
+PO-CONST-00149,2023-01-09,V-CONST-002,UltraTech Cement,construction,0.947,0.5,4,0.0144,0.0024,0.016,90.1,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00150,2024-05-06,V-CONST-002,UltraTech Cement,construction,0.948,0.6,7,0.0118,0.0055,0.012,98.5,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00151,2024-03-15,V-CONST-002,UltraTech Cement,construction,0.847,3.3,11,0.037,0.0264,0.078,83.2,0,True,Low,on_time_delivery,3.8,Medium
+PO-CONST-00152,2025-02-02,V-CONST-002,UltraTech Cement,construction,0.978,1.1,3,0.009,0.0012,-0.004,94.7,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00153,2023-09-15,V-CONST-002,UltraTech Cement,construction,0.977,0.5,6,0.0068,0.0045,0.008,96.1,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00154,2023-12-07,V-CONST-002,UltraTech Cement,construction,0.96,0.1,4,0.0108,0.0043,-0.017,98.0,0,False,Medium,on_time_delivery,4.5,Low
+PO-CONST-00155,2023-11-24,V-CONST-002,UltraTech Cement,construction,0.965,0.5,5,0.0073,0.0073,-0.001,90.7,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00156,2025-07-17,V-CONST-002,UltraTech Cement,construction,0.929,1.2,2,0.0116,0.0078,0.003,96.5,0,False,High,on_time_delivery,4.6,Low
+PO-CONST-00157,2024-06-05,V-CONST-002,UltraTech Cement,construction,0.939,1.1,7,0.0117,0.0003,0.013,95.5,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00158,2023-08-20,V-CONST-002,UltraTech Cement,construction,0.967,1.0,3,0.0114,0.0032,-0.008,92.0,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00159,2025-10-11,V-CONST-002,UltraTech Cement,construction,0.96,0.9,4,0.0043,0.007,0.029,94.7,0,False,High,on_time_delivery,4.5,Low
+PO-CONST-00160,2025-12-06,V-CONST-002,UltraTech Cement,construction,0.964,0.5,5,0.0017,0.0028,0.012,93.4,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00161,2024-03-25,V-CONST-002,UltraTech Cement,construction,0.958,0.3,3,0.0052,0.0057,0.02,98.2,0,False,High,on_time_delivery,4.7,Low
+PO-CONST-00162,2023-05-07,V-CONST-002,UltraTech Cement,construction,0.943,0.1,5,0.0129,0.0007,0.016,91.7,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00163,2023-04-26,V-CONST-002,UltraTech Cement,construction,0.973,0.9,6,0.004,0.0017,0.025,92.7,0,True,Medium,on_time_delivery,4.9,Low
+PO-CONST-00164,2023-12-25,V-CONST-002,UltraTech Cement,construction,0.812,2.2,8,0.0287,0.0143,0.056,76.0,1,False,Medium,on_time_delivery,3.7,Medium
+PO-CONST-00165,2024-02-26,V-CONST-002,UltraTech Cement,construction,0.878,2.9,10,0.0427,0.0167,0.061,79.9,0,True,Low,on_time_delivery,3.8,Medium
+PO-CONST-00166,2025-07-10,V-CONST-002,UltraTech Cement,construction,0.931,0.4,5,0.009,0.002,0.008,98.5,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00167,2025-11-24,V-CONST-002,UltraTech Cement,construction,0.954,0.2,4,0.0034,0.0058,0.004,98.3,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00168,2025-01-25,V-CONST-002,UltraTech Cement,construction,0.92,0.2,7,0.0042,0.0057,-0.02,94.6,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00169,2025-08-22,V-CONST-002,UltraTech Cement,construction,0.954,0.0,6,0.0068,0.0001,0.016,94.8,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00170,2024-03-04,V-CONST-002,UltraTech Cement,construction,0.984,0.6,3,0.0037,0.0042,0.021,92.4,0,False,Medium,on_time_delivery,4.6,Low
+PO-CONST-00171,2025-04-23,V-CONST-002,UltraTech Cement,construction,0.936,0.8,2,0.0102,0.0069,0.018,90.8,0,False,High,on_time_delivery,4.7,Low
+PO-CONST-00172,2023-12-06,V-CONST-002,UltraTech Cement,construction,0.926,1.0,7,0.012,0.0045,0.023,90.9,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00173,2025-08-09,V-CONST-002,UltraTech Cement,construction,0.756,1.7,9,0.0423,0.0201,0.042,85.0,1,True,Low,delayed_delivery,4.0,Medium
+PO-CONST-00174,2024-02-10,V-CONST-002,UltraTech Cement,construction,0.931,0.3,5,0.0105,0.0043,-0.001,96.7,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00175,2023-07-08,V-CONST-002,UltraTech Cement,construction,0.979,0.4,6,0.0144,0.0032,0.019,90.3,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00176,2024-07-06,V-CONST-002,UltraTech Cement,construction,0.968,0.8,2,0.0118,0.0024,-0.008,90.7,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00177,2023-12-13,V-CONST-002,UltraTech Cement,construction,0.942,0.1,2,0.0142,0.0036,0.018,90.9,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00178,2025-07-04,V-CONST-002,UltraTech Cement,construction,0.922,0.4,2,0.0094,0.0063,0.023,90.1,0,False,High,on_time_delivery,4.8,Low
+PO-CONST-00179,2025-04-19,V-CONST-002,UltraTech Cement,construction,0.956,0.8,3,0.0029,0.0024,0.005,90.6,0,False,High,on_time_delivery,4.6,Low
+PO-CONST-00180,2023-06-09,V-CONST-002,UltraTech Cement,construction,0.986,0.9,5,0.0093,0.0016,-0.015,92.7,0,False,High,on_time_delivery,4.8,Low
+PO-CONST-00181,2024-08-11,V-CONST-002,UltraTech Cement,construction,0.95,,7,,0.0011,-0.004,98.5,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00182,2024-05-24,V-CONST-002,UltraTech Cement,construction,0.84,3.0,8,0.0268,0.015,0.079,77.1,1,True,Low,delayed_delivery,4.2,Medium
+PO-CONST-00183,2025-04-15,V-CONST-002,UltraTech Cement,construction,0.976,1.0,2,0.0125,0.0064,0.0,94.5,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00184,2024-07-03,V-CONST-002,UltraTech Cement,construction,0.951,0.7,6,0.0066,0.0041,0.026,96.2,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00185,2025-11-03,V-CONST-002,UltraTech Cement,construction,0.928,0.3,7,0.006,0.0052,-0.018,98.9,0,False,High,on_time_delivery,4.9,Low
+PO-CONST-00186,2023-02-09,V-CONST-002,UltraTech Cement,construction,0.936,0.9,6,0.0091,0.0046,0.002,93.5,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00187,2024-07-03,V-CONST-002,UltraTech Cement,construction,0.928,1.1,3,0.0059,0.0027,0.019,94.7,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00188,2024-06-03,V-CONST-002,UltraTech Cement,construction,0.941,1.0,2,0.0013,0.0027,-0.015,97.2,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00189,2025-07-15,V-CONST-002,UltraTech Cement,construction,0.936,0.5,3,0.0036,0.0053,-0.0,96.6,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00190,2025-04-07,V-CONST-002,UltraTech Cement,construction,0.939,0.8,2,0.0091,0.0064,0.007,93.3,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00191,2024-09-21,V-CONST-002,UltraTech Cement,construction,0.942,0.5,5,0.0092,0.0028,0.022,95.6,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00192,2024-02-08,V-CONST-002,UltraTech Cement,construction,0.941,0.2,7,0.003,0.0031,0.01,95.2,0,False,Medium,on_time_delivery,4.6,Low
+PO-CONST-00193,2025-03-18,V-CONST-002,UltraTech Cement,construction,0.932,0.3,3,0.0054,0.0036,-0.017,93.2,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00194,2025-09-21,V-CONST-002,UltraTech Cement,construction,0.955,0.8,5,0.0109,0.0036,-0.012,95.1,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00195,2024-03-25,V-CONST-002,UltraTech Cement,construction,0.952,0.9,5,0.0087,0.0009,-0.014,97.0,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00196,2025-08-18,V-CONST-002,UltraTech Cement,construction,0.935,0.5,7,0.0126,0.006,-0.005,99.0,0,False,High,on_time_delivery,4.6,Low
+PO-CONST-00197,2024-02-25,V-CONST-002,UltraTech Cement,construction,0.977,0.3,7,0.0092,0.0028,0.016,95.7,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00198,2023-01-19,V-CONST-002,UltraTech Cement,construction,0.945,0.3,6,0.0034,0.0078,-0.005,95.2,0,True,Medium,on_time_delivery,4.9,Low
+PO-CONST-00199,2023-05-28,V-CONST-002,UltraTech Cement,construction,0.966,0.8,3,0.0045,0.0057,0.021,96.9,0,False,High,on_time_delivery,4.5,Low
+PO-CONST-00200,2025-07-13,V-CONST-002,UltraTech Cement,construction,0.952,0.8,2,0.0066,0.006,0.015,97.9,0,False,High,on_time_delivery,4.6,Low
+PO-CONST-00201,2025-02-24,V-CONST-003,Tata Steel,construction,0.988,0.8,7,0.006,0.0005,0.007,92.0,0,False,Medium,on_time_delivery,4.6,Low
+PO-CONST-00202,2024-06-18,V-CONST-003,Tata Steel,construction,0.96,0.7,5,0.012,0.0072,0.018,90.4,0,False,Medium,on_time_delivery,4.5,Low
+PO-CONST-00203,2024-08-01,V-CONST-003,Tata Steel,construction,0.879,2.8,7,0.0418,0.0154,0.084,84.3,0,False,Medium,delayed_delivery,3.7,Medium
+PO-CONST-00204,2023-01-13,V-CONST-003,Tata Steel,construction,0.831,3.7,8,0.0296,0.0116,0.045,75.0,0,True,Low,on_time_delivery,3.4,Medium
+PO-CONST-00205,2023-07-23,V-CONST-003,Tata Steel,construction,0.929,0.1,5,0.0023,0.0064,-0.015,93.3,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00206,2023-11-22,V-CONST-003,Tata Steel,construction,0.93,0.6,2,0.0095,0.0013,-0.002,91.9,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00207,2023-02-04,V-CONST-003,Tata Steel,construction,0.93,0.1,7,0.0064,0.0077,-0.004,91.3,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00208,2025-12-20,V-CONST-003,Tata Steel,construction,0.94,1.1,2,0.0129,0.0053,-0.005,94.7,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00209,2023-08-13,V-CONST-003,Tata Steel,construction,0.928,0.6,6,0.002,0.0071,-0.019,93.2,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00210,2024-06-18,V-CONST-003,Tata Steel,construction,0.968,0.9,2,0.0012,0.0005,-0.007,90.4,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00211,2025-07-14,V-CONST-003,Tata Steel,construction,0.969,0.1,6,0.0085,0.0012,-0.016,90.7,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00212,2025-11-22,V-CONST-003,Tata Steel,construction,0.965,0.4,5,0.0112,0.0068,-0.017,90.8,0,False,Medium,on_time_delivery,4.6,Low
+PO-CONST-00213,2024-11-24,V-CONST-003,Tata Steel,construction,0.966,0.2,2,0.0109,0.0056,-0.012,98.6,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00214,2024-12-04,V-CONST-003,Tata Steel,construction,0.974,0.0,5,0.0048,0.0005,0.016,95.2,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00215,2024-10-06,V-CONST-003,Tata Steel,construction,0.946,0.3,2,0.0135,0.0054,-0.014,96.7,0,True,Medium,on_time_delivery,4.8,Low
+PO-CONST-00216,2023-08-12,V-CONST-003,Tata Steel,construction,0.947,0.2,2,0.0087,0.0073,0.017,93.8,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00217,2024-02-19,V-CONST-003,Tata Steel,construction,0.946,0.6,2,0.0035,0.0064,0.029,98.6,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00218,2024-06-03,V-CONST-003,Tata Steel,construction,0.959,0.0,3,0.0051,0.0063,0.017,92.2,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00219,2023-12-18,V-CONST-003,Tata Steel,construction,0.644,7.1,10,0.1156,0.0361,0.19,57.1,4,False,Medium,delayed_delivery,2.9,High
+PO-CONST-00220,2025-12-10,V-CONST-003,Tata Steel,construction,0.927,0.6,3,0.0069,0.0077,0.029,91.3,0,True,Medium,on_time_delivery,4.4,Low
+PO-CONST-00221,2025-07-23,V-CONST-003,Tata Steel,construction,0.983,0.6,7,0.0022,0.0008,-0.013,97.4,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00222,2023-04-10,V-CONST-003,Tata Steel,construction,0.938,0.4,5,0.0108,0.0059,-0.004,92.4,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00223,2023-03-04,V-CONST-003,Tata Steel,construction,0.932,0.6,5,0.0027,0.0029,0.019,94.1,0,False,High,on_time_delivery,4.8,Low
+PO-CONST-00224,2025-05-27,V-CONST-003,Tata Steel,construction,0.969,0.7,3,0.0127,0.0026,-0.015,92.2,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00225,2024-03-01,V-CONST-003,Tata Steel,construction,0.987,1.0,6,0.0115,0.002,0.003,97.2,0,True,Medium,on_time_delivery,4.4,Low
+PO-CONST-00226,2023-03-07,V-CONST-003,Tata Steel,construction,0.978,0.4,7,0.0141,0.0007,0.009,98.3,0,True,Medium,on_time_delivery,4.9,Low
+PO-CONST-00227,2025-08-26,V-CONST-003,Tata Steel,construction,0.929,1.1,4,0.0027,0.0075,-0.017,98.3,0,False,High,on_time_delivery,4.6,Low
+PO-CONST-00228,2025-07-06,V-CONST-003,Tata Steel,construction,0.945,1.1,4,0.0049,0.0071,-0.018,95.6,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00229,2025-08-02,V-CONST-003,Tata Steel,construction,0.926,0.5,5,0.0038,0.0071,0.006,95.7,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00230,2025-08-12,V-CONST-003,Tata Steel,construction,0.984,0.6,5,0.0048,0.0002,0.01,90.3,0,True,Medium,on_time_delivery,4.8,Low
+PO-CONST-00231,2024-10-08,V-CONST-003,Tata Steel,construction,0.988,0.1,7,0.0044,0.0043,0.02,96.6,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00232,2024-03-06,V-CONST-003,Tata Steel,construction,0.937,0.4,7,0.0108,0.0073,-0.019,96.3,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00233,2024-09-10,V-CONST-003,Tata Steel,construction,0.932,0.0,2,0.0043,0.0018,0.006,90.0,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00234,2024-01-01,V-CONST-003,Tata Steel,construction,0.93,0.8,3,0.0118,0.0068,0.023,98.6,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00235,2023-06-10,V-CONST-003,Tata Steel,construction,0.943,1.2,7,0.0143,0.0063,0.028,95.8,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00236,2025-06-08,V-CONST-003,Tata Steel,construction,0.967,1.0,5,0.0053,0.0055,-0.014,96.6,0,False,High,on_time_delivery,4.4,Low
+PO-CONST-00237,2025-04-21,V-CONST-003,Tata Steel,construction,0.96,1.1,3,0.0056,0.0006,-0.003,92.9,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00238,2024-08-01,V-CONST-003,Tata Steel,construction,0.939,0.3,2,0.0059,0.0063,0.016,90.4,0,False,High,on_time_delivery,4.6,Low
+PO-CONST-00239,2024-08-13,V-CONST-003,Tata Steel,construction,0.945,0.5,5,0.012,0.0046,0.018,92.0,0,False,Medium,on_time_delivery,4.8,Low
+PO-CONST-00240,2023-06-09,V-CONST-003,Tata Steel,construction,0.987,0.1,3,0.0134,0.0013,-0.016,98.5,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00241,2024-12-01,V-CONST-003,Tata Steel,construction,0.95,0.8,6,0.0135,0.0013,-0.015,91.8,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00242,2025-09-09,V-CONST-003,Tata Steel,construction,0.966,0.4,2,0.0017,0.0046,0.022,91.4,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00243,2025-11-20,V-CONST-003,Tata Steel,construction,0.954,0.1,3,0.0034,0.0023,-0.016,97.6,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00244,2024-02-21,V-CONST-003,Tata Steel,construction,0.821,2.1,11,0.028,0.018,0.053,78.5,0,False,Low,delayed_delivery,4.0,Medium
+PO-CONST-00245,2023-11-12,V-CONST-003,Tata Steel,construction,0.977,0.5,6,0.0042,0.0005,-0.001,94.7,0,False,High,on_time_delivery,4.8,Low
+PO-CONST-00246,2023-07-28,V-CONST-003,Tata Steel,construction,0.97,0.6,6,0.0122,0.0054,0.011,91.1,0,False,Medium,on_time_delivery,4.9,Low
+PO-CONST-00247,2023-04-05,V-CONST-003,Tata Steel,construction,0.923,0.1,7,0.0071,0.008,0.011,97.5,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00248,2023-02-13,V-CONST-003,Tata Steel,construction,0.822,3.2,9,0.032,0.0265,0.041,81.8,1,False,Low,on_time_delivery,3.5,Medium
+PO-CONST-00249,2025-02-04,V-CONST-003,Tata Steel,construction,0.959,0.1,4,0.0131,0.007,0.024,92.4,0,False,High,on_time_delivery,4.7,Low
+PO-CONST-00250,2024-07-05,V-CONST-003,Tata Steel,construction,0.963,0.8,5,0.0015,0.0071,-0.003,92.1,0,False,High,on_time_delivery,4.8,Low
+PO-CONST-00251,2024-05-09,V-CONST-003,Tata Steel,construction,1.35,1.0,7,0.0024,0.007,-0.013,115.0,0,False,High,on_time_delivery,4.5,Low
+PO-CONST-00252,2025-02-07,V-CONST-003,Tata Steel,construction,0.951,1.1,5,0.0114,0.0061,0.023,97.4,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00253,2023-09-19,V-CONST-003,Tata Steel,construction,0.922,0.2,3,0.0127,0.002,0.003,98.3,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00254,2024-11-04,V-CONST-003,Tata Steel,construction,0.968,0.3,5,0.0093,0.0014,0.024,95.3,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00255,2025-12-03,V-CONST-003,Tata Steel,construction,0.787,2.7,7,0.0411,0.024,0.051,75.1,0,True,Medium,on_time_delivery,3.8,Medium
+PO-CONST-00256,2025-01-16,V-CONST-003,Tata Steel,construction,0.868,3.4,5,0.024,0.021,0.087,82.0,1,False,Medium,on_time_delivery,4.1,Medium
+PO-CONST-00257,2023-08-10,V-CONST-003,Tata Steel,construction,0.967,1.0,5,0.0092,0.0001,0.03,98.7,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00258,2024-11-04,V-CONST-003,Tata Steel,construction,0.954,0.4,4,0.01,0.0069,-0.007,96.4,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00259,2023-10-13,V-CONST-003,Tata Steel,construction,0.966,0.8,7,0.0014,0.004,-0.005,98.2,0,False,High,on_time_delivery,4.8,Low
+PO-CONST-00260,2025-04-11,V-CONST-003,Tata Steel,construction,0.971,0.3,6,0.0099,0.0038,0.027,93.2,0,True,Medium,on_time_delivery,4.8,Low
+PO-CONST-00261,2023-05-04,V-CONST-003,Tata Steel,construction,0.811,3.7,7,0.0436,0.0262,0.073,75.1,0,False,Medium,on_time_delivery,3.7,Medium
+PO-CONST-00262,2024-02-16,V-CONST-003,Tata Steel,construction,0.924,0.8,6,0.0142,0.0006,0.024,94.5,0,False,High,on_time_delivery,4.5,Low
+PO-CONST-00263,2023-03-07,V-CONST-003,Tata Steel,construction,0.944,1.2,5,0.003,0.0069,-0.011,90.7,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00264,2023-01-15,V-CONST-003,Tata Steel,construction,0.939,0.9,3,0.0091,0.0013,0.019,97.0,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00265,2024-08-13,V-CONST-003,Tata Steel,construction,0.92,0.6,7,0.0062,0.0001,-0.004,97.5,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00266,2023-04-23,V-CONST-003,Tata Steel,construction,0.981,0.4,2,0.0064,0.0047,-0.012,97.4,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00267,2025-06-14,V-CONST-003,Tata Steel,construction,0.982,1.2,4,0.0149,0.0039,0.018,91.5,0,False,Medium,on_time_delivery,4.5,Low
+PO-CONST-00268,2023-04-24,V-CONST-003,Tata Steel,construction,0.922,0.6,2,0.0061,0.0052,-0.018,97.9,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00269,2023-11-04,V-CONST-003,Tata Steel,construction,0.966,0.0,7,0.0026,0.0036,-0.014,92.3,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00270,2024-07-22,V-CONST-003,Tata Steel,construction,0.927,0.6,6,0.0095,0.0011,0.022,90.9,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00271,2023-10-07,V-CONST-003,Tata Steel,construction,0.974,1.0,3,0.006,0.0033,-0.012,94.9,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00272,2023-01-22,V-CONST-003,Tata Steel,construction,0.926,0.1,6,0.0104,0.0012,-0.015,94.6,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00273,2024-05-15,V-CONST-003,Tata Steel,construction,0.924,1.0,2,0.0129,0.0029,0.014,93.8,0,True,Medium,on_time_delivery,4.8,Low
+PO-CONST-00274,2023-03-22,V-CONST-003,Tata Steel,construction,0.834,2.5,12,0.0438,0.0148,0.077,77.2,1,True,Low,on_time_delivery,3.7,Medium
+PO-CONST-00275,2024-12-28,V-CONST-003,Tata Steel,construction,0.953,0.5,3,0.0026,0.0056,-0.017,98.5,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00276,2025-11-15,V-CONST-003,Tata Steel,construction,0.933,0.5,4,0.0096,0.0069,0.024,96.5,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00277,2024-08-02,V-CONST-003,Tata Steel,construction,0.924,0.8,2,0.0109,0.0054,0.018,95.2,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00278,2025-12-20,V-CONST-003,Tata Steel,construction,0.927,0.8,3,0.0077,0.0053,0.012,91.3,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00279,2024-08-28,V-CONST-003,Tata Steel,construction,0.932,0.9,4,0.0044,0.0078,-0.017,92.0,0,False,High,on_time_delivery,4.8,Low
+PO-CONST-00280,2024-10-15,V-CONST-003,Tata Steel,construction,0.926,0.6,4,0.0027,0.004,0.013,90.9,0,False,Medium,on_time_delivery,4.7,Low
+PO-CONST-00281,2023-10-20,V-CONST-003,Tata Steel,construction,0.965,1.1,6,0.0039,0.0054,0.028,93.3,0,True,Medium,on_time_delivery,4.8,Low
+PO-CONST-00282,2025-10-16,V-CONST-003,Tata Steel,construction,0.97,0.4,5,0.0026,0.0061,-0.009,93.1,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00283,2023-03-16,V-CONST-003,Tata Steel,construction,0.93,0.9,7,0.0067,0.002,-0.01,91.1,0,False,Medium,on_time_delivery,4.6,Low
+PO-CONST-00284,2025-06-04,V-CONST-003,Tata Steel,construction,0.973,0.1,7,0.0127,0.0047,0.019,94.1,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00285,2025-07-27,V-CONST-003,Tata Steel,construction,0.961,1.1,3,0.0107,0.0014,0.021,90.9,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00286,2025-12-25,V-CONST-003,Tata Steel,construction,0.937,0.5,4,0.0146,0.0036,-0.013,93.7,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00287,2025-09-21,V-CONST-003,Tata Steel,construction,0.935,0.3,7,0.0051,0.0028,0.014,98.8,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00288,2025-02-25,V-CONST-003,Tata Steel,construction,0.945,0.6,6,0.0142,0.0057,0.014,98.0,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00289,2023-07-05,V-CONST-003,Tata Steel,construction,0.924,0.1,4,0.0115,0.0013,-0.006,92.3,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00290,2025-01-12,V-CONST-003,Tata Steel,construction,0.977,0.1,7,0.0114,0.0069,0.017,95.1,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00291,2024-12-22,V-CONST-003,Tata Steel,construction,0.923,0.5,5,0.0144,0.0078,-0.004,95.0,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00292,2024-04-21,V-CONST-003,Tata Steel,construction,0.969,0.8,6,0.0087,0.0048,0.019,98.7,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00293,2023-03-24,V-CONST-003,Tata Steel,construction,0.956,0.5,5,0.0049,0.0021,-0.012,97.6,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00294,2023-03-11,V-CONST-003,Tata Steel,construction,0.828,3.8,9,0.0312,0.0203,0.058,83.0,1,True,Low,delayed_delivery,4.0,Medium
+PO-CONST-00295,2025-09-13,V-CONST-003,Tata Steel,construction,0.926,0.3,3,0.0103,0.0026,-0.005,98.6,0,False,High,on_time_delivery,4.8,Low
+PO-CONST-00296,2023-02-22,V-CONST-003,Tata Steel,construction,0.566,7.1,20,0.0949,0.063,0.245,58.0,3,False,Low,defective_shipment,2.4,High
+PO-CONST-00297,2023-09-27,V-CONST-003,Tata Steel,construction,0.974,0.6,6,0.0072,0.0004,0.025,91.7,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00298,2025-09-01,V-CONST-003,Tata Steel,construction,0.832,2.1,8,0.0414,0.0176,0.045,79.5,1,False,Low,delayed_delivery,3.4,Medium
+PO-CONST-00299,2023-02-03,V-CONST-003,Tata Steel,construction,0.924,1.0,6,0.002,0.0066,0.026,93.7,0,False,High,on_time_delivery,4.6,Low
+PO-CONST-00300,2024-11-04,V-CONST-003,Tata Steel,construction,0.957,0.8,6,0.0019,0.006,-0.018,97.6,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00301,2024-10-03,V-CONST-004,JK Cement Ltd,construction,0.94,1.1,5,0.0065,0.0053,0.004,94.8,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00302,2025-05-21,V-CONST-004,JK Cement Ltd,construction,0.93,0.8,7,0.0101,0.0077,-0.019,97.9,0,True,Medium,on_time_delivery,4.4,Low
+PO-CONST-00303,2024-09-18,V-CONST-004,JK Cement Ltd,construction,0.873,2.4,10,0.0237,0.0263,0.083,74.0,0,True,Medium,delayed_delivery,3.5,Medium
+PO-CONST-00304,2025-01-28,V-CONST-004,JK Cement Ltd,construction,0.848,4.5,12,0.0354,0.0113,0.074,75.5,0,False,Medium,on_time_delivery,3.5,Medium
+PO-CONST-00305,2023-05-20,V-CONST-004,JK Cement Ltd,construction,0.759,2.1,12,0.0302,0.0211,0.055,80.2,1,False,Medium,on_time_delivery,3.5,Medium
+PO-CONST-00306,2023-12-24,V-CONST-004,JK Cement Ltd,construction,0.833,2.3,10,0.0216,0.0232,0.084,78.5,1,False,Medium,delayed_delivery,3.5,Medium
+PO-CONST-00307,2024-03-18,V-CONST-004,JK Cement Ltd,construction,0.776,3.7,6,0.0376,0.0261,0.082,80.8,1,False,Low,delayed_delivery,3.8,Medium
+PO-CONST-00308,2025-08-21,V-CONST-004,JK Cement Ltd,construction,0.851,2.6,8,0.0421,0.0206,0.083,73.9,1,True,Medium,on_time_delivery,3.8,Medium
+PO-CONST-00309,2025-11-06,V-CONST-004,JK Cement Ltd,construction,0.848,1.9,7,0.0228,0.0271,0.073,85.5,1,False,Medium,delayed_delivery,3.6,Medium
+PO-CONST-00310,2023-05-12,V-CONST-004,JK Cement Ltd,construction,0.78,3.5,10,0.0285,0.0265,0.084,72.6,1,False,Low,on_time_delivery,4.1,Medium
+PO-CONST-00311,2025-10-06,V-CONST-004,JK Cement Ltd,construction,0.799,2.6,6,0.0319,0.0168,0.085,79.2,1,False,Medium,on_time_delivery,4.1,Medium
+PO-CONST-00312,2023-08-06,V-CONST-004,JK Cement Ltd,construction,0.78,3.0,9,0.0237,0.0134,0.058,82.0,0,True,Medium,on_time_delivery,4.0,Medium
+PO-CONST-00313,2024-08-07,V-CONST-004,JK Cement Ltd,construction,0.827,3.4,11,0.0186,0.0108,0.069,74.3,1,True,Low,delayed_delivery,3.5,Medium
+PO-CONST-00314,2025-07-20,V-CONST-004,JK Cement Ltd,construction,0.684,9.6,20,0.1084,0.0776,0.148,56.5,3,False,Low,delayed_delivery,3.0,High
+PO-CONST-00315,2025-03-20,V-CONST-004,JK Cement Ltd,construction,0.836,2.3,10,0.0429,0.0207,0.043,77.3,0,True,Low,delayed_delivery,3.8,Medium
+PO-CONST-00316,2025-07-27,V-CONST-004,JK Cement Ltd,construction,0.528,6.1,17,0.1136,0.062,0.234,55.1,2,False,Medium,delayed_delivery,3.1,High
+PO-CONST-00317,2023-11-21,V-CONST-004,JK Cement Ltd,construction,0.806,2.8,5,0.0368,0.0177,0.087,78.7,1,False,Low,on_time_delivery,3.5,Medium
+PO-CONST-00318,2023-02-10,V-CONST-004,JK Cement Ltd,construction,0.828,3.1,9,0.0231,0.0228,0.079,80.1,0,True,Medium,delayed_delivery,4.0,Medium
+PO-CONST-00319,2024-02-05,V-CONST-004,JK Cement Ltd,construction,0.805,3.3,9,0.0411,0.0176,0.058,75.9,1,False,Low,on_time_delivery,3.8,Medium
+PO-CONST-00320,2023-06-18,V-CONST-004,JK Cement Ltd,construction,0.822,2.3,9,0.0336,0.0239,0.06,73.9,1,True,Low,on_time_delivery,4.0,Medium
+PO-CONST-00321,2023-04-17,V-CONST-004,JK Cement Ltd,construction,0.576,7.7,18,0.0949,0.0658,0.127,52.4,4,False,Low,delayed_delivery,2.6,High
+PO-CONST-00322,2023-02-09,V-CONST-004,JK Cement Ltd,construction,0.779,1.7,5,0.0376,0.0268,0.06,81.2,1,True,Low,on_time_delivery,3.8,Medium
+PO-CONST-00323,2025-09-10,V-CONST-004,JK Cement Ltd,construction,0.775,3.9,8,0.0346,0.0221,0.058,81.2,0,True,Medium,on_time_delivery,3.7,Medium
+PO-CONST-00324,2025-04-17,V-CONST-004,JK Cement Ltd,construction,0.752,3.6,6,0.0328,0.0231,0.068,80.2,1,False,Low,delayed_delivery,3.8,Medium
+PO-CONST-00325,2023-05-06,V-CONST-004,JK Cement Ltd,construction,0.803,1.8,6,0.0316,0.0161,0.046,79.2,1,False,Medium,on_time_delivery,3.9,Medium
+PO-CONST-00326,2024-08-22,V-CONST-004,JK Cement Ltd,construction,0.952,0.7,2,0.0077,0.0021,-0.001,97.1,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00327,2024-06-17,V-CONST-004,JK Cement Ltd,construction,0.957,0.8,4,0.0045,0.0007,0.014,97.4,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00328,2024-04-19,V-CONST-004,JK Cement Ltd,construction,0.785,4.3,8,0.0315,0.0136,0.077,84.2,0,True,Low,delayed_delivery,4.1,Medium
+PO-CONST-00329,2023-02-03,V-CONST-004,JK Cement Ltd,construction,0.838,3.5,5,0.0386,0.0197,0.042,78.8,1,False,Medium,on_time_delivery,3.8,Medium
+PO-CONST-00330,2025-05-13,V-CONST-004,JK Cement Ltd,construction,0.542,9.2,10,0.0892,0.054,0.242,45.6,3,False,Low,defective_shipment,3.2,High
+PO-CONST-00331,2024-06-23,V-CONST-004,JK Cement Ltd,construction,0.751,3.5,11,0.0337,0.0159,0.071,75.6,1,False,Low,on_time_delivery,3.8,Medium
+PO-CONST-00332,2024-03-16,V-CONST-004,JK Cement Ltd,construction,0.805,2.8,10,0.0279,0.0172,0.063,80.0,1,True,Low,on_time_delivery,4.0,Medium
+PO-CONST-00333,2024-04-05,V-CONST-004,JK Cement Ltd,construction,0.854,3.7,12,0.0398,0.0132,0.065,85.9,1,False,Medium,on_time_delivery,3.6,Medium
+PO-CONST-00334,2023-07-04,V-CONST-004,JK Cement Ltd,construction,0.631,5.9,14,0.086,0.0633,0.178,51.4,3,False,Medium,defective_shipment,2.1,High
+PO-CONST-00335,2025-10-07,V-CONST-004,JK Cement Ltd,construction,0.825,3.4,7,0.0444,0.0151,0.056,79.1,1,False,Low,on_time_delivery,3.9,Medium
+PO-CONST-00336,2023-03-21,V-CONST-004,JK Cement Ltd,construction,0.855,2.5,11,0.0409,0.0113,0.048,75.2,1,False,Medium,on_time_delivery,3.6,Medium
+PO-CONST-00337,2024-12-19,V-CONST-004,JK Cement Ltd,construction,0.818,2.9,7,0.023,0.0104,0.076,81.3,1,True,Low,delayed_delivery,3.7,Medium
+PO-CONST-00338,2024-09-02,V-CONST-004,JK Cement Ltd,construction,0.753,2.7,6,0.0208,0.0211,0.044,85.0,1,False,Low,delayed_delivery,4.0,Medium
+PO-CONST-00339,2023-03-17,V-CONST-004,JK Cement Ltd,construction,0.859,1.6,10,0.0412,0.0159,0.064,85.6,1,False,Medium,delayed_delivery,4.2,Medium
+PO-CONST-00340,2023-10-20,V-CONST-004,JK Cement Ltd,construction,0.809,3.7,11,0.0321,0.0215,0.055,76.9,1,True,Low,on_time_delivery,3.6,Medium
+PO-CONST-00341,2023-05-01,V-CONST-004,JK Cement Ltd,construction,0.75,3.9,7,0.0273,0.0184,0.04,84.9,1,False,Low,on_time_delivery,4.0,Medium
+PO-CONST-00342,2023-09-12,V-CONST-004,JK Cement Ltd,construction,0.775,4.1,11,0.0287,0.0129,0.077,77.5,1,True,Medium,delayed_delivery,3.7,Medium
+PO-CONST-00343,2025-12-22,V-CONST-004,JK Cement Ltd,construction,0.785,3.4,9,0.0291,0.0254,0.049,76.1,1,False,Medium,on_time_delivery,4.0,Medium
+PO-CONST-00344,2024-01-05,V-CONST-004,JK Cement Ltd,construction,0.756,3.1,7,0.0443,0.0151,0.046,78.1,0,True,Low,delayed_delivery,3.4,Medium
+PO-CONST-00345,2024-05-26,V-CONST-004,JK Cement Ltd,construction,0.854,4.5,12,0.0368,0.0106,0.044,82.5,0,True,Medium,on_time_delivery,3.5,Medium
+PO-CONST-00346,2023-05-27,V-CONST-004,JK Cement Ltd,construction,0.8,1.5,8,0.0284,0.0275,0.052,85.9,0,False,Low,delayed_delivery,3.8,Medium
+PO-CONST-00347,2024-06-06,V-CONST-004,JK Cement Ltd,construction,0.832,1.6,6,0.0248,0.0215,0.05,84.4,1,True,Low,delayed_delivery,3.9,Medium
+PO-CONST-00348,2023-05-19,V-CONST-004,JK Cement Ltd,construction,0.766,3.9,5,0.0442,0.0205,0.075,81.6,0,False,Low,delayed_delivery,3.5,Medium
+PO-CONST-00349,2025-06-25,V-CONST-004,JK Cement Ltd,construction,0.831,1.7,7,0.0369,0.0242,0.046,75.3,1,False,Medium,delayed_delivery,3.4,Medium
+PO-CONST-00350,2025-03-09,V-CONST-004,JK Cement Ltd,construction,0.867,3.0,12,0.0331,0.0198,0.065,79.9,1,False,Medium,on_time_delivery,3.6,Medium
+PO-CONST-00351,2025-03-03,V-CONST-004,JK Cement Ltd,construction,0.957,0.5,4,0.0086,0.0036,0.019,94.6,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00352,2025-04-11,V-CONST-004,JK Cement Ltd,construction,0.844,3.5,11,0.0231,0.0223,0.078,74.2,1,False,Medium,on_time_delivery,3.5,Medium
+PO-CONST-00353,2023-01-27,V-CONST-004,JK Cement Ltd,construction,0.872,2.0,5,0.0235,0.0187,0.045,80.0,1,False,Medium,delayed_delivery,3.7,Medium
+PO-CONST-00354,2023-01-07,V-CONST-004,JK Cement Ltd,construction,0.835,4.3,6,0.0306,0.0215,0.058,82.4,1,False,Low,on_time_delivery,3.8,Medium
+PO-CONST-00355,2024-02-07,V-CONST-004,JK Cement Ltd,construction,0.987,0.1,7,0.0042,0.0031,-0.01,95.9,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00356,2023-11-19,V-CONST-004,JK Cement Ltd,construction,0.797,2.9,11,0.0418,0.013,0.049,77.6,1,True,Medium,on_time_delivery,4.1,Medium
+PO-CONST-00357,2024-06-14,V-CONST-004,JK Cement Ltd,construction,0.849,2.8,10,0.0344,0.0201,0.051,82.7,1,False,Medium,on_time_delivery,3.8,Medium
+PO-CONST-00358,2025-01-10,V-CONST-004,JK Cement Ltd,construction,0.827,3.1,9,0.0182,0.0277,0.051,76.4,1,False,Low,delayed_delivery,3.4,Medium
+PO-CONST-00359,2023-05-12,V-CONST-004,JK Cement Ltd,construction,0.866,2.2,9,0.0399,0.0117,0.06,84.9,1,True,Medium,on_time_delivery,3.5,Medium
+PO-CONST-00360,2025-12-19,V-CONST-004,JK Cement Ltd,construction,0.977,0.1,7,0.0052,0.0058,0.009,90.7,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00361,2024-02-28,V-CONST-004,JK Cement Ltd,construction,0.974,0.9,6,0.014,0.0051,0.012,90.5,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00362,2025-12-08,V-CONST-004,JK Cement Ltd,construction,0.77,3.5,11,0.0442,0.0236,0.069,73.3,1,False,Medium,delayed_delivery,3.5,Medium
+PO-CONST-00363,2025-12-02,V-CONST-004,JK Cement Ltd,construction,0.821,2.3,11,0.0315,0.0239,0.047,73.9,1,True,Medium,on_time_delivery,3.9,Medium
+PO-CONST-00364,2025-12-17,V-CONST-004,JK Cement Ltd,construction,0.782,1.7,11,0.0267,0.0266,0.044,81.4,1,False,Medium,delayed_delivery,3.7,Medium
+PO-CONST-00365,2023-05-06,V-CONST-004,JK Cement Ltd,construction,0.878,3.3,12,0.0348,0.0179,0.086,75.3,1,False,Low,delayed_delivery,3.5,Medium
+PO-CONST-00366,2025-03-28,V-CONST-004,JK Cement Ltd,construction,0.858,2.4,10,0.0367,0.012,0.063,72.3,0,True,Low,on_time_delivery,3.8,Medium
+PO-CONST-00367,2023-12-23,V-CONST-004,JK Cement Ltd,construction,0.837,2.6,5,0.0249,0.0111,0.05,81.8,1,True,Medium,delayed_delivery,3.5,Medium
+PO-CONST-00368,2025-11-12,V-CONST-004,JK Cement Ltd,construction,0.862,1.6,11,0.0242,0.0169,0.089,73.4,1,False,Low,delayed_delivery,3.6,Medium
+PO-CONST-00369,2025-12-01,V-CONST-004,JK Cement Ltd,construction,0.508,11.5,14,0.0767,0.0527,0.14,51.6,3,False,Medium,delayed_delivery,3.2,High
+PO-CONST-00370,2024-01-21,V-CONST-004,JK Cement Ltd,construction,0.549,8.0,10,0.1164,0.0777,0.149,51.5,3,True,Low,delayed_delivery,2.9,High
+PO-CONST-00371,2025-10-28,V-CONST-004,JK Cement Ltd,construction,0.831,2.2,8,0.0335,0.0177,0.056,80.5,1,True,Low,delayed_delivery,3.9,Medium
+PO-CONST-00372,2023-03-10,V-CONST-004,JK Cement Ltd,construction,0.84,4.2,7,0.0296,0.0264,0.079,81.2,1,True,Medium,delayed_delivery,3.8,Medium
+PO-CONST-00373,2023-03-11,V-CONST-004,JK Cement Ltd,construction,0.66,6.4,10,0.1048,0.0746,0.174,52.8,3,True,Medium,delayed_delivery,3.0,High
+PO-CONST-00374,2023-01-25,V-CONST-004,JK Cement Ltd,construction,0.878,3.4,8,0.0341,0.0142,0.041,73.1,1,True,Medium,on_time_delivery,3.5,Medium
+PO-CONST-00375,2024-03-06,V-CONST-004,JK Cement Ltd,construction,0.775,1.6,5,0.043,0.0271,0.051,81.4,0,True,Low,delayed_delivery,4.1,Medium
+PO-CONST-00376,2025-08-23,V-CONST-004,JK Cement Ltd,construction,0.562,8.5,13,0.0828,0.0699,0.199,60.7,4,False,Medium,delayed_delivery,2.7,High
+PO-CONST-00377,2023-04-17,V-CONST-004,JK Cement Ltd,construction,0.82,4.5,5,0.0331,0.0193,0.072,72.7,1,False,Medium,on_time_delivery,4.0,Medium
+PO-CONST-00378,2023-07-10,V-CONST-004,JK Cement Ltd,construction,0.83,1.7,7,0.0305,0.0216,0.045,79.0,0,True,Medium,on_time_delivery,3.7,Medium
+PO-CONST-00379,2024-10-23,V-CONST-004,JK Cement Ltd,construction,0.866,4.1,6,0.0248,0.0225,0.085,83.2,1,True,Low,delayed_delivery,4.0,Medium
+PO-CONST-00380,2023-09-23,V-CONST-004,JK Cement Ltd,construction,0.8,3.9,7,0.0282,0.0169,0.078,84.8,1,True,Low,delayed_delivery,3.5,Medium
+PO-CONST-00381,2024-05-10,V-CONST-004,JK Cement Ltd,construction,0.971,1.2,4,0.0098,0.0009,-0.013,91.8,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00382,2025-01-20,V-CONST-004,JK Cement Ltd,construction,0.668,7.0,19,0.0979,0.0554,0.177,56.4,2,False,Medium,delayed_delivery,2.2,High
+PO-CONST-00383,2025-06-02,V-CONST-004,JK Cement Ltd,construction,0.769,1.6,9,0.0269,0.0116,0.045,85.9,0,False,Low,on_time_delivery,4.0,Medium
+PO-CONST-00384,2023-02-25,V-CONST-004,JK Cement Ltd,construction,0.789,2.6,11,0.0401,0.0237,0.082,72.9,1,True,Low,on_time_delivery,3.7,Medium
+PO-CONST-00385,2023-12-07,V-CONST-004,JK Cement Ltd,construction,0.83,1.8,6,0.0311,0.0224,0.087,85.8,1,False,Medium,on_time_delivery,3.8,Medium
+PO-CONST-00386,2024-03-20,V-CONST-004,JK Cement Ltd,construction,0.607,8.9,20,0.0874,0.0714,0.235,49.4,3,False,Low,delayed_delivery,2.1,High
+PO-CONST-00387,2023-12-28,V-CONST-004,JK Cement Ltd,construction,0.777,3.3,11,0.0292,0.016,0.068,80.9,0,True,Medium,on_time_delivery,4.0,Medium
+PO-CONST-00388,2025-09-11,V-CONST-004,JK Cement Ltd,construction,0.85,1.8,10,0.0272,0.023,0.071,72.4,0,True,Medium,on_time_delivery,4.1,Medium
+PO-CONST-00389,2024-01-21,V-CONST-004,JK Cement Ltd,construction,0.768,2.0,12,0.0421,0.0197,0.057,83.0,1,True,Medium,on_time_delivery,3.8,Medium
+PO-CONST-00390,2025-11-11,V-CONST-004,JK Cement Ltd,construction,0.854,4.2,10,0.0198,0.0127,0.082,76.7,1,True,Medium,delayed_delivery,3.9,Medium
+PO-CONST-00391,2024-12-28,V-CONST-004,JK Cement Ltd,construction,0.56,5.7,16,0.0606,0.0745,0.168,60.8,3,False,Medium,delayed_delivery,2.2,High
+PO-CONST-00392,2023-02-15,V-CONST-004,JK Cement Ltd,construction,0.955,1.0,6,0.0032,0.0027,0.004,97.9,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00393,2025-11-05,V-CONST-004,JK Cement Ltd,construction,0.539,5.7,16,0.1014,0.0585,0.121,62.7,4,True,Low,defective_shipment,2.6,High
+PO-CONST-00394,2025-11-24,V-CONST-004,JK Cement Ltd,construction,0.791,3.2,9,0.0352,0.0138,0.05,76.0,1,False,Medium,delayed_delivery,3.6,Medium
+PO-CONST-00395,2023-01-20,V-CONST-004,JK Cement Ltd,construction,0.823,1.8,10,0.0328,0.0149,0.087,83.3,1,True,Low,delayed_delivery,3.6,Medium
+PO-CONST-00396,2025-08-02,V-CONST-004,JK Cement Ltd,construction,0.525,8.6,20,0.0583,0.0523,0.131,52.4,4,True,Medium,defective_shipment,2.4,High
+PO-CONST-00397,2025-11-26,V-CONST-004,JK Cement Ltd,construction,0.957,1.2,5,0.0089,0.0007,0.02,96.3,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00398,2024-08-08,V-CONST-004,JK Cement Ltd,construction,0.873,1.9,9,0.0426,0.0171,0.075,81.3,1,False,Medium,delayed_delivery,3.5,Medium
+PO-CONST-00399,2024-08-28,V-CONST-004,JK Cement Ltd,construction,0.772,3.8,7,0.0317,0.0173,0.076,73.5,1,True,Medium,on_time_delivery,3.7,Medium
+PO-CONST-00400,2025-04-18,V-CONST-004,JK Cement Ltd,construction,0.771,2.9,6,0.0272,0.0247,0.07,83.0,1,False,Low,delayed_delivery,3.9,Medium
+PO-CONST-00401,2025-10-27,V-CONST-005,Dalmia Bharat Cement,construction,0.813,3.3,12,0.0268,0.0118,0.062,76.3,1,True,Low,on_time_delivery,3.7,Medium
+PO-CONST-00401,2023-02-07,V-CONST-005,Dalmia Bharat Cement,construction,0.856,4.2,5,0.0384,0.0219,0.063,76.1,1,False,Low,delayed_delivery,3.9,Medium
+PO-CONST-00403,2025-11-10,V-CONST-005,Dalmia Bharat Cement,construction,0.869,4.3,10,0.0447,0.0205,0.071,79.1,0,False,Low,on_time_delivery,4.1,Medium
+PO-CONST-00404,2023-12-18,V-CONST-005,Dalmia Bharat Cement,construction,0.656,7.8,14,0.1113,0.0456,0.211,52.5,3,True,Medium,defective_shipment,2.5,High
+PO-CONST-00405,2025-03-16,V-CONST-005,Dalmia Bharat Cement,construction,0.768,3.2,10,0.0407,0.0128,0.09,81.4,0,True,Low,delayed_delivery,3.5,Medium
+PO-CONST-00406,2025-07-05,V-CONST-005,Dalmia Bharat Cement,construction,0.516,9.7,16,0.1109,0.0752,0.21,62.7,4,False,Medium,defective_shipment,2.7,High
+PO-CONST-00407,2024-04-06,V-CONST-005,Dalmia Bharat Cement,construction,0.805,1.5,12,0.0409,0.0143,0.065,77.8,1,False,Low,delayed_delivery,3.9,Medium
+PO-CONST-00408,2023-10-16,V-CONST-005,Dalmia Bharat Cement,construction,0.987,0.1,7,0.0112,0.0079,0.029,97.0,0,False,High,on_time_delivery,4.4,Low
+PO-CONST-00409,2023-04-16,V-CONST-005,Dalmia Bharat Cement,construction,0.62,9.8,20,0.0601,0.0635,0.224,50.9,2,False,Low,defective_shipment,2.6,High
+PO-CONST-00410,2025-12-11,V-CONST-005,Dalmia Bharat Cement,construction,0.58,11.7,14,0.0738,0.0366,0.24,59.2,4,True,Medium,delayed_delivery,2.8,High
+PO-CONST-00411,2025-01-22,V-CONST-005,Dalmia Bharat Cement,construction,0.879,3.9,5,0.0257,0.0115,0.065,83.9,1,False,Low,on_time_delivery,3.6,Medium
+PO-CONST-00412,2025-02-20,V-CONST-005,Dalmia Bharat Cement,construction,0.773,3.3,7,0.0358,0.0167,0.049,83.0,0,False,Low,delayed_delivery,3.7,Medium
+PO-CONST-00413,2023-10-27,V-CONST-005,Dalmia Bharat Cement,construction,0.77,3.0,11,0.0388,0.0143,0.062,80.9,0,False,Low,on_time_delivery,4.0,Medium
+PO-CONST-00414,2023-08-13,V-CONST-005,Dalmia Bharat Cement,construction,0.812,2.9,8,0.0283,0.0227,0.064,74.0,1,True,Medium,on_time_delivery,3.7,Medium
+PO-CONST-00415,2025-11-02,V-CONST-005,Dalmia Bharat Cement,construction,0.763,3.1,10,0.0438,0.0178,0.086,84.0,1,False,Medium,delayed_delivery,3.6,Medium
+PO-CONST-00416,2024-11-24,V-CONST-005,Dalmia Bharat Cement,construction,0.781,3.5,8,0.032,0.0222,0.09,76.4,0,True,Low,delayed_delivery,3.7,Medium
+PO-CONST-00417,2025-08-12,V-CONST-005,Dalmia Bharat Cement,construction,0.779,2.3,8,0.0189,0.0211,0.043,80.3,0,True,Low,delayed_delivery,4.1,Medium
+PO-CONST-00418,2025-11-19,V-CONST-005,Dalmia Bharat Cement,construction,0.854,2.1,6,0.0368,0.0146,0.063,85.1,1,False,Medium,on_time_delivery,4.0,Medium
+PO-CONST-00419,2024-05-06,V-CONST-005,Dalmia Bharat Cement,construction,0.851,2.3,5,0.0283,0.016,0.043,85.4,1,True,Medium,delayed_delivery,3.8,Medium
+PO-CONST-00420,2025-07-06,V-CONST-005,Dalmia Bharat Cement,construction,0.623,6.2,18,0.105,0.0448,0.204,62.3,4,False,Low,delayed_delivery,2.2,High
+PO-CONST-00421,2024-08-01,V-CONST-005,Dalmia Bharat Cement,construction,0.867,,5,,0.022,0.053,81.8,1,True,Medium,on_time_delivery,3.7,Medium
+PO-CONST-00422,2023-09-08,V-CONST-005,Dalmia Bharat Cement,construction,0.92,1.1,5,0.0027,0.0043,0.03,93.0,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00423,2025-02-12,V-CONST-005,Dalmia Bharat Cement,construction,0.602,11.7,11,0.1097,0.0692,0.158,48.9,4,False,Medium,delayed_delivery,2.4,High
+PO-CONST-00424,2023-11-23,V-CONST-005,Dalmia Bharat Cement,construction,0.797,1.8,12,0.0379,0.0125,0.05,82.1,1,True,Medium,on_time_delivery,3.5,Medium
+PO-CONST-00425,2024-08-18,V-CONST-005,Dalmia Bharat Cement,construction,0.875,3.9,5,0.019,0.011,0.079,72.6,0,True,Medium,delayed_delivery,4.0,Medium
+PO-CONST-00426,2023-01-24,V-CONST-005,Dalmia Bharat Cement,construction,0.768,3.5,12,0.0425,0.0211,0.052,81.1,0,True,Low,on_time_delivery,4.1,Medium
+PO-CONST-00427,2025-03-27,V-CONST-005,Dalmia Bharat Cement,construction,0.827,4.0,6,0.0211,0.0207,0.071,72.9,0,False,Medium,on_time_delivery,3.7,Medium
+PO-CONST-00428,2025-09-05,V-CONST-005,Dalmia Bharat Cement,construction,0.561,11.8,13,0.1047,0.0617,0.164,47.3,2,False,Low,defective_shipment,2.7,High
+PO-CONST-00429,2025-01-05,V-CONST-005,Dalmia Bharat Cement,construction,0.763,4.0,11,0.039,0.0103,0.064,72.1,0,True,Medium,on_time_delivery,4.0,Medium
+PO-CONST-00430,2024-12-05,V-CONST-005,Dalmia Bharat Cement,construction,0.934,0.8,6,0.0073,0.0019,-0.011,96.2,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00431,2025-05-12,V-CONST-005,Dalmia Bharat Cement,construction,0.58,9.1,13,0.0626,0.0589,0.132,51.9,4,True,Low,defective_shipment,2.9,High
+PO-CONST-00432,2024-01-07,V-CONST-005,Dalmia Bharat Cement,construction,0.765,1.9,12,0.0314,0.0129,0.086,72.8,1,False,Low,on_time_delivery,3.6,Medium
+PO-CONST-00433,2024-01-04,V-CONST-005,Dalmia Bharat Cement,construction,0.846,4.3,7,0.0223,0.0105,0.066,73.0,0,False,Medium,on_time_delivery,3.6,Medium
+PO-CONST-00434,2024-04-25,V-CONST-005,Dalmia Bharat Cement,construction,0.764,2.2,8,0.0379,0.0257,0.059,75.1,1,False,Low,on_time_delivery,3.5,Medium
+PO-CONST-00435,2024-03-13,V-CONST-005,Dalmia Bharat Cement,construction,0.571,8.5,13,0.0961,0.0789,0.146,47.4,4,True,Low,defective_shipment,2.3,High
+PO-CONST-00436,2024-07-06,V-CONST-005,Dalmia Bharat Cement,construction,0.644,6.9,14,0.0942,0.0705,0.203,56.6,2,True,Low,delayed_delivery,2.6,High
+PO-CONST-00437,2023-10-16,V-CONST-005,Dalmia Bharat Cement,construction,0.859,2.3,11,0.0379,0.0144,0.056,80.1,1,True,Low,on_time_delivery,4.2,Medium
+PO-CONST-00438,2024-12-25,V-CONST-005,Dalmia Bharat Cement,construction,0.816,2.8,11,0.0309,0.0244,0.081,78.3,0,True,Low,on_time_delivery,4.2,Medium
+PO-CONST-00439,2024-04-21,V-CONST-005,Dalmia Bharat Cement,construction,0.88,1.5,9,0.0224,0.0183,0.069,80.2,1,False,Low,on_time_delivery,3.5,Medium
+PO-CONST-00440,2025-08-23,V-CONST-005,Dalmia Bharat Cement,construction,0.62,11.1,11,0.08,0.0661,0.189,50.6,3,True,Low,delayed_delivery,2.8,High
+PO-CONST-00441,2023-09-22,V-CONST-005,Dalmia Bharat Cement,construction,0.797,1.7,11,0.0279,0.0211,0.058,74.5,1,True,Low,delayed_delivery,4.2,Medium
+PO-CONST-00442,2023-11-16,V-CONST-005,Dalmia Bharat Cement,construction,0.846,3.8,8,0.0383,0.0237,0.056,84.6,1,False,Medium,delayed_delivery,3.5,Medium
+PO-CONST-00443,2024-09-17,V-CONST-005,Dalmia Bharat Cement,construction,0.858,2.9,9,0.0302,0.0166,0.074,81.7,0,True,Medium,delayed_delivery,3.5,Medium
+PO-CONST-00444,2024-02-04,V-CONST-005,Dalmia Bharat Cement,construction,0.531,6.2,12,0.0873,0.0744,0.188,56.9,3,False,Low,defective_shipment,2.5,High
+PO-CONST-00445,2025-01-10,V-CONST-005,Dalmia Bharat Cement,construction,0.775,1.6,8,0.0405,0.0194,0.057,80.1,1,False,Medium,on_time_delivery,3.8,Medium
+PO-CONST-00446,2024-03-26,V-CONST-005,Dalmia Bharat Cement,construction,0.784,3.0,9,0.0388,0.0109,0.058,78.4,0,True,Medium,delayed_delivery,4.2,Medium
+PO-CONST-00447,2025-11-26,V-CONST-005,Dalmia Bharat Cement,construction,0.931,0.3,2,0.0149,0.0046,0.002,93.3,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00448,2024-03-12,V-CONST-005,Dalmia Bharat Cement,construction,0.808,4.4,9,0.0213,0.0104,0.087,82.8,1,False,Low,delayed_delivery,4.2,Medium
+PO-CONST-00449,2025-06-21,V-CONST-005,Dalmia Bharat Cement,construction,0.842,2.9,9,0.0442,0.0236,0.09,81.3,1,False,Medium,delayed_delivery,4.0,Medium
+PO-CONST-00450,2023-11-18,V-CONST-005,Dalmia Bharat Cement,construction,0.522,5.7,19,0.1097,0.0551,0.132,46.0,4,False,Low,defective_shipment,2.3,High
+PO-CONST-00451,2024-11-22,V-CONST-005,Dalmia Bharat Cement,construction,0.874,4.4,11,0.0233,0.0157,0.07,85.2,1,False,Medium,delayed_delivery,4.0,Medium
+PO-CONST-00452,2024-06-01,V-CONST-005,Dalmia Bharat Cement,construction,0.787,2.6,12,0.0416,0.0116,0.076,78.2,1,False,Medium,delayed_delivery,4.0,Medium
+PO-CONST-00453,2024-12-14,V-CONST-005,Dalmia Bharat Cement,construction,0.527,9.3,11,0.0643,0.0486,0.248,55.0,3,False,Medium,delayed_delivery,2.1,High
+PO-CONST-00454,2024-07-06,V-CONST-005,Dalmia Bharat Cement,construction,0.822,3.6,7,0.0234,0.025,0.054,78.9,1,False,Medium,on_time_delivery,3.6,Medium
+PO-CONST-00455,2023-05-10,V-CONST-005,Dalmia Bharat Cement,construction,0.987,1.0,5,0.0027,0.0053,-0.006,91.6,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00456,2023-10-24,V-CONST-005,Dalmia Bharat Cement,construction,0.797,2.9,11,0.0414,0.0213,0.064,81.7,0,False,Low,on_time_delivery,3.5,Medium
+PO-CONST-00457,2024-08-23,V-CONST-005,Dalmia Bharat Cement,construction,0.768,2.0,9,0.0278,0.0215,0.088,72.7,1,True,Low,delayed_delivery,4.0,Medium
+PO-CONST-00458,2023-09-11,V-CONST-005,Dalmia Bharat Cement,construction,0.863,4.0,9,0.0253,0.0226,0.058,79.5,1,True,Low,delayed_delivery,3.8,Medium
+PO-CONST-00459,2024-07-11,V-CONST-005,Dalmia Bharat Cement,construction,0.87,2.0,8,0.0222,0.014,0.049,84.6,1,True,Medium,on_time_delivery,4.1,Medium
+PO-CONST-00460,2023-01-16,V-CONST-005,Dalmia Bharat Cement,construction,0.795,3.6,7,0.0401,0.026,0.07,82.7,1,True,Medium,delayed_delivery,4.0,Medium
+PO-CONST-00461,2023-12-05,V-CONST-005,Dalmia Bharat Cement,construction,0.839,2.4,8,0.0215,0.0114,0.075,83.0,0,True,Medium,on_time_delivery,3.4,Medium
+PO-CONST-00462,2025-09-19,V-CONST-005,Dalmia Bharat Cement,construction,0.758,1.9,9,0.0192,0.0154,0.041,73.4,0,True,Low,delayed_delivery,3.9,Medium
+PO-CONST-00463,2023-12-09,V-CONST-005,Dalmia Bharat Cement,construction,0.873,2.5,7,0.0411,0.0241,0.071,79.1,0,True,Low,delayed_delivery,4.0,Medium
+PO-CONST-00464,2023-09-01,V-CONST-005,Dalmia Bharat Cement,construction,0.685,6.1,13,0.1148,0.0733,0.182,58.3,2,False,Low,delayed_delivery,3.0,High
+PO-CONST-00465,2024-04-17,V-CONST-005,Dalmia Bharat Cement,construction,0.543,6.2,15,0.063,0.04,0.138,59.5,4,False,Low,delayed_delivery,2.5,High
+PO-CONST-00466,2024-08-20,V-CONST-005,Dalmia Bharat Cement,construction,0.846,3.6,12,0.0241,0.0173,0.089,78.0,0,False,Medium,delayed_delivery,3.4,Medium
+PO-CONST-00467,2025-02-13,V-CONST-005,Dalmia Bharat Cement,construction,0.807,3.5,6,0.0212,0.0171,0.075,85.7,1,True,Low,on_time_delivery,4.2,Medium
+PO-CONST-00468,2025-07-04,V-CONST-005,Dalmia Bharat Cement,construction,0.78,2.8,12,0.0255,0.0228,0.069,75.8,1,False,Medium,on_time_delivery,3.9,Medium
+PO-CONST-00469,2024-09-09,V-CONST-005,Dalmia Bharat Cement,construction,0.528,8.5,11,0.0713,0.0574,0.202,47.6,2,True,Low,delayed_delivery,2.6,High
+PO-CONST-00470,2023-07-20,V-CONST-005,Dalmia Bharat Cement,construction,0.838,2.0,6,0.0385,0.0219,0.066,78.9,1,True,Medium,on_time_delivery,3.8,Medium
+PO-CONST-00471,2024-09-18,V-CONST-005,Dalmia Bharat Cement,construction,0.752,3.8,11,0.0418,0.0121,0.063,83.9,1,False,Low,delayed_delivery,3.5,Medium
+PO-CONST-00472,2024-12-06,V-CONST-005,Dalmia Bharat Cement,construction,0.814,1.9,11,0.0312,0.012,0.074,81.2,1,False,Medium,delayed_delivery,3.8,Medium
+PO-CONST-00473,2024-10-13,V-CONST-005,Dalmia Bharat Cement,construction,0.83,2.6,9,0.0267,0.0105,0.042,83.7,1,True,Medium,on_time_delivery,3.5,Medium
+PO-CONST-00474,2024-07-12,V-CONST-005,Dalmia Bharat Cement,construction,0.757,2.2,8,0.0355,0.0207,0.086,72.9,1,True,Medium,delayed_delivery,3.4,Medium
+PO-CONST-00475,2024-11-28,V-CONST-005,Dalmia Bharat Cement,construction,0.805,3.0,11,0.0252,0.0225,0.069,85.8,1,False,Medium,delayed_delivery,4.0,Medium
+PO-CONST-00476,2025-04-11,V-CONST-005,Dalmia Bharat Cement,construction,0.815,3.9,10,0.0225,0.0154,0.088,74.8,1,True,Low,on_time_delivery,3.6,Medium
+PO-CONST-00477,2025-07-26,V-CONST-005,Dalmia Bharat Cement,construction,0.779,3.7,6,0.0374,0.0204,0.07,75.8,1,False,Medium,delayed_delivery,3.7,Medium
+PO-CONST-00478,2024-09-26,V-CONST-005,Dalmia Bharat Cement,construction,0.789,3.5,10,0.0234,0.0172,0.071,78.3,1,True,Low,delayed_delivery,3.9,Medium
+PO-CONST-00479,2025-08-09,V-CONST-005,Dalmia Bharat Cement,construction,0.872,3.1,11,0.0432,0.0231,0.043,74.8,1,True,Low,delayed_delivery,4.0,Medium
+PO-CONST-00480,2024-07-11,V-CONST-005,Dalmia Bharat Cement,construction,0.98,1.1,7,0.0038,0.0033,0.021,95.8,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00481,2023-03-07,V-CONST-005,Dalmia Bharat Cement,construction,0.754,3.9,9,0.0305,0.0201,0.062,81.1,0,True,Low,on_time_delivery,3.5,Medium
+PO-CONST-00482,2024-11-18,V-CONST-005,Dalmia Bharat Cement,construction,0.773,4.1,12,0.0391,0.011,0.085,76.4,1,True,Medium,on_time_delivery,3.9,Medium
+PO-CONST-00483,2024-12-27,V-CONST-005,Dalmia Bharat Cement,construction,0.527,6.2,18,0.1156,0.0585,0.228,63.0,4,False,Medium,delayed_delivery,2.4,High
+PO-CONST-00484,2024-06-27,V-CONST-005,Dalmia Bharat Cement,construction,0.826,2.7,8,0.0433,0.0139,0.045,75.0,1,False,Medium,on_time_delivery,4.1,Medium
+PO-CONST-00485,2025-06-23,V-CONST-005,Dalmia Bharat Cement,construction,0.873,2.4,11,0.0308,0.0144,0.054,83.0,0,False,Medium,on_time_delivery,4.1,Medium
+PO-CONST-00486,2025-01-27,V-CONST-005,Dalmia Bharat Cement,construction,0.846,3.9,5,0.0366,0.0242,0.052,79.7,1,False,Low,delayed_delivery,4.1,Medium
+PO-CONST-00487,2024-05-10,V-CONST-005,Dalmia Bharat Cement,construction,0.762,4.0,8,0.026,0.0255,0.048,78.1,1,False,Low,on_time_delivery,4.1,Medium
+PO-CONST-00488,2024-08-24,V-CONST-005,Dalmia Bharat Cement,construction,0.949,1.0,7,0.0069,0.0073,-0.015,91.4,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00489,2025-09-24,V-CONST-005,Dalmia Bharat Cement,construction,0.792,3.6,5,0.0353,0.0133,0.062,81.0,0,False,Low,on_time_delivery,3.7,Medium
+PO-CONST-00490,2023-04-17,V-CONST-005,Dalmia Bharat Cement,construction,0.843,3.8,7,0.0409,0.0223,0.08,76.5,1,True,Medium,delayed_delivery,3.9,Medium
+PO-CONST-00491,2024-04-03,V-CONST-005,Dalmia Bharat Cement,construction,0.949,0.2,5,0.0142,0.0071,-0.009,98.5,0,True,Medium,on_time_delivery,4.9,Low
+PO-CONST-00492,2025-03-02,V-CONST-005,Dalmia Bharat Cement,construction,0.802,2.8,9,0.022,0.0272,0.049,79.9,0,False,Medium,on_time_delivery,3.5,Medium
+PO-CONST-00493,2023-05-10,V-CONST-005,Dalmia Bharat Cement,construction,0.972,0.5,5,0.013,0.0048,0.03,92.5,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00494,2023-05-09,V-CONST-005,Dalmia Bharat Cement,construction,0.936,0.5,3,0.0062,0.0055,0.003,90.1,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00495,2023-12-13,V-CONST-005,Dalmia Bharat Cement,construction,0.842,3.7,9,0.02,0.02,0.043,85.0,1,False,Low,delayed_delivery,3.6,Medium
+PO-CONST-00496,2024-07-22,V-CONST-005,Dalmia Bharat Cement,construction,0.798,4.4,5,0.0337,0.0147,0.065,85.0,1,True,Low,on_time_delivery,4.0,Medium
+PO-CONST-00497,2024-02-11,V-CONST-005,Dalmia Bharat Cement,construction,0.756,1.9,9,0.0382,0.0267,0.054,84.3,1,False,Medium,on_time_delivery,4.1,Medium
+PO-CONST-00498,2024-03-18,V-CONST-005,Dalmia Bharat Cement,construction,0.861,3.5,12,0.0194,0.0127,0.051,72.5,1,True,Medium,on_time_delivery,3.5,Medium
+PO-CONST-00499,2024-01-15,V-CONST-005,Dalmia Bharat Cement,construction,0.568,10.1,17,0.0848,0.0401,0.214,47.8,3,False,Low,defective_shipment,2.3,High
+PO-CONST-00500,2025-05-19,V-CONST-005,Dalmia Bharat Cement,construction,0.866,3.3,5,0.0322,0.0203,0.061,73.1,1,True,Medium,delayed_delivery,3.6,Medium
+PO-CONST-00501,2023-07-12,V-CONST-006,JSW Steel,construction,1.35,11.7,15,0.065,0.0386,0.228,115.0,3,True,Medium,delayed_delivery,2.5,High
+PO-CONST-00502,2025-08-11,V-CONST-006,JSW Steel,construction,0.986,1.2,6,0.0028,0.0069,0.02,92.5,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00503,2024-02-13,V-CONST-006,JSW Steel,construction,0.783,2.2,11,0.0204,0.0253,0.048,82.9,1,True,Low,on_time_delivery,3.8,Medium
+PO-CONST-00504,2024-11-20,V-CONST-006,JSW Steel,construction,0.929,0.8,4,0.0082,0.0039,0.024,94.3,0,False,Medium,on_time_delivery,4.8,Low
+PO-CONST-00505,2025-03-14,V-CONST-006,JSW Steel,construction,0.964,0.1,6,0.0058,0.0037,-0.009,96.2,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00506,2023-05-15,V-CONST-006,JSW Steel,construction,0.951,1.1,5,0.0052,0.0079,0.014,92.7,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00507,2025-02-02,V-CONST-006,JSW Steel,construction,0.956,0.6,5,0.0023,0.0053,0.008,92.3,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00508,2023-12-22,V-CONST-006,JSW Steel,construction,0.952,0.9,5,0.0016,0.0033,0.015,92.8,0,False,High,on_time_delivery,4.6,Low
+PO-CONST-00509,2024-03-07,V-CONST-006,JSW Steel,construction,0.933,0.9,6,0.0046,0.0054,0.002,90.2,0,False,Medium,on_time_delivery,4.4,Low
+PO-CONST-00510,2024-12-13,V-CONST-006,JSW Steel,construction,0.981,1.2,6,0.0112,0.0024,0.021,95.6,0,False,High,on_time_delivery,4.4,Low
+PO-CONST-00511,2023-02-27,V-CONST-006,JSW Steel,construction,0.921,1.2,2,0.0039,0.0052,0.012,93.9,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00512,2024-07-01,V-CONST-006,JSW Steel,construction,0.928,1.1,7,0.0108,0.0077,0.004,97.7,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00513,2024-01-11,V-CONST-006,JSW Steel,construction,0.921,0.8,7,0.007,0.0033,0.005,95.2,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00514,2025-12-20,V-CONST-006,JSW Steel,construction,0.985,1.1,5,0.0042,0.0005,-0.019,95.2,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00515,2024-02-16,V-CONST-006,JSW Steel,construction,0.964,0.8,5,0.0108,0.0002,-0.006,91.7,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00516,2025-06-20,V-CONST-006,JSW Steel,construction,0.98,0.9,5,0.0028,0.0023,0.016,98.6,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00517,2025-04-10,V-CONST-006,JSW Steel,construction,0.968,0.1,5,0.0028,0.0016,0.01,90.9,0,False,High,on_time_delivery,4.6,Low
+PO-CONST-00518,2023-01-12,V-CONST-006,JSW Steel,construction,0.982,0.4,3,0.0034,0.0069,0.005,97.3,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00519,2025-04-16,V-CONST-006,JSW Steel,construction,0.938,0.4,4,0.0118,0.0062,0.008,98.1,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00520,2024-02-04,V-CONST-006,JSW Steel,construction,0.852,3.3,6,0.0402,0.0108,0.045,80.8,0,False,Low,on_time_delivery,4.0,Medium
+PO-CONST-00521,2024-12-28,V-CONST-006,JSW Steel,construction,0.927,0.8,4,0.0125,0.001,-0.01,98.7,0,True,Medium,on_time_delivery,4.8,Low
+PO-CONST-00522,2024-09-06,V-CONST-006,JSW Steel,construction,0.926,0.4,5,0.006,0.0053,-0.012,96.8,0,False,Medium,on_time_delivery,4.5,Low
+PO-CONST-00523,2024-08-28,V-CONST-006,JSW Steel,construction,0.956,0.8,2,0.0072,0.0062,0.016,94.7,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00524,2023-07-02,V-CONST-006,JSW Steel,construction,0.948,0.0,7,0.0031,0.0046,0.029,98.8,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00525,2025-05-24,V-CONST-006,JSW Steel,construction,0.972,1.1,2,0.0126,0.0072,0.011,91.3,0,False,High,on_time_delivery,4.7,Low
+PO-CONST-00526,2025-10-21,V-CONST-006,JSW Steel,construction,0.807,2.5,11,0.0389,0.0259,0.044,79.5,1,True,Medium,delayed_delivery,3.5,Medium
+PO-CONST-00527,2025-06-25,V-CONST-006,JSW Steel,construction,0.964,0.0,6,0.0093,0.0019,0.019,96.5,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00528,2025-09-12,V-CONST-006,JSW Steel,construction,0.929,0.9,2,0.0073,0.0046,-0.02,93.1,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00529,2025-11-18,V-CONST-006,JSW Steel,construction,0.979,0.3,4,0.005,0.0063,0.016,96.1,0,False,High,on_time_delivery,4.8,Low
+PO-CONST-00530,2025-10-07,V-CONST-006,JSW Steel,construction,0.978,0.4,2,0.0031,0.0034,0.001,90.8,0,False,Medium,on_time_delivery,4.6,Low
+PO-CONST-00531,2024-11-17,V-CONST-006,JSW Steel,construction,0.948,0.7,5,0.0132,0.0047,0.012,99.0,0,False,High,on_time_delivery,4.9,Low
+PO-CONST-00532,2023-09-05,V-CONST-006,JSW Steel,construction,0.954,0.5,7,0.0082,0.0042,0.015,94.1,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00533,2023-10-28,V-CONST-006,JSW Steel,construction,0.949,0.1,6,0.0051,0.0042,-0.014,92.7,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00534,2023-03-26,V-CONST-006,JSW Steel,construction,0.961,0.1,4,0.0134,0.0017,0.021,94.4,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00535,2024-08-19,V-CONST-006,JSW Steel,construction,0.79,2.9,10,0.0391,0.0186,0.076,80.5,0,False,Medium,on_time_delivery,3.5,Medium
+PO-CONST-00536,2023-10-22,V-CONST-006,JSW Steel,construction,0.964,0.5,5,0.0057,0.0004,0.014,94.0,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00537,2023-10-21,V-CONST-006,JSW Steel,construction,0.976,0.8,6,0.01,0.0052,-0.016,98.6,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00538,2025-01-04,V-CONST-006,JSW Steel,construction,0.966,0.6,2,0.0048,0.0016,0.021,97.6,0,False,Medium,on_time_delivery,4.8,Low
+PO-CONST-00539,2024-10-02,V-CONST-006,JSW Steel,construction,0.954,1.1,4,0.0071,0.0033,0.023,92.9,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00540,2023-05-05,V-CONST-006,JSW Steel,construction,0.933,0.9,3,0.0053,0.0033,-0.012,95.5,0,True,Medium,on_time_delivery,4.4,Low
+PO-CONST-00541,2024-02-11,V-CONST-006,JSW Steel,construction,0.93,1.1,4,0.0063,0.0066,-0.014,91.8,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00542,2023-05-02,V-CONST-006,JSW Steel,construction,0.942,0.7,2,0.0078,0.0033,-0.008,98.0,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00543,2023-09-21,V-CONST-006,JSW Steel,construction,0.975,0.4,5,0.0072,0.0068,0.005,97.0,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00544,2023-09-14,V-CONST-006,JSW Steel,construction,0.987,0.7,2,0.001,0.0037,0.021,92.6,0,True,Medium,on_time_delivery,4.4,Low
+PO-CONST-00545,2024-10-09,V-CONST-006,JSW Steel,construction,0.859,2.6,10,0.0407,0.0138,0.082,75.9,0,True,Medium,delayed_delivery,3.7,Medium
+PO-CONST-00546,2023-12-18,V-CONST-006,JSW Steel,construction,0.99,1.1,3,0.0095,0.0077,-0.004,96.1,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00547,2024-05-08,V-CONST-006,JSW Steel,construction,0.966,0.4,3,0.0074,0.0048,-0.019,96.2,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00548,2025-03-14,V-CONST-006,JSW Steel,construction,0.822,3.6,12,0.0386,0.0197,0.079,81.1,0,True,Medium,delayed_delivery,3.7,Medium
+PO-CONST-00549,2025-06-13,V-CONST-006,JSW Steel,construction,0.932,0.9,7,0.0148,0.001,-0.001,91.7,0,True,Medium,on_time_delivery,4.8,Low
+PO-CONST-00550,2025-12-12,V-CONST-006,JSW Steel,construction,0.933,1.0,7,0.0052,0.0057,-0.008,94.4,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00551,2025-10-07,V-CONST-006,JSW Steel,construction,0.751,4.5,11,0.021,0.015,0.065,74.4,0,True,Low,delayed_delivery,4.0,Medium
+PO-CONST-00552,2025-04-17,V-CONST-006,JSW Steel,construction,0.971,0.3,7,0.0013,0.0078,0.014,95.5,0,False,Medium,on_time_delivery,4.9,Low
+PO-CONST-00553,2025-01-28,V-CONST-006,JSW Steel,construction,0.986,0.5,5,0.0048,0.0054,0.003,93.3,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00554,2024-09-15,V-CONST-006,JSW Steel,construction,0.942,0.5,4,0.0021,0.0046,-0.019,96.6,0,False,Medium,on_time_delivery,4.9,Low
+PO-CONST-00555,2024-05-03,V-CONST-006,JSW Steel,construction,0.964,0.1,5,0.007,0.0002,0.02,98.4,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00556,2024-01-27,V-CONST-006,JSW Steel,construction,0.943,1.0,2,0.0119,0.005,0.018,95.6,0,True,Medium,on_time_delivery,4.9,Low
+PO-CONST-00557,2024-06-28,V-CONST-006,JSW Steel,construction,0.84,3.8,5,0.0428,0.018,0.055,80.8,0,True,Low,delayed_delivery,3.6,Medium
+PO-CONST-00558,2023-10-25,V-CONST-006,JSW Steel,construction,0.949,1.0,7,0.0097,0.0036,0.003,93.9,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00559,2023-08-17,V-CONST-006,JSW Steel,construction,0.943,0.2,2,0.0012,0.0057,0.01,97.6,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00560,2024-12-20,V-CONST-006,JSW Steel,construction,0.951,0.3,2,0.0018,0.0025,0.002,98.6,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00561,2023-03-16,V-CONST-006,JSW Steel,construction,0.942,0.4,4,0.0146,0.0041,0.013,91.3,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00562,2023-07-12,V-CONST-006,JSW Steel,construction,0.934,0.2,3,0.012,0.0027,0.013,96.3,0,False,High,on_time_delivery,4.7,Low
+PO-CONST-00563,2025-06-20,V-CONST-006,JSW Steel,construction,0.789,2.5,6,0.0303,0.0242,0.042,75.1,0,True,Low,on_time_delivery,3.9,Medium
+PO-CONST-00564,2025-06-26,V-CONST-006,JSW Steel,construction,0.972,0.2,3,0.0126,0.0001,-0.02,93.2,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00565,2025-06-02,V-CONST-006,JSW Steel,construction,0.988,0.2,4,0.0034,0.0071,0.016,93.1,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00566,2024-02-01,V-CONST-006,JSW Steel,construction,0.978,0.2,7,0.012,0.0009,0.027,92.7,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00567,2025-10-14,V-CONST-006,JSW Steel,construction,0.981,0.1,3,0.0134,0.001,-0.011,94.8,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00568,2023-01-25,V-CONST-006,JSW Steel,construction,0.617,6.7,18,0.0741,0.0417,0.152,57.0,3,False,Medium,delayed_delivery,2.9,High
+PO-CONST-00569,2025-10-03,V-CONST-006,JSW Steel,construction,0.932,0.5,7,0.0115,0.003,0.006,91.6,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00570,2024-08-09,V-CONST-006,JSW Steel,construction,0.961,0.8,6,0.0101,0.0017,0.025,94.1,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00571,2024-10-06,V-CONST-006,JSW Steel,construction,0.985,0.4,6,0.0022,0.006,-0.005,94.7,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00572,2024-07-15,V-CONST-006,JSW Steel,construction,0.953,0.5,5,0.0054,0.0031,-0.011,92.1,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00573,2025-09-18,V-CONST-006,JSW Steel,construction,0.965,0.9,3,0.0024,0.0006,-0.018,91.8,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00574,2025-05-07,V-CONST-006,JSW Steel,construction,0.969,1.2,7,0.0114,0.0073,-0.02,92.7,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00575,2025-01-16,V-CONST-006,JSW Steel,construction,0.966,1.2,3,0.0131,0.0018,0.016,91.9,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00576,2024-12-27,V-CONST-006,JSW Steel,construction,0.952,1.0,4,0.0128,0.0034,0.027,93.8,0,False,High,on_time_delivery,4.8,Low
+PO-CONST-00577,2023-10-28,V-CONST-006,JSW Steel,construction,0.929,1.1,2,0.008,0.0053,-0.002,92.0,0,False,High,on_time_delivery,4.8,Low
+PO-CONST-00578,2025-09-10,V-CONST-006,JSW Steel,construction,0.943,0.0,2,0.0139,0.0012,0.028,93.0,0,False,High,on_time_delivery,4.5,Low
+PO-CONST-00579,2025-07-07,V-CONST-006,JSW Steel,construction,0.953,0.4,5,0.0099,0.0024,-0.011,96.1,0,True,Medium,on_time_delivery,4.8,Low
+PO-CONST-00580,2023-03-07,V-CONST-006,JSW Steel,construction,0.925,1.2,4,0.0039,0.0023,0.006,94.1,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00581,2024-07-06,V-CONST-006,JSW Steel,construction,0.989,0.2,5,0.0077,0.0006,0.028,97.8,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00582,2025-08-06,V-CONST-006,JSW Steel,construction,0.962,1.1,6,0.0038,0.0057,0.003,91.8,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00583,2023-09-11,V-CONST-006,JSW Steel,construction,0.984,1.1,5,0.0075,0.0003,-0.015,95.8,0,False,High,on_time_delivery,4.8,Low
+PO-CONST-00584,2024-07-20,V-CONST-006,JSW Steel,construction,0.978,1.0,5,0.0045,0.0072,0.017,94.1,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00585,2023-04-28,V-CONST-006,JSW Steel,construction,0.931,1.1,6,0.0051,0.0073,0.015,96.5,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00586,2023-06-03,V-CONST-006,JSW Steel,construction,0.973,0.6,4,0.0067,0.0013,-0.01,90.4,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00587,2024-07-11,V-CONST-006,JSW Steel,construction,0.972,1.0,5,0.0015,0.002,0.015,91.2,0,False,High,on_time_delivery,4.6,Low
+PO-CONST-00588,2025-04-23,V-CONST-006,JSW Steel,construction,0.987,0.2,4,0.0128,0.0014,-0.019,90.9,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00589,2023-11-25,V-CONST-006,JSW Steel,construction,0.921,0.3,5,0.006,0.0017,-0.018,96.1,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00590,2025-11-22,V-CONST-006,JSW Steel,construction,0.97,1.1,5,0.0107,0.0036,0.01,90.4,0,False,Medium,on_time_delivery,4.9,Low
+PO-CONST-00591,2023-04-03,V-CONST-006,JSW Steel,construction,0.921,0.0,2,0.0057,0.0015,0.013,92.0,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00592,2024-09-04,V-CONST-006,JSW Steel,construction,0.977,0.4,7,0.0037,0.0017,0.007,98.5,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00593,2023-01-13,V-CONST-006,JSW Steel,construction,0.966,0.0,3,0.0074,0.0005,0.021,95.8,0,True,Medium,on_time_delivery,4.4,Low
+PO-CONST-00594,2024-10-16,V-CONST-006,JSW Steel,construction,0.989,0.1,6,0.0121,0.0074,0.008,92.3,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00595,2024-11-25,V-CONST-006,JSW Steel,construction,0.969,0.4,7,0.0117,0.0055,0.029,96.0,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00596,2024-07-17,V-CONST-006,JSW Steel,construction,0.833,2.2,5,0.0243,0.0211,0.085,76.3,1,False,Low,delayed_delivery,3.4,Medium
+PO-CONST-00597,2024-04-05,V-CONST-006,JSW Steel,construction,0.946,0.8,3,0.0139,0.0048,0.027,96.7,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00598,2023-09-26,V-CONST-006,JSW Steel,construction,0.988,0.8,4,0.0115,0.0018,0.017,93.1,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00599,2023-11-23,V-CONST-006,JSW Steel,construction,0.844,3.3,11,0.0321,0.0133,0.071,72.9,1,True,Low,delayed_delivery,3.9,Medium
+PO-CONST-00600,2023-03-03,V-CONST-006,JSW Steel,construction,0.932,0.7,3,0.0043,0.0006,0.016,92.8,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00601,2024-05-19,V-CONST-007,Shree Cement,construction,0.808,3.4,9,0.0413,0.0187,0.088,77.0,1,True,Medium,on_time_delivery,3.7,Medium
+PO-CONST-00602,2024-03-27,V-CONST-007,Shree Cement,construction,0.874,2.9,11,0.0295,0.0115,0.085,76.2,1,True,Low,on_time_delivery,3.7,Medium
+PO-CONST-00603,2024-07-18,V-CONST-007,Shree Cement,construction,0.829,1.7,7,0.0373,0.0135,0.086,72.1,1,False,Medium,on_time_delivery,4.1,Medium
+PO-CONST-00604,2025-06-13,V-CONST-007,Shree Cement,construction,0.593,9.7,19,0.0596,0.0748,0.249,47.4,4,False,Low,defective_shipment,3.2,High
+PO-CONST-00605,2025-06-17,V-CONST-007,Shree Cement,construction,0.97,0.8,4,0.0108,0.0052,0.026,96.6,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00606,2025-12-22,V-CONST-007,Shree Cement,construction,0.922,0.8,3,0.0047,0.0036,0.014,92.3,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00607,2025-07-13,V-CONST-007,Shree Cement,construction,0.842,4.4,6,0.032,0.0134,0.061,83.6,1,False,Medium,on_time_delivery,4.0,Medium
+PO-CONST-00608,2025-02-04,V-CONST-007,Shree Cement,construction,0.965,0.9,4,0.0124,0.0022,-0.01,96.7,0,True,Medium,on_time_delivery,4.9,Low
+PO-CONST-00609,2023-02-03,V-CONST-007,Shree Cement,construction,0.974,0.5,5,0.0102,0.0059,-0.011,93.4,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00610,2023-08-19,V-CONST-007,Shree Cement,construction,0.856,2.1,5,0.0382,0.0246,0.05,85.8,1,False,Low,delayed_delivery,3.5,Medium
+PO-CONST-00611,2023-05-03,V-CONST-007,Shree Cement,construction,0.794,3.3,12,0.0311,0.0237,0.04,75.7,0,True,Low,delayed_delivery,3.8,Medium
+PO-CONST-00612,2025-09-25,V-CONST-007,Shree Cement,construction,0.785,3.0,10,0.0343,0.0161,0.074,76.8,1,True,Medium,on_time_delivery,3.7,Medium
+PO-CONST-00613,2024-06-26,V-CONST-007,Shree Cement,construction,0.763,2.9,11,0.0376,0.026,0.047,80.4,1,False,Low,on_time_delivery,3.8,Medium
+PO-CONST-00614,2024-09-14,V-CONST-007,Shree Cement,construction,0.836,1.5,10,0.0184,0.0165,0.042,83.3,1,False,Low,on_time_delivery,3.7,Medium
+PO-CONST-00615,2023-06-14,V-CONST-007,Shree Cement,construction,0.872,4.3,12,0.0446,0.0254,0.085,82.3,1,True,Low,delayed_delivery,3.5,Medium
+PO-CONST-00616,2024-11-18,V-CONST-007,Shree Cement,construction,0.989,0.6,5,0.0144,0.0039,0.007,92.2,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00617,2025-01-06,V-CONST-007,Shree Cement,construction,0.871,2.5,11,0.0387,0.014,0.053,78.7,1,True,Low,on_time_delivery,3.5,Medium
+PO-CONST-00618,2023-10-25,V-CONST-007,Shree Cement,construction,0.87,1.7,10,0.0282,0.0229,0.077,77.3,1,False,Low,delayed_delivery,3.6,Medium
+PO-CONST-00619,2023-02-11,V-CONST-007,Shree Cement,construction,0.846,4.3,6,0.0335,0.0123,0.056,77.3,1,True,Medium,delayed_delivery,3.9,Medium
+PO-CONST-00620,2024-07-11,V-CONST-007,Shree Cement,construction,0.85,3.9,7,0.032,0.0208,0.051,77.5,1,False,Medium,delayed_delivery,4.1,Medium
+PO-CONST-00621,2023-08-22,V-CONST-007,Shree Cement,construction,0.809,3.3,7,0.0382,0.0253,0.081,72.5,1,False,Low,on_time_delivery,4.2,Medium
+PO-CONST-00622,2024-11-27,V-CONST-007,Shree Cement,construction,0.935,0.3,5,0.0018,0.0065,-0.012,96.5,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00623,2023-08-24,V-CONST-007,Shree Cement,construction,0.574,11.9,20,0.1143,0.0422,0.123,52.5,3,True,Medium,defective_shipment,2.9,High
+PO-CONST-00624,2025-12-10,V-CONST-007,Shree Cement,construction,0.787,4.3,11,0.0206,0.0158,0.08,84.1,0,False,Medium,delayed_delivery,3.9,Medium
+PO-CONST-00625,2024-05-05,V-CONST-007,Shree Cement,construction,0.777,3.9,8,0.0379,0.0102,0.076,80.1,1,True,Medium,on_time_delivery,3.9,Medium
+PO-CONST-00626,2023-02-12,V-CONST-007,Shree Cement,construction,0.877,2.0,5,0.0212,0.0193,0.057,78.1,0,False,Low,delayed_delivery,3.5,Medium
+PO-CONST-00627,2024-12-20,V-CONST-007,Shree Cement,construction,0.874,3.5,11,0.0389,0.0278,0.074,73.3,1,False,Medium,on_time_delivery,3.7,Medium
+PO-CONST-00628,2023-02-16,V-CONST-007,Shree Cement,construction,0.833,4.2,8,0.0186,0.0203,0.069,75.8,1,True,Low,on_time_delivery,3.8,Medium
+PO-CONST-00629,2024-05-19,V-CONST-007,Shree Cement,construction,0.766,2.5,7,0.0289,0.0226,0.06,83.4,1,False,Low,delayed_delivery,4.0,Medium
+PO-CONST-00630,2025-02-06,V-CONST-007,Shree Cement,construction,0.862,3.6,5,0.033,0.0244,0.046,73.8,0,True,Low,on_time_delivery,4.1,Medium
+PO-CONST-00631,2023-09-10,V-CONST-007,Shree Cement,construction,0.797,3.1,11,0.0444,0.0218,0.052,72.6,1,False,Medium,delayed_delivery,3.9,Medium
+PO-CONST-00632,2025-06-20,V-CONST-007,Shree Cement,construction,0.82,2.1,6,0.0359,0.0108,0.042,74.0,0,True,Low,on_time_delivery,3.6,Medium
+PO-CONST-00633,2024-02-18,V-CONST-007,Shree Cement,construction,0.938,0.5,3,0.0066,0.0007,-0.007,93.8,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00634,2024-11-23,V-CONST-007,Shree Cement,construction,0.834,3.6,7,0.0293,0.0128,0.09,78.1,0,True,Low,on_time_delivery,3.5,Medium
+PO-CONST-00635,2025-07-03,V-CONST-007,Shree Cement,construction,0.793,1.8,10,0.039,0.0126,0.08,75.8,0,False,Low,on_time_delivery,4.2,Medium
+PO-CONST-00636,2023-03-17,V-CONST-007,Shree Cement,construction,0.971,0.4,5,0.0023,0.0028,0.009,92.5,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00637,2024-07-06,V-CONST-007,Shree Cement,construction,0.795,3.7,11,0.0309,0.0123,0.04,79.2,0,True,Low,on_time_delivery,3.9,Medium
+PO-CONST-00638,2025-11-12,V-CONST-007,Shree Cement,construction,0.842,2.2,11,0.0371,0.0133,0.089,83.2,1,False,Medium,on_time_delivery,3.8,Medium
+PO-CONST-00639,2023-05-21,V-CONST-007,Shree Cement,construction,0.98,1.1,5,0.0118,0.0068,0.012,90.7,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00640,2025-05-18,V-CONST-007,Shree Cement,construction,0.871,3.9,5,0.044,0.0176,0.065,82.2,1,False,Low,on_time_delivery,3.4,Medium
+PO-CONST-00641,2025-01-23,V-CONST-007,Shree Cement,construction,0.805,3.1,10,0.0246,0.0233,0.088,83.5,1,True,Medium,delayed_delivery,3.9,Medium
+PO-CONST-00642,2025-04-06,V-CONST-007,Shree Cement,construction,0.514,11.0,18,0.078,0.0373,0.184,48.2,2,False,Low,delayed_delivery,2.4,High
+PO-CONST-00643,2024-04-01,V-CONST-007,Shree Cement,construction,0.846,3.2,8,0.0429,0.0267,0.088,79.2,0,False,Medium,delayed_delivery,3.7,Medium
+PO-CONST-00644,2024-05-12,V-CONST-007,Shree Cement,construction,0.764,2.5,7,0.0289,0.0102,0.062,74.8,1,True,Medium,delayed_delivery,4.1,Medium
+PO-CONST-00645,2025-05-08,V-CONST-007,Shree Cement,construction,0.811,2.6,10,0.0296,0.0133,0.081,73.5,1,False,Low,delayed_delivery,3.7,Medium
+PO-CONST-00646,2024-12-07,V-CONST-007,Shree Cement,construction,0.764,2.4,7,0.0287,0.0234,0.085,74.2,0,False,Medium,delayed_delivery,3.7,Medium
+PO-CONST-00647,2025-12-05,V-CONST-007,Shree Cement,construction,0.792,3.8,11,0.0316,0.0266,0.082,77.4,0,True,Low,delayed_delivery,3.5,Medium
+PO-CONST-00648,2025-04-02,V-CONST-007,Shree Cement,construction,0.838,2.5,5,0.0297,0.0152,0.064,82.7,0,True,Low,delayed_delivery,3.6,Medium
+PO-CONST-00649,2024-12-08,V-CONST-007,Shree Cement,construction,0.837,2.8,12,0.0371,0.0246,0.075,79.0,0,True,Low,delayed_delivery,3.5,Medium
+PO-CONST-00650,2024-04-05,V-CONST-007,Shree Cement,construction,0.805,3.3,6,0.0413,0.0168,0.066,81.8,0,True,Medium,on_time_delivery,3.8,Medium
+PO-CONST-00651,2025-01-10,V-CONST-007,Shree Cement,construction,0.764,,10,,0.0144,0.085,74.5,0,True,Medium,delayed_delivery,3.6,Medium
+PO-CONST-00652,2025-02-14,V-CONST-007,Shree Cement,construction,0.774,4.3,10,0.027,0.012,0.073,81.6,0,False,Medium,on_time_delivery,4.0,Medium
+PO-CONST-00653,2025-06-08,V-CONST-007,Shree Cement,construction,0.835,2.1,11,0.0204,0.0119,0.071,80.4,0,True,Low,on_time_delivery,4.1,Medium
+PO-CONST-00654,2025-10-11,V-CONST-007,Shree Cement,construction,0.789,2.9,8,0.0324,0.0128,0.046,77.9,1,False,Medium,on_time_delivery,3.8,Medium
+PO-CONST-00655,2024-02-16,V-CONST-007,Shree Cement,construction,0.949,1.1,6,0.0121,0.0013,-0.006,98.7,0,True,Medium,on_time_delivery,4.9,Low
+PO-CONST-00656,2025-04-24,V-CONST-007,Shree Cement,construction,0.856,3.0,6,0.0225,0.0235,0.059,82.9,1,False,Low,delayed_delivery,3.4,Medium
+PO-CONST-00657,2025-12-01,V-CONST-007,Shree Cement,construction,0.864,3.9,12,0.0316,0.023,0.053,83.9,1,False,Low,delayed_delivery,3.6,Medium
+PO-CONST-00658,2024-01-21,V-CONST-007,Shree Cement,construction,0.769,4.2,7,0.0253,0.0242,0.072,75.5,0,True,Low,on_time_delivery,3.9,Medium
+PO-CONST-00659,2024-02-23,V-CONST-007,Shree Cement,construction,0.668,7.2,12,0.0815,0.0625,0.162,46.1,2,False,Low,defective_shipment,2.3,High
+PO-CONST-00660,2025-11-28,V-CONST-007,Shree Cement,construction,0.648,10.6,11,0.102,0.066,0.243,49.9,4,True,Low,defective_shipment,2.3,High
+PO-CONST-00661,2025-11-26,V-CONST-007,Shree Cement,construction,0.862,2.7,12,0.0243,0.0231,0.058,84.6,0,False,Low,on_time_delivery,3.5,Medium
+PO-CONST-00662,2023-10-16,V-CONST-007,Shree Cement,construction,0.679,6.7,14,0.0564,0.0423,0.143,52.5,4,False,Low,delayed_delivery,2.2,High
+PO-CONST-00663,2025-07-04,V-CONST-007,Shree Cement,construction,0.844,1.9,5,0.0343,0.0168,0.041,83.6,1,True,Low,delayed_delivery,4.0,Medium
+PO-CONST-00664,2025-10-01,V-CONST-007,Shree Cement,construction,0.853,1.5,6,0.0326,0.0247,0.083,73.2,0,False,Medium,delayed_delivery,3.6,Medium
+PO-CONST-00665,2023-01-18,V-CONST-007,Shree Cement,construction,0.84,3.4,6,0.0186,0.0108,0.067,73.4,1,True,Low,delayed_delivery,3.4,Medium
+PO-CONST-00666,2023-06-21,V-CONST-007,Shree Cement,construction,0.787,4.3,11,0.0365,0.0229,0.085,78.9,0,True,Low,on_time_delivery,3.7,Medium
+PO-CONST-00667,2023-06-03,V-CONST-007,Shree Cement,construction,0.866,3.3,7,0.0296,0.016,0.049,78.0,1,False,Medium,on_time_delivery,4.1,Medium
+PO-CONST-00668,2024-11-12,V-CONST-007,Shree Cement,construction,0.871,3.9,6,0.0393,0.0255,0.089,82.9,0,False,Low,on_time_delivery,3.8,Medium
+PO-CONST-00669,2024-02-04,V-CONST-007,Shree Cement,construction,0.96,1.2,4,0.003,0.0026,-0.014,96.9,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00670,2024-10-26,V-CONST-007,Shree Cement,construction,0.833,1.9,8,0.0283,0.0199,0.067,78.9,1,True,Medium,delayed_delivery,3.9,Medium
+PO-CONST-00671,2025-12-26,V-CONST-007,Shree Cement,construction,0.847,3.6,8,0.0278,0.0137,0.083,77.1,1,True,Low,delayed_delivery,4.1,Medium
+PO-CONST-00672,2023-05-15,V-CONST-007,Shree Cement,construction,0.769,4.1,11,0.0245,0.0249,0.043,73.9,1,True,Medium,delayed_delivery,4.0,Medium
+PO-CONST-00673,2023-12-04,V-CONST-007,Shree Cement,construction,0.836,1.7,7,0.0188,0.0166,0.044,73.1,1,False,Low,delayed_delivery,3.8,Medium
+PO-CONST-00674,2025-12-10,V-CONST-007,Shree Cement,construction,0.811,3.7,12,0.0391,0.0225,0.054,74.2,1,True,Low,delayed_delivery,3.4,Medium
+PO-CONST-00675,2025-08-18,V-CONST-007,Shree Cement,construction,0.97,0.3,6,0.008,0.0057,0.001,91.4,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00676,2025-04-13,V-CONST-007,Shree Cement,construction,0.618,6.9,12,0.1085,0.0789,0.199,46.5,4,False,Medium,defective_shipment,2.8,High
+PO-CONST-00677,2024-03-02,V-CONST-007,Shree Cement,construction,0.854,3.4,8,0.0253,0.0119,0.058,82.9,1,True,Low,on_time_delivery,3.5,Medium
+PO-CONST-00678,2023-10-01,V-CONST-007,Shree Cement,construction,0.848,2.4,8,0.0352,0.0106,0.053,85.7,1,True,Medium,delayed_delivery,3.4,Medium
+PO-CONST-00679,2024-01-12,V-CONST-007,Shree Cement,construction,0.848,4.4,8,0.0265,0.017,0.058,73.8,1,True,Medium,on_time_delivery,4.1,Medium
+PO-CONST-00680,2025-03-01,V-CONST-007,Shree Cement,construction,0.826,2.6,5,0.0258,0.0127,0.063,84.4,0,True,Low,delayed_delivery,4.0,Medium
+PO-CONST-00681,2025-09-24,V-CONST-007,Shree Cement,construction,0.829,3.1,10,0.0301,0.0124,0.055,80.7,1,True,Medium,delayed_delivery,3.6,Medium
+PO-CONST-00682,2023-03-19,V-CONST-007,Shree Cement,construction,0.832,3.0,5,0.0219,0.0257,0.067,85.6,0,False,Low,on_time_delivery,3.7,Medium
+PO-CONST-00683,2023-02-09,V-CONST-007,Shree Cement,construction,0.61,7.8,11,0.0666,0.0697,0.154,54.0,3,False,Low,delayed_delivery,3.2,High
+PO-CONST-00684,2024-05-13,V-CONST-007,Shree Cement,construction,0.803,3.4,7,0.0299,0.0192,0.071,76.4,0,False,Medium,on_time_delivery,4.1,Medium
+PO-CONST-00685,2023-10-21,V-CONST-007,Shree Cement,construction,0.511,10.6,18,0.0555,0.0734,0.158,48.0,3,False,Low,defective_shipment,3.1,High
+PO-CONST-00686,2024-08-15,V-CONST-007,Shree Cement,construction,0.834,4.2,12,0.0209,0.0132,0.045,85.4,1,False,Low,on_time_delivery,3.7,Medium
+PO-CONST-00687,2025-08-07,V-CONST-007,Shree Cement,construction,0.841,2.9,9,0.0303,0.0198,0.087,74.0,0,False,Low,on_time_delivery,3.4,Medium
+PO-CONST-00688,2024-08-07,V-CONST-007,Shree Cement,construction,0.924,1.0,7,0.0069,0.002,-0.011,91.3,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00689,2024-07-17,V-CONST-007,Shree Cement,construction,0.541,11.3,12,0.109,0.0392,0.237,51.5,3,False,Low,defective_shipment,3.1,High
+PO-CONST-00690,2025-12-26,V-CONST-007,Shree Cement,construction,0.771,3.6,10,0.0426,0.0203,0.081,79.9,1,True,Low,delayed_delivery,3.7,Medium
+PO-CONST-00691,2025-12-27,V-CONST-007,Shree Cement,construction,0.64,7.6,12,0.1133,0.077,0.185,51.0,4,False,Medium,delayed_delivery,3.2,High
+PO-CONST-00692,2023-11-15,V-CONST-007,Shree Cement,construction,0.621,9.3,10,0.0692,0.0791,0.175,55.4,2,True,Medium,delayed_delivery,2.5,High
+PO-CONST-00693,2025-10-01,V-CONST-007,Shree Cement,construction,0.57,7.9,14,0.1133,0.0576,0.233,58.3,4,False,Medium,defective_shipment,2.5,High
+PO-CONST-00694,2024-09-25,V-CONST-007,Shree Cement,construction,0.944,1.1,5,0.007,0.0014,0.01,94.9,0,False,High,on_time_delivery,4.8,Low
+PO-CONST-00695,2024-11-10,V-CONST-007,Shree Cement,construction,0.841,4.3,6,0.0449,0.0245,0.045,81.1,1,False,Low,on_time_delivery,4.0,Medium
+PO-CONST-00696,2025-02-21,V-CONST-007,Shree Cement,construction,0.808,3.2,5,0.036,0.0253,0.051,82.9,1,False,Low,delayed_delivery,4.1,Medium
+PO-CONST-00697,2024-08-14,V-CONST-007,Shree Cement,construction,0.673,9.7,16,0.0555,0.0519,0.149,50.4,4,False,Medium,defective_shipment,2.8,High
+PO-CONST-00698,2024-01-01,V-CONST-007,Shree Cement,construction,0.753,3.9,10,0.027,0.0273,0.09,75.4,1,True,Medium,delayed_delivery,4.0,Medium
+PO-CONST-00699,2023-11-13,V-CONST-007,Shree Cement,construction,0.877,2.0,10,0.032,0.0179,0.045,83.2,1,True,Medium,on_time_delivery,4.1,Medium
+PO-CONST-00700,2024-04-03,V-CONST-007,Shree Cement,construction,0.762,2.8,7,0.0188,0.0227,0.086,73.1,1,True,Low,on_time_delivery,3.9,Medium
+PO-CONST-00701,2023-04-21,V-CONST-008,Ambuja Cements,construction,0.983,0.4,6,0.0128,0.0058,0.02,93.4,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00702,2023-11-01,V-CONST-008,Ambuja Cements,construction,0.965,0.7,2,0.0026,0.0074,-0.014,91.3,0,True,Medium,on_time_delivery,4.4,Low
+PO-CONST-00703,2024-04-13,V-CONST-008,Ambuja Cements,construction,0.927,1.0,5,0.002,0.0077,-0.016,96.2,0,False,High,on_time_delivery,4.7,Low
+PO-CONST-00704,2023-03-10,V-CONST-008,Ambuja Cements,construction,0.921,0.2,6,0.0098,0.0068,-0.014,93.1,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00705,2023-03-17,V-CONST-008,Ambuja Cements,construction,0.972,1.1,3,0.0095,0.0043,0.006,96.8,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00706,2024-03-08,V-CONST-008,Ambuja Cements,construction,0.926,0.8,3,0.0047,0.0039,0.028,93.1,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00707,2025-07-07,V-CONST-008,Ambuja Cements,construction,0.938,0.2,7,0.0049,0.0031,0.009,96.9,0,True,Medium,on_time_delivery,4.8,Low
+PO-CONST-00708,2024-07-15,V-CONST-008,Ambuja Cements,construction,0.805,3.7,10,0.0348,0.0209,0.061,79.9,1,True,Medium,delayed_delivery,4.1,Medium
+PO-CONST-00709,2024-10-14,V-CONST-008,Ambuja Cements,construction,0.788,4.0,10,0.0288,0.0121,0.08,78.0,0,False,Low,delayed_delivery,3.6,Medium
+PO-CONST-00710,2023-06-04,V-CONST-008,Ambuja Cements,construction,0.921,0.8,7,0.0056,0.0037,0.02,98.1,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00711,2023-02-18,V-CONST-008,Ambuja Cements,construction,0.939,0.7,7,0.002,0.0071,0.001,96.8,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00712,2024-08-02,V-CONST-008,Ambuja Cements,construction,0.989,0.5,2,0.0073,0.0048,0.01,92.1,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00713,2025-01-15,V-CONST-008,Ambuja Cements,construction,0.94,1.0,5,0.0015,0.0043,0.006,93.0,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00714,2024-12-10,V-CONST-008,Ambuja Cements,construction,0.939,0.9,5,0.0021,0.0062,0.005,90.4,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00715,2025-02-27,V-CONST-008,Ambuja Cements,construction,0.946,0.7,2,0.0041,0.0066,-0.013,98.9,0,False,Medium,on_time_delivery,4.5,Low
+PO-CONST-00716,2024-09-01,V-CONST-008,Ambuja Cements,construction,0.985,1.0,4,0.0134,0.0003,-0.018,92.7,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00717,2024-05-23,V-CONST-008,Ambuja Cements,construction,0.932,0.2,5,0.0027,0.0026,-0.013,95.3,0,False,High,on_time_delivery,4.6,Low
+PO-CONST-00718,2025-04-19,V-CONST-008,Ambuja Cements,construction,0.953,0.6,4,0.0055,0.0058,-0.009,92.4,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00719,2023-11-21,V-CONST-008,Ambuja Cements,construction,0.971,0.2,2,0.0021,0.004,-0.009,96.0,0,False,High,on_time_delivery,4.5,Low
+PO-CONST-00720,2023-10-25,V-CONST-008,Ambuja Cements,construction,0.957,1.0,4,0.0109,0.0052,0.022,91.0,0,True,Medium,on_time_delivery,4.9,Low
+PO-CONST-00721,2024-10-17,V-CONST-008,Ambuja Cements,construction,0.934,0.5,2,0.0049,0.0013,-0.005,97.8,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00722,2023-04-01,V-CONST-008,Ambuja Cements,construction,0.983,0.2,2,0.0077,0.0042,-0.002,91.1,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00723,2025-07-17,V-CONST-008,Ambuja Cements,construction,0.943,0.5,4,0.0024,0.0052,0.017,93.8,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00724,2025-10-16,V-CONST-008,Ambuja Cements,construction,0.956,0.1,2,0.01,0.0077,-0.009,90.5,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00725,2023-05-08,V-CONST-008,Ambuja Cements,construction,0.982,0.8,5,0.0065,0.0008,0.017,97.9,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00726,2024-11-10,V-CONST-008,Ambuja Cements,construction,0.969,0.3,2,0.0023,0.004,0.015,94.3,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00727,2023-03-06,V-CONST-008,Ambuja Cements,construction,0.943,0.5,2,0.0103,0.0034,-0.019,98.8,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00728,2025-06-16,V-CONST-008,Ambuja Cements,construction,0.826,3.0,8,0.0308,0.0108,0.041,81.5,1,True,Low,delayed_delivery,4.0,Medium
+PO-CONST-00729,2025-06-15,V-CONST-008,Ambuja Cements,construction,0.954,0.4,6,0.0046,0.0039,-0.002,90.1,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00730,2025-10-16,V-CONST-008,Ambuja Cements,construction,0.765,3.6,5,0.022,0.0174,0.051,85.9,1,False,Low,delayed_delivery,3.9,Medium
+PO-CONST-00731,2024-06-07,V-CONST-008,Ambuja Cements,construction,0.972,0.2,5,0.0099,0.0077,0.024,96.1,0,False,High,on_time_delivery,4.5,Low
+PO-CONST-00732,2024-06-13,V-CONST-008,Ambuja Cements,construction,0.827,4.3,9,0.0264,0.0107,0.066,76.8,1,True,Medium,on_time_delivery,3.9,Medium
+PO-CONST-00733,2024-05-04,V-CONST-008,Ambuja Cements,construction,0.988,0.6,7,0.0031,0.0054,0.006,92.6,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00734,2024-01-15,V-CONST-008,Ambuja Cements,construction,0.923,0.3,6,0.0027,0.0039,-0.02,93.2,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00735,2024-09-22,V-CONST-008,Ambuja Cements,construction,0.987,0.7,2,0.011,0.0011,0.017,93.9,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00736,2024-04-26,V-CONST-008,Ambuja Cements,construction,0.967,0.5,5,0.0145,0.0008,-0.007,92.7,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00737,2024-10-05,V-CONST-008,Ambuja Cements,construction,0.968,0.2,3,0.0068,0.0016,-0.005,92.7,0,False,High,on_time_delivery,4.5,Low
+PO-CONST-00738,2024-02-05,V-CONST-008,Ambuja Cements,construction,0.957,0.8,6,0.0141,0.0057,0.003,93.8,0,False,High,on_time_delivery,4.6,Low
+PO-CONST-00739,2023-07-03,V-CONST-008,Ambuja Cements,construction,0.848,3.3,9,0.0392,0.0204,0.059,80.7,1,False,Low,on_time_delivery,3.5,Medium
+PO-CONST-00740,2024-09-15,V-CONST-008,Ambuja Cements,construction,0.979,0.1,4,0.0126,0.0052,-0.003,90.9,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00741,2023-02-24,V-CONST-008,Ambuja Cements,construction,0.961,0.6,7,0.0017,0.0016,-0.013,96.7,0,False,Medium,on_time_delivery,4.5,Low
+PO-CONST-00742,2023-05-21,V-CONST-008,Ambuja Cements,construction,0.942,1.2,2,0.0123,0.005,-0.01,90.6,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00743,2023-04-04,V-CONST-008,Ambuja Cements,construction,0.953,1.0,5,0.0065,0.0074,-0.005,94.4,0,True,Medium,on_time_delivery,4.8,Low
+PO-CONST-00744,2025-11-15,V-CONST-008,Ambuja Cements,construction,0.98,0.7,5,0.003,0.0002,-0.013,96.7,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00745,2023-08-16,V-CONST-008,Ambuja Cements,construction,0.94,0.8,6,0.0079,0.0053,-0.0,96.3,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00746,2023-05-15,V-CONST-008,Ambuja Cements,construction,0.928,0.5,6,0.0052,0.0052,0.025,95.6,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00747,2025-08-09,V-CONST-008,Ambuja Cements,construction,0.921,0.2,6,0.013,0.004,-0.003,96.4,0,False,High,on_time_delivery,4.4,Low
+PO-CONST-00748,2024-11-24,V-CONST-008,Ambuja Cements,construction,0.959,0.6,3,0.0049,0.0061,-0.005,93.5,0,False,High,on_time_delivery,4.9,Low
+PO-CONST-00749,2023-10-23,V-CONST-008,Ambuja Cements,construction,0.985,0.9,6,0.0046,0.0056,0.009,95.2,0,False,Medium,on_time_delivery,4.4,Low
+PO-CONST-00750,2023-04-04,V-CONST-008,Ambuja Cements,construction,0.836,3.0,12,0.0267,0.0142,0.079,84.8,0,True,Low,on_time_delivery,4.0,Medium
+PO-CONST-00751,2023-01-20,V-CONST-008,Ambuja Cements,construction,0.938,0.0,7,0.002,0.0061,0.01,97.6,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00752,2023-11-19,V-CONST-008,Ambuja Cements,construction,0.959,0.2,5,0.0071,0.0023,-0.01,91.5,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00753,2025-02-07,V-CONST-008,Ambuja Cements,construction,0.922,0.2,2,0.006,0.0033,0.007,90.6,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00754,2025-09-16,V-CONST-008,Ambuja Cements,construction,0.775,2.1,12,0.0315,0.0164,0.085,83.9,0,False,Medium,on_time_delivery,4.1,Medium
+PO-CONST-00755,2023-09-10,V-CONST-008,Ambuja Cements,construction,0.927,0.6,2,0.0094,0.0026,-0.009,98.5,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00756,2023-05-03,V-CONST-008,Ambuja Cements,construction,0.957,0.3,6,0.014,0.004,-0.0,90.5,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00757,2024-11-01,V-CONST-008,Ambuja Cements,construction,0.754,2.8,8,0.027,0.0238,0.047,79.7,1,False,Low,delayed_delivery,3.8,Medium
+PO-CONST-00758,2025-10-23,V-CONST-008,Ambuja Cements,construction,0.978,1.0,4,0.0147,0.0076,0.01,95.5,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00759,2025-01-04,V-CONST-008,Ambuja Cements,construction,0.922,0.6,7,0.0059,0.0038,0.019,97.9,0,True,Medium,on_time_delivery,4.9,Low
+PO-CONST-00760,2023-09-20,V-CONST-008,Ambuja Cements,construction,0.98,0.8,7,0.0013,0.0039,-0.001,93.4,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00761,2023-08-04,V-CONST-008,Ambuja Cements,construction,0.983,1.2,4,0.0059,0.0027,0.026,92.1,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00762,2025-10-02,V-CONST-008,Ambuja Cements,construction,0.989,0.0,7,0.0045,0.0005,-0.017,93.9,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00763,2023-05-05,V-CONST-008,Ambuja Cements,construction,0.962,0.6,2,0.0102,0.0006,0.027,91.9,0,True,Medium,on_time_delivery,4.6,Low
+PO-CONST-00764,2024-09-10,V-CONST-008,Ambuja Cements,construction,0.981,0.3,4,0.0055,0.0043,-0.015,93.1,0,False,High,on_time_delivery,4.9,Low
+PO-CONST-00765,2023-04-05,V-CONST-008,Ambuja Cements,construction,0.979,0.6,4,0.0114,0.0017,-0.001,97.3,0,True,Medium,on_time_delivery,4.9,Low
+PO-CONST-00766,2025-08-04,V-CONST-008,Ambuja Cements,construction,0.921,1.0,4,0.0049,0.0031,0.021,90.8,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00767,2024-07-15,V-CONST-008,Ambuja Cements,construction,0.923,0.2,3,0.0102,0.0043,0.013,90.3,0,True,Medium,on_time_delivery,4.9,Low
+PO-CONST-00768,2024-05-26,V-CONST-008,Ambuja Cements,construction,0.973,0.3,2,0.0058,0.0066,0.002,93.8,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00769,2025-05-28,V-CONST-008,Ambuja Cements,construction,0.879,3.1,11,0.0335,0.0202,0.066,74.3,1,False,Low,delayed_delivery,4.1,Medium
+PO-CONST-00770,2025-05-03,V-CONST-008,Ambuja Cements,construction,0.99,0.9,4,0.0057,0.0032,0.011,93.3,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00771,2023-05-19,V-CONST-008,Ambuja Cements,construction,0.966,1.0,3,0.0072,0.0001,-0.02,90.3,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00772,2024-01-19,V-CONST-008,Ambuja Cements,construction,0.986,0.3,6,0.0087,0.0076,0.002,92.3,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00773,2025-03-05,V-CONST-008,Ambuja Cements,construction,0.981,0.8,3,0.0026,0.0003,0.014,97.7,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00774,2025-05-09,V-CONST-008,Ambuja Cements,construction,0.921,1.0,4,0.0086,0.0004,-0.008,91.0,0,False,Medium,on_time_delivery,4.7,Low
+PO-CONST-00775,2024-10-12,V-CONST-008,Ambuja Cements,construction,0.978,0.8,2,0.01,0.007,-0.013,92.9,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00776,2024-08-10,V-CONST-008,Ambuja Cements,construction,0.831,2.0,5,0.0259,0.0127,0.07,73.5,0,False,Medium,delayed_delivery,3.7,Medium
+PO-CONST-00777,2025-12-05,V-CONST-008,Ambuja Cements,construction,0.947,1.2,2,0.0144,0.0077,0.03,95.1,0,False,High,on_time_delivery,4.8,Low
+PO-CONST-00778,2025-01-20,V-CONST-008,Ambuja Cements,construction,0.953,0.6,5,0.0054,0.0016,0.009,98.2,0,True,Medium,on_time_delivery,4.8,Low
+PO-CONST-00779,2023-08-11,V-CONST-008,Ambuja Cements,construction,0.642,6.3,13,0.0839,0.0781,0.173,46.5,4,True,Low,defective_shipment,2.8,High
+PO-CONST-00780,2024-07-08,V-CONST-008,Ambuja Cements,construction,0.96,1.0,3,0.014,0.002,0.025,96.1,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00781,2024-02-03,V-CONST-008,Ambuja Cements,construction,0.949,0.6,3,0.0091,0.0051,0.019,98.1,0,False,Medium,on_time_delivery,4.5,Low
+PO-CONST-00782,2025-12-16,V-CONST-008,Ambuja Cements,construction,0.972,0.2,2,0.0127,0.0002,-0.012,90.7,0,False,High,on_time_delivery,4.6,Low
+PO-CONST-00783,2025-04-23,V-CONST-008,Ambuja Cements,construction,0.941,0.4,4,0.0093,0.0049,0.03,90.4,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00784,2025-07-10,V-CONST-008,Ambuja Cements,construction,0.973,0.8,7,0.0036,0.0061,0.026,98.4,0,True,Medium,on_time_delivery,4.8,Low
+PO-CONST-00785,2024-11-21,V-CONST-008,Ambuja Cements,construction,0.952,0.4,3,0.0081,0.0047,0.027,90.9,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00786,2025-10-17,V-CONST-008,Ambuja Cements,construction,0.979,0.5,4,0.0064,0.0061,0.028,90.4,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00787,2025-06-04,V-CONST-008,Ambuja Cements,construction,0.944,0.2,4,0.0048,0.0035,0.024,92.6,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00788,2025-05-05,V-CONST-008,Ambuja Cements,construction,0.762,3.2,7,0.0187,0.0262,0.088,79.6,0,True,Medium,delayed_delivery,3.7,Medium
+PO-CONST-00789,2025-07-24,V-CONST-008,Ambuja Cements,construction,0.951,0.2,5,0.0051,0.0009,0.015,97.6,0,False,High,on_time_delivery,4.6,Low
+PO-CONST-00790,2023-05-24,V-CONST-008,Ambuja Cements,construction,0.967,1.2,2,0.0114,0.0018,-0.016,91.4,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00791,2025-02-23,V-CONST-008,Ambuja Cements,construction,0.968,1.1,2,0.0071,0.0075,0.02,92.9,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00792,2025-07-28,V-CONST-008,Ambuja Cements,construction,0.986,0.8,4,0.0076,0.0039,-0.011,94.5,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00793,2025-12-24,V-CONST-008,Ambuja Cements,construction,0.935,0.5,5,0.0088,0.0017,-0.011,93.8,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00794,2025-06-16,V-CONST-008,Ambuja Cements,construction,0.957,1.1,4,0.0128,0.007,0.013,94.4,0,False,High,on_time_delivery,4.6,Low
+PO-CONST-00795,2023-04-04,V-CONST-008,Ambuja Cements,construction,0.987,1.1,4,0.0069,0.0036,-0.008,93.8,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00796,2024-12-13,V-CONST-008,Ambuja Cements,construction,0.969,0.9,5,0.0128,0.0069,0.01,96.2,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00797,2024-01-18,V-CONST-008,Ambuja Cements,construction,0.974,0.3,4,0.0068,0.0065,0.001,92.3,0,True,High,on_time_delivery,4.6,Low
+PO-CONST-00798,2025-01-10,V-CONST-008,Ambuja Cements,construction,0.951,0.3,3,0.0085,0.0062,-0.014,98.7,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00799,2025-01-26,V-CONST-008,Ambuja Cements,construction,0.947,0.9,4,0.0138,0.0061,0.008,95.9,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00800,2025-07-28,V-CONST-008,Ambuja Cements,construction,0.636,7.4,12,0.1142,0.0499,0.148,58.9,2,False,Low,delayed_delivery,2.7,High
+PO-CONST-00801,2023-03-10,V-CONST-009,SAIL (Steel Authority),construction,0.557,7.0,13,0.0572,0.0687,0.226,52.2,3,False,Medium,delayed_delivery,2.2,High
+PO-CONST-00802,2025-12-14,V-CONST-009,SAIL (Steel Authority),construction,0.504,10.3,18,0.0943,0.0418,0.216,60.1,2,True,Medium,defective_shipment,2.6,High
+PO-CONST-00803,2024-05-15,V-CONST-009,SAIL (Steel Authority),construction,0.539,7.2,20,0.0925,0.0519,0.176,49.2,3,True,Medium,defective_shipment,2.4,High
+PO-CONST-00804,2025-04-13,V-CONST-009,SAIL (Steel Authority),construction,0.503,8.7,16,0.1168,0.0693,0.213,53.6,4,False,Medium,delayed_delivery,2.6,High
+PO-CONST-00805,2023-11-10,V-CONST-009,SAIL (Steel Authority),construction,0.563,10.8,11,0.0612,0.0426,0.232,54.3,2,False,Low,defective_shipment,2.8,High
+PO-CONST-00806,2025-10-25,V-CONST-009,SAIL (Steel Authority),construction,0.544,10.5,14,0.0818,0.0683,0.228,45.7,4,True,Medium,delayed_delivery,2.4,High
+PO-CONST-00807,2025-08-18,V-CONST-009,SAIL (Steel Authority),construction,0.595,11.7,13,0.0759,0.0669,0.187,61.3,4,False,Low,defective_shipment,2.9,High
+PO-CONST-00808,2023-03-17,V-CONST-009,SAIL (Steel Authority),construction,0.642,6.6,17,0.1115,0.0401,0.235,54.4,4,True,Medium,delayed_delivery,2.9,High
+PO-CONST-00809,2024-01-10,V-CONST-009,SAIL (Steel Authority),construction,0.522,12.0,20,0.0726,0.0495,0.236,55.7,2,False,Medium,delayed_delivery,3.0,High
+PO-CONST-00810,2024-09-20,V-CONST-009,SAIL (Steel Authority),construction,0.938,0.6,4,0.014,0.0058,0.023,91.2,0,False,Medium,on_time_delivery,4.6,Low
+PO-CONST-00811,2024-02-01,V-CONST-009,SAIL (Steel Authority),construction,0.559,6.7,11,0.09,0.0499,0.128,53.9,2,False,Medium,delayed_delivery,2.5,High
+PO-CONST-00812,2023-05-10,V-CONST-009,SAIL (Steel Authority),construction,0.656,11.1,19,0.1024,0.0515,0.22,62.8,4,True,Low,delayed_delivery,2.8,High
+PO-CONST-00813,2023-05-06,V-CONST-009,SAIL (Steel Authority),construction,0.55,6.2,18,0.0932,0.0695,0.163,59.7,4,True,Medium,defective_shipment,2.3,High
+PO-CONST-00814,2023-04-03,V-CONST-009,SAIL (Steel Authority),construction,0.677,9.5,12,0.0657,0.0744,0.162,62.0,2,False,Medium,defective_shipment,2.8,High
+PO-CONST-00815,2025-02-08,V-CONST-009,SAIL (Steel Authority),construction,0.606,8.0,16,0.1009,0.051,0.229,51.0,2,True,Low,delayed_delivery,3.1,High
+PO-CONST-00816,2025-03-27,V-CONST-009,SAIL (Steel Authority),construction,0.807,2.8,9,0.0365,0.02,0.062,76.9,0,False,Medium,on_time_delivery,4.0,Medium
+PO-CONST-00817,2025-04-13,V-CONST-009,SAIL (Steel Authority),construction,0.571,11.6,10,0.0677,0.0512,0.145,56.1,3,False,Medium,defective_shipment,2.7,High
+PO-CONST-00818,2024-01-21,V-CONST-009,SAIL (Steel Authority),construction,0.552,8.6,10,0.1197,0.0667,0.156,46.1,4,False,Medium,defective_shipment,2.6,High
+PO-CONST-00819,2025-09-26,V-CONST-009,SAIL (Steel Authority),construction,0.52,7.9,19,0.1131,0.0419,0.216,61.5,2,False,Medium,delayed_delivery,2.2,High
+PO-CONST-00820,2023-06-04,V-CONST-009,SAIL (Steel Authority),construction,0.663,7.3,13,0.0976,0.0682,0.163,57.8,3,True,Low,defective_shipment,2.7,High
+PO-CONST-00821,2024-07-27,V-CONST-009,SAIL (Steel Authority),construction,1.35,1.7,8,0.0403,0.019,0.076,115.0,1,True,Medium,delayed_delivery,4.0,Medium
+PO-CONST-00822,2025-12-27,V-CONST-009,SAIL (Steel Authority),construction,0.659,5.5,14,0.0914,0.0403,0.181,60.9,2,True,Medium,delayed_delivery,2.2,High
+PO-CONST-00823,2025-02-06,V-CONST-009,SAIL (Steel Authority),construction,0.56,9.6,10,0.1048,0.0705,0.148,52.1,2,True,Low,defective_shipment,3.0,High
+PO-CONST-00824,2023-12-25,V-CONST-009,SAIL (Steel Authority),construction,0.64,7.5,16,0.1009,0.043,0.138,51.0,2,False,Medium,delayed_delivery,2.3,High
+PO-CONST-00825,2025-08-09,V-CONST-009,SAIL (Steel Authority),construction,0.518,7.8,15,0.0777,0.0639,0.178,57.0,2,False,Medium,delayed_delivery,2.7,High
+PO-CONST-00826,2025-07-12,V-CONST-009,SAIL (Steel Authority),construction,0.623,9.9,14,0.0685,0.0665,0.185,60.8,3,False,Low,defective_shipment,2.3,High
+PO-CONST-00827,2023-09-22,V-CONST-009,SAIL (Steel Authority),construction,0.62,8.6,17,0.0931,0.0518,0.169,56.2,2,False,Low,defective_shipment,3.1,High
+PO-CONST-00828,2024-08-11,V-CONST-009,SAIL (Steel Authority),construction,0.564,11.4,12,0.1144,0.0488,0.181,48.5,2,False,Medium,defective_shipment,2.9,High
+PO-CONST-00829,2023-05-24,V-CONST-009,SAIL (Steel Authority),construction,0.571,7.7,20,0.0811,0.0368,0.241,49.5,4,False,Medium,defective_shipment,3.0,High
+PO-CONST-00830,2024-10-01,V-CONST-009,SAIL (Steel Authority),construction,0.931,0.2,4,0.0134,0.0077,0.027,91.8,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00831,2023-02-10,V-CONST-009,SAIL (Steel Authority),construction,0.651,6.4,15,0.0848,0.0424,0.12,47.8,2,False,Medium,delayed_delivery,2.3,High
+PO-CONST-00832,2024-02-24,V-CONST-009,SAIL (Steel Authority),construction,0.782,3.6,10,0.0181,0.0129,0.045,79.7,1,True,Medium,on_time_delivery,4.1,Medium
+PO-CONST-00833,2023-07-05,V-CONST-009,SAIL (Steel Authority),construction,0.56,11.6,16,0.1053,0.0754,0.227,58.9,3,True,Medium,delayed_delivery,2.5,High
+PO-CONST-00834,2025-01-08,V-CONST-009,SAIL (Steel Authority),construction,0.668,6.7,13,0.079,0.0503,0.227,56.6,3,False,Low,delayed_delivery,2.6,High
+PO-CONST-00835,2024-07-03,V-CONST-009,SAIL (Steel Authority),construction,0.565,9.8,16,0.0648,0.049,0.208,54.1,3,False,Low,delayed_delivery,2.5,High
+PO-CONST-00836,2023-08-26,V-CONST-009,SAIL (Steel Authority),construction,0.516,10.0,11,0.0976,0.0532,0.225,48.1,2,True,Medium,defective_shipment,2.1,High
+PO-CONST-00837,2025-07-14,V-CONST-009,SAIL (Steel Authority),construction,0.647,7.5,14,0.1032,0.0402,0.225,62.3,4,False,Medium,defective_shipment,3.0,High
+PO-CONST-00838,2023-03-14,V-CONST-009,SAIL (Steel Authority),construction,0.957,0.5,7,0.0021,0.0001,0.027,96.4,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00839,2024-07-02,V-CONST-009,SAIL (Steel Authority),construction,0.588,5.8,17,0.0849,0.0373,0.198,52.0,3,False,Medium,delayed_delivery,2.7,High
+PO-CONST-00840,2024-07-01,V-CONST-009,SAIL (Steel Authority),construction,0.585,7.4,10,0.0937,0.0511,0.125,59.0,2,False,Low,delayed_delivery,2.2,High
+PO-CONST-00841,2024-07-09,V-CONST-009,SAIL (Steel Authority),construction,0.566,8.5,19,0.0709,0.0722,0.229,58.9,4,True,Medium,delayed_delivery,2.2,High
+PO-CONST-00842,2023-10-24,V-CONST-009,SAIL (Steel Authority),construction,0.621,11.2,16,0.0883,0.0676,0.164,57.1,3,False,Medium,delayed_delivery,2.3,High
+PO-CONST-00843,2025-11-24,V-CONST-009,SAIL (Steel Authority),construction,0.668,10.9,16,0.1177,0.0707,0.194,63.9,4,True,Low,delayed_delivery,2.5,High
+PO-CONST-00844,2024-05-24,V-CONST-009,SAIL (Steel Authority),construction,0.631,6.7,18,0.0986,0.0622,0.238,57.9,3,False,Medium,delayed_delivery,2.1,High
+PO-CONST-00845,2023-05-09,V-CONST-009,SAIL (Steel Authority),construction,0.588,10.6,20,0.0757,0.045,0.122,51.2,2,True,Medium,defective_shipment,2.7,High
+PO-CONST-00846,2024-09-13,V-CONST-009,SAIL (Steel Authority),construction,0.59,9.1,15,0.0771,0.0506,0.178,53.8,4,False,Low,delayed_delivery,2.8,High
+PO-CONST-00847,2023-11-28,V-CONST-009,SAIL (Steel Authority),construction,0.609,6.0,17,0.0915,0.0505,0.147,63.7,3,False,Medium,defective_shipment,2.6,High
+PO-CONST-00848,2023-10-19,V-CONST-009,SAIL (Steel Authority),construction,0.532,7.8,16,0.082,0.0694,0.218,50.4,4,False,Low,defective_shipment,3.1,High
+PO-CONST-00849,2025-02-04,V-CONST-009,SAIL (Steel Authority),construction,0.575,6.9,11,0.0921,0.043,0.141,59.8,4,False,Medium,defective_shipment,2.9,High
+PO-CONST-00850,2025-05-11,V-CONST-009,SAIL (Steel Authority),construction,0.646,9.6,20,0.1125,0.0782,0.219,51.0,4,True,Medium,delayed_delivery,3.0,High
+PO-CONST-00851,2024-05-27,V-CONST-009,SAIL (Steel Authority),construction,0.676,6.5,12,0.081,0.0352,0.228,59.5,4,False,Low,defective_shipment,2.7,High
+PO-CONST-00852,2024-07-07,V-CONST-009,SAIL (Steel Authority),construction,0.621,9.5,12,0.0946,0.0577,0.13,55.8,3,False,Medium,delayed_delivery,2.3,High
+PO-CONST-00853,2025-02-12,V-CONST-009,SAIL (Steel Authority),construction,0.504,9.4,20,0.0803,0.058,0.145,62.4,3,False,Low,delayed_delivery,2.6,High
+PO-CONST-00854,2023-06-05,V-CONST-009,SAIL (Steel Authority),construction,0.556,11.3,13,0.0925,0.0557,0.209,53.4,2,False,Medium,delayed_delivery,3.0,High
+PO-CONST-00855,2023-04-15,V-CONST-009,SAIL (Steel Authority),construction,0.844,1.7,5,0.0364,0.0173,0.066,78.6,1,True,Medium,on_time_delivery,4.1,Medium
+PO-CONST-00856,2025-10-21,V-CONST-009,SAIL (Steel Authority),construction,0.688,10.1,17,0.0863,0.0677,0.158,52.6,4,False,Medium,defective_shipment,2.9,High
+PO-CONST-00857,2025-08-14,V-CONST-009,SAIL (Steel Authority),construction,0.65,6.2,14,0.1043,0.0611,0.223,58.7,3,False,Medium,delayed_delivery,3.1,High
+PO-CONST-00858,2023-05-04,V-CONST-009,SAIL (Steel Authority),construction,0.563,10.0,17,0.1134,0.0571,0.152,49.9,3,True,Medium,defective_shipment,3.0,High
+PO-CONST-00859,2025-05-20,V-CONST-009,SAIL (Steel Authority),construction,0.507,6.4,18,0.0737,0.0449,0.168,51.9,3,False,Low,defective_shipment,2.6,High
+PO-CONST-00860,2024-03-24,V-CONST-009,SAIL (Steel Authority),construction,0.653,6.3,19,0.074,0.0523,0.203,45.5,2,True,Medium,delayed_delivery,2.7,High
+PO-CONST-00861,2025-09-24,V-CONST-009,SAIL (Steel Authority),construction,0.665,8.9,17,0.0952,0.0427,0.165,48.0,4,False,Medium,defective_shipment,3.1,High
+PO-CONST-00862,2023-09-16,V-CONST-009,SAIL (Steel Authority),construction,0.533,11.3,10,0.0985,0.0379,0.149,48.9,2,False,Low,delayed_delivery,2.5,High
+PO-CONST-00863,2025-01-27,V-CONST-009,SAIL (Steel Authority),construction,0.642,10.8,18,0.1134,0.0684,0.167,45.6,4,False,Medium,delayed_delivery,2.4,High
+PO-CONST-00864,2025-09-28,V-CONST-009,SAIL (Steel Authority),construction,0.926,1.0,5,0.0089,0.002,-0.007,96.7,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00865,2023-10-09,V-CONST-009,SAIL (Steel Authority),construction,0.605,6.1,13,0.1027,0.0763,0.238,47.5,3,False,Low,delayed_delivery,2.4,High
+PO-CONST-00866,2024-08-04,V-CONST-009,SAIL (Steel Authority),construction,0.602,10.6,15,0.1064,0.0383,0.182,53.4,3,False,Low,delayed_delivery,2.8,High
+PO-CONST-00867,2023-10-14,V-CONST-009,SAIL (Steel Authority),construction,0.664,6.2,17,0.1055,0.0438,0.225,56.7,3,False,Medium,defective_shipment,2.8,High
+PO-CONST-00868,2023-06-17,V-CONST-009,SAIL (Steel Authority),construction,0.592,7.3,20,0.0745,0.074,0.152,50.2,4,True,Medium,defective_shipment,2.2,High
+PO-CONST-00869,2023-08-01,V-CONST-009,SAIL (Steel Authority),construction,0.561,11.8,17,0.0872,0.043,0.219,57.8,2,False,Medium,delayed_delivery,2.3,High
+PO-CONST-00870,2023-04-10,V-CONST-009,SAIL (Steel Authority),construction,0.595,7.6,18,0.0857,0.0658,0.241,49.0,4,False,Medium,delayed_delivery,2.3,High
+PO-CONST-00871,2023-03-20,V-CONST-009,SAIL (Steel Authority),construction,0.626,7.6,18,0.1188,0.0644,0.223,59.8,3,False,Medium,defective_shipment,3.1,High
+PO-CONST-00872,2024-03-10,V-CONST-009,SAIL (Steel Authority),construction,0.793,2.6,10,0.0301,0.0177,0.06,77.8,1,True,Medium,on_time_delivery,3.9,Medium
+PO-CONST-00873,2024-05-01,V-CONST-009,SAIL (Steel Authority),construction,0.656,6.8,20,0.1016,0.0483,0.169,51.1,3,False,Low,delayed_delivery,2.8,High
+PO-CONST-00874,2024-02-03,V-CONST-009,SAIL (Steel Authority),construction,0.546,7.6,17,0.1162,0.0617,0.244,63.0,4,False,Medium,delayed_delivery,2.4,High
+PO-CONST-00875,2024-01-04,V-CONST-009,SAIL (Steel Authority),construction,0.511,7.7,18,0.079,0.0766,0.134,47.6,4,False,Medium,defective_shipment,3.0,High
+PO-CONST-00876,2025-05-19,V-CONST-009,SAIL (Steel Authority),construction,0.776,1.8,8,0.0269,0.0198,0.073,79.8,1,True,Low,delayed_delivery,4.1,Medium
+PO-CONST-00877,2025-06-28,V-CONST-009,SAIL (Steel Authority),construction,0.569,10.5,13,0.067,0.0561,0.18,51.3,4,True,Medium,defective_shipment,2.8,High
+PO-CONST-00878,2023-02-21,V-CONST-009,SAIL (Steel Authority),construction,0.803,2.7,12,0.0395,0.025,0.043,85.9,1,True,Medium,delayed_delivery,4.2,Medium
+PO-CONST-00879,2024-09-16,V-CONST-009,SAIL (Steel Authority),construction,0.787,2.5,6,0.0378,0.0202,0.089,82.9,1,True,Low,on_time_delivery,3.9,Medium
+PO-CONST-00880,2023-11-14,V-CONST-009,SAIL (Steel Authority),construction,0.977,0.6,7,0.0031,0.0026,-0.011,95.2,0,False,High,on_time_delivery,4.8,Low
+PO-CONST-00881,2024-01-13,V-CONST-009,SAIL (Steel Authority),construction,0.609,5.5,16,0.0562,0.0451,0.176,49.9,2,True,Medium,defective_shipment,2.8,High
+PO-CONST-00882,2025-06-23,V-CONST-009,SAIL (Steel Authority),construction,0.665,6.5,12,0.0684,0.0432,0.123,56.4,2,False,Medium,delayed_delivery,2.5,High
+PO-CONST-00883,2023-11-07,V-CONST-009,SAIL (Steel Authority),construction,0.538,6.6,14,0.0701,0.0764,0.22,45.5,3,False,Medium,delayed_delivery,2.6,High
+PO-CONST-00884,2025-04-13,V-CONST-009,SAIL (Steel Authority),construction,0.509,8.4,13,0.0684,0.0521,0.226,46.8,2,True,Low,delayed_delivery,2.9,High
+PO-CONST-00885,2024-12-20,V-CONST-009,SAIL (Steel Authority),construction,0.568,12.0,16,0.0674,0.0793,0.224,51.8,3,True,Low,defective_shipment,2.1,High
+PO-CONST-00886,2024-07-28,V-CONST-009,SAIL (Steel Authority),construction,0.519,7.8,14,0.1094,0.0545,0.23,50.7,4,False,Medium,defective_shipment,2.1,High
+PO-CONST-00887,2025-11-11,V-CONST-009,SAIL (Steel Authority),construction,0.923,1.0,3,0.0089,0.001,-0.012,96.3,0,True,Medium,on_time_delivery,4.7,Low
+PO-CONST-00888,2025-11-10,V-CONST-009,SAIL (Steel Authority),construction,0.571,8.2,12,0.0823,0.0429,0.187,47.9,4,False,Medium,delayed_delivery,3.0,High
+PO-CONST-00889,2023-05-13,V-CONST-009,SAIL (Steel Authority),construction,0.619,11.4,14,0.0954,0.0363,0.123,45.5,3,False,Low,defective_shipment,2.2,High
+PO-CONST-00890,2025-12-17,V-CONST-009,SAIL (Steel Authority),construction,0.532,6.2,15,0.1133,0.0391,0.248,47.1,3,False,Medium,defective_shipment,2.2,High
+PO-CONST-00891,2025-01-10,V-CONST-009,SAIL (Steel Authority),construction,0.59,11.3,14,0.0633,0.0645,0.168,56.7,4,False,Medium,defective_shipment,2.9,High
+PO-CONST-00892,2023-03-08,V-CONST-009,SAIL (Steel Authority),construction,0.817,3.9,7,0.0241,0.0115,0.045,77.7,1,True,Low,delayed_delivery,3.6,Medium
+PO-CONST-00893,2024-06-23,V-CONST-009,SAIL (Steel Authority),construction,0.685,9.8,18,0.0886,0.0794,0.155,62.1,3,False,Medium,delayed_delivery,2.7,High
+PO-CONST-00894,2023-12-26,V-CONST-009,SAIL (Steel Authority),construction,0.8,1.6,8,0.0444,0.0103,0.072,83.7,0,True,Medium,on_time_delivery,3.4,Medium
+PO-CONST-00895,2024-04-21,V-CONST-009,SAIL (Steel Authority),construction,0.665,11.8,16,0.0844,0.0447,0.201,55.4,2,True,Medium,defective_shipment,2.5,High
+PO-CONST-00896,2024-06-26,V-CONST-009,SAIL (Steel Authority),construction,0.863,3.8,12,0.0359,0.022,0.057,79.3,0,False,Medium,delayed_delivery,4.2,Medium
+PO-CONST-00897,2023-08-27,V-CONST-009,SAIL (Steel Authority),construction,0.521,9.1,14,0.0632,0.0506,0.179,55.5,2,True,Low,defective_shipment,3.0,High
+PO-CONST-00898,2025-04-05,V-CONST-009,SAIL (Steel Authority),construction,0.859,2.2,5,0.0234,0.0234,0.066,82.9,1,True,Medium,delayed_delivery,4.0,Medium
+PO-CONST-00899,2023-06-06,V-CONST-009,SAIL (Steel Authority),construction,0.927,0.2,7,0.013,0.0018,0.027,96.4,0,False,Medium,on_time_delivery,4.5,Low
+PO-CONST-00900,2024-05-13,V-CONST-009,SAIL (Steel Authority),construction,0.983,1.2,5,0.0076,0.0011,0.027,90.0,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00901,2025-10-20,V-CONST-010,Ramco Cements,construction,0.875,1.7,11,0.0218,0.0187,0.048,85.6,0,False,Low,on_time_delivery,3.7,Medium
+PO-CONST-00902,2024-02-08,V-CONST-010,Ramco Cements,construction,0.875,2.3,11,0.0213,0.0233,0.087,74.1,1,True,Medium,on_time_delivery,3.4,Medium
+PO-CONST-00903,2024-09-04,V-CONST-010,Ramco Cements,construction,0.85,3.3,8,0.0358,0.0154,0.046,82.4,1,True,Low,on_time_delivery,4.1,Medium
+PO-CONST-00904,2023-07-27,V-CONST-010,Ramco Cements,construction,0.669,6.2,17,0.0827,0.0426,0.212,61.4,3,False,Low,delayed_delivery,2.2,High
+PO-CONST-00905,2025-06-08,V-CONST-010,Ramco Cements,construction,0.981,0.8,7,0.0145,0.0034,0.012,97.8,0,True,High,on_time_delivery,4.8,Low
+PO-CONST-00906,2025-09-11,V-CONST-010,Ramco Cements,construction,0.58,10.9,15,0.0604,0.0396,0.225,49.6,3,False,Medium,defective_shipment,2.2,High
+PO-CONST-00907,2025-08-18,V-CONST-010,Ramco Cements,construction,0.962,0.7,6,0.0083,0.0074,-0.001,95.4,0,True,High,on_time_delivery,4.4,Low
+PO-CONST-00908,2023-06-19,V-CONST-010,Ramco Cements,construction,0.628,11.4,16,0.108,0.0673,0.125,57.3,3,False,Low,defective_shipment,3.0,High
+PO-CONST-00909,2024-11-01,V-CONST-010,Ramco Cements,construction,0.778,2.0,10,0.0207,0.0266,0.08,82.2,1,False,Medium,on_time_delivery,4.2,Medium
+PO-CONST-00910,2024-01-11,V-CONST-010,Ramco Cements,construction,0.81,4.5,9,0.0388,0.0129,0.068,84.1,1,False,Medium,on_time_delivery,4.0,Medium
+PO-CONST-00911,2024-02-11,V-CONST-010,Ramco Cements,construction,0.796,3.1,8,0.0265,0.0155,0.086,73.3,1,False,Medium,delayed_delivery,4.0,Medium
+PO-CONST-00912,2025-08-12,V-CONST-010,Ramco Cements,construction,0.794,2.8,10,0.0384,0.0273,0.056,73.6,1,False,Medium,delayed_delivery,3.7,Medium
+PO-CONST-00913,2023-02-03,V-CONST-010,Ramco Cements,construction,0.843,4.2,11,0.041,0.0126,0.057,77.0,0,False,Low,on_time_delivery,3.9,Medium
+PO-CONST-00914,2024-04-15,V-CONST-010,Ramco Cements,construction,0.657,7.1,12,0.0984,0.0473,0.184,60.8,2,False,Low,defective_shipment,2.8,High
+PO-CONST-00915,2023-05-08,V-CONST-010,Ramco Cements,construction,0.875,4.1,12,0.0406,0.0175,0.068,80.0,1,True,Medium,on_time_delivery,4.0,Medium
+PO-CONST-00916,2024-05-14,V-CONST-010,Ramco Cements,construction,0.946,1.1,3,0.0055,0.0029,0.028,91.2,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00917,2025-12-16,V-CONST-010,Ramco Cements,construction,0.82,1.8,8,0.0374,0.0229,0.072,79.8,0,False,Medium,delayed_delivery,3.8,Medium
+PO-CONST-00918,2025-07-03,V-CONST-010,Ramco Cements,construction,0.874,2.0,12,0.0331,0.011,0.057,84.1,0,True,Medium,delayed_delivery,4.2,Medium
+PO-CONST-00919,2024-12-01,V-CONST-010,Ramco Cements,construction,0.843,3.0,7,0.0446,0.0139,0.063,79.5,1,False,Medium,delayed_delivery,3.9,Medium
+PO-CONST-00920,2024-03-25,V-CONST-010,Ramco Cements,construction,0.603,9.9,15,0.1111,0.0787,0.127,59.3,4,False,Low,delayed_delivery,2.7,High
+PO-CONST-00921,2025-04-08,V-CONST-010,Ramco Cements,construction,0.989,0.9,3,0.0127,0.0002,0.026,96.6,0,True,Medium,on_time_delivery,4.4,Low
+PO-CONST-00922,2025-11-13,V-CONST-010,Ramco Cements,construction,0.855,2.6,12,0.0217,0.0162,0.045,77.0,1,False,Medium,on_time_delivery,3.5,Medium
+PO-CONST-00923,2023-04-12,V-CONST-010,Ramco Cements,construction,0.878,3.4,10,0.0302,0.0117,0.053,84.3,0,True,Medium,delayed_delivery,3.5,Medium
+PO-CONST-00924,2025-01-01,V-CONST-010,Ramco Cements,construction,0.562,7.5,19,0.0916,0.0737,0.244,48.6,4,False,Low,delayed_delivery,3.2,High
+PO-CONST-00925,2025-03-20,V-CONST-010,Ramco Cements,construction,0.799,2.0,12,0.0371,0.0258,0.049,74.1,1,True,Low,delayed_delivery,4.0,Medium
+PO-CONST-00926,2024-02-12,V-CONST-010,Ramco Cements,construction,0.839,3.3,7,0.0423,0.019,0.07,86.0,1,False,Medium,on_time_delivery,4.2,Medium
+PO-CONST-00927,2023-06-08,V-CONST-010,Ramco Cements,construction,0.798,2.2,12,0.0231,0.0173,0.058,84.8,1,True,Low,on_time_delivery,4.1,Medium
+PO-CONST-00928,2025-09-17,V-CONST-010,Ramco Cements,construction,0.801,3.1,8,0.0256,0.0124,0.078,76.1,1,False,Medium,on_time_delivery,3.7,Medium
+PO-CONST-00929,2024-02-11,V-CONST-010,Ramco Cements,construction,0.823,3.3,9,0.0314,0.0242,0.054,81.6,0,True,Low,delayed_delivery,3.6,Medium
+PO-CONST-00930,2025-09-06,V-CONST-010,Ramco Cements,construction,0.833,3.7,5,0.0193,0.0155,0.049,85.5,0,False,Low,on_time_delivery,3.9,Medium
+PO-CONST-00931,2023-02-15,V-CONST-010,Ramco Cements,construction,0.873,4.2,10,0.02,0.0137,0.05,81.0,0,True,Medium,delayed_delivery,4.1,Medium
+PO-CONST-00932,2024-01-08,V-CONST-010,Ramco Cements,construction,0.836,4.2,10,0.0446,0.0278,0.081,77.2,1,True,Low,delayed_delivery,3.9,Medium
+PO-CONST-00933,2024-07-22,V-CONST-010,Ramco Cements,construction,0.824,4.1,9,0.0235,0.0258,0.077,75.8,1,True,Medium,on_time_delivery,3.7,Medium
+PO-CONST-00934,2023-08-09,V-CONST-010,Ramco Cements,construction,0.962,0.8,5,0.0016,0.0061,-0.014,96.2,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00935,2024-02-06,V-CONST-010,Ramco Cements,construction,0.82,2.0,9,0.0438,0.0229,0.075,76.0,1,False,Medium,delayed_delivery,4.0,Medium
+PO-CONST-00936,2023-02-18,V-CONST-010,Ramco Cements,construction,0.86,2.1,5,0.0307,0.012,0.051,83.7,0,True,Low,delayed_delivery,3.7,Medium
+PO-CONST-00937,2025-03-15,V-CONST-010,Ramco Cements,construction,0.828,1.6,8,0.0388,0.023,0.042,72.2,0,False,Medium,delayed_delivery,3.7,Medium
+PO-CONST-00938,2025-01-13,V-CONST-010,Ramco Cements,construction,0.799,4.3,6,0.0241,0.0213,0.057,82.1,0,False,Low,delayed_delivery,3.9,Medium
+PO-CONST-00939,2023-03-18,V-CONST-010,Ramco Cements,construction,0.875,1.7,6,0.0291,0.0196,0.071,74.4,1,False,Low,delayed_delivery,4.1,Medium
+PO-CONST-00940,2023-07-01,V-CONST-010,Ramco Cements,construction,0.823,3.9,6,0.0411,0.0237,0.042,79.6,0,False,Medium,on_time_delivery,3.9,Medium
+PO-CONST-00941,2025-04-22,V-CONST-010,Ramco Cements,construction,0.814,2.3,12,0.0309,0.0262,0.063,84.3,0,True,Medium,delayed_delivery,4.2,Medium
+PO-CONST-00942,2024-03-12,V-CONST-010,Ramco Cements,construction,0.846,2.8,9,0.0219,0.0183,0.076,79.6,0,False,Low,on_time_delivery,3.6,Medium
+PO-CONST-00943,2024-08-24,V-CONST-010,Ramco Cements,construction,0.809,4.4,12,0.0278,0.0159,0.06,82.1,0,True,Low,delayed_delivery,3.9,Medium
+PO-CONST-00944,2025-11-26,V-CONST-010,Ramco Cements,construction,0.618,11.4,18,0.1111,0.0706,0.169,50.8,3,False,Medium,delayed_delivery,2.7,High
+PO-CONST-00945,2025-07-02,V-CONST-010,Ramco Cements,construction,0.776,2.5,7,0.0358,0.0269,0.062,85.2,0,True,Medium,delayed_delivery,3.6,Medium
+PO-CONST-00946,2025-03-21,V-CONST-010,Ramco Cements,construction,0.948,0.9,3,0.0031,0.0025,-0.008,96.6,0,False,High,on_time_delivery,4.7,Low
+PO-CONST-00947,2025-12-21,V-CONST-010,Ramco Cements,construction,0.981,0.8,2,0.0022,0.0001,0.023,90.5,0,True,High,on_time_delivery,4.9,Low
+PO-CONST-00948,2025-03-07,V-CONST-010,Ramco Cements,construction,0.79,1.7,10,0.0338,0.0249,0.064,81.9,1,False,Low,delayed_delivery,4.1,Medium
+PO-CONST-00949,2024-02-18,V-CONST-010,Ramco Cements,construction,0.868,2.7,12,0.0369,0.0151,0.082,75.5,0,True,Medium,delayed_delivery,4.0,Medium
+PO-CONST-00950,2024-08-13,V-CONST-010,Ramco Cements,construction,0.812,3.8,10,0.0431,0.0205,0.049,84.5,1,False,Medium,delayed_delivery,4.1,Medium
+PO-CONST-00951,2023-10-10,V-CONST-010,Ramco Cements,construction,0.838,4.3,6,0.0448,0.0242,0.073,85.5,1,False,Low,on_time_delivery,3.9,Medium
+PO-CONST-00952,2023-10-19,V-CONST-010,Ramco Cements,construction,0.949,0.2,4,0.0037,0.0022,0.006,98.2,0,False,High,on_time_delivery,4.9,Low
+PO-CONST-00953,2023-12-10,V-CONST-010,Ramco Cements,construction,0.784,4.5,10,0.0191,0.0235,0.078,78.4,0,False,Low,delayed_delivery,4.1,Medium
+PO-CONST-00954,2023-12-19,V-CONST-010,Ramco Cements,construction,0.504,8.0,17,0.0797,0.0366,0.207,58.2,3,False,Medium,defective_shipment,2.9,High
+PO-CONST-00955,2024-12-09,V-CONST-010,Ramco Cements,construction,0.822,3.0,9,0.0202,0.0181,0.074,83.3,1,True,Low,delayed_delivery,4.0,Medium
+PO-CONST-00956,2023-03-12,V-CONST-010,Ramco Cements,construction,0.758,3.2,8,0.039,0.0255,0.04,72.2,1,True,Low,on_time_delivery,3.9,Medium
+PO-CONST-00957,2025-02-20,V-CONST-010,Ramco Cements,construction,0.766,3.6,8,0.0428,0.0267,0.049,82.1,0,True,Medium,delayed_delivery,3.6,Medium
+PO-CONST-00958,2024-06-21,V-CONST-010,Ramco Cements,construction,0.957,0.6,3,0.0109,0.004,0.015,94.2,0,True,High,on_time_delivery,4.5,Low
+PO-CONST-00959,2023-04-09,V-CONST-010,Ramco Cements,construction,0.769,3.1,8,0.0369,0.0227,0.044,74.6,1,True,Low,on_time_delivery,3.9,Medium
+PO-CONST-00960,2025-07-17,V-CONST-010,Ramco Cements,construction,0.833,2.2,9,0.0403,0.0232,0.067,81.2,1,False,Medium,delayed_delivery,3.5,Medium
+PO-CONST-00961,2024-12-02,V-CONST-010,Ramco Cements,construction,0.831,4.0,6,0.0362,0.0262,0.062,85.7,1,True,Medium,on_time_delivery,4.0,Medium
+PO-CONST-00962,2023-10-09,V-CONST-010,Ramco Cements,construction,0.845,2.5,10,0.038,0.0186,0.065,82.7,1,True,Low,delayed_delivery,3.4,Medium
+PO-CONST-00963,2024-08-11,V-CONST-010,Ramco Cements,construction,0.87,4.0,11,0.0305,0.0262,0.063,74.0,1,False,Low,delayed_delivery,4.0,Medium
+PO-CONST-00964,2025-03-13,V-CONST-010,Ramco Cements,construction,0.798,2.8,7,0.0221,0.027,0.051,72.2,1,True,Medium,on_time_delivery,3.6,Medium
+PO-CONST-00965,2023-05-27,V-CONST-010,Ramco Cements,construction,0.874,3.1,8,0.0231,0.0209,0.065,78.1,0,False,Low,on_time_delivery,4.2,Medium
+PO-CONST-00966,2024-12-16,V-CONST-010,Ramco Cements,construction,0.829,1.9,12,0.0397,0.0175,0.041,76.3,0,False,Medium,on_time_delivery,3.9,Medium
+PO-CONST-00967,2025-05-11,V-CONST-010,Ramco Cements,construction,0.844,3.9,7,0.028,0.0275,0.043,78.3,1,True,Low,on_time_delivery,4.0,Medium
+PO-CONST-00968,2024-11-16,V-CONST-010,Ramco Cements,construction,0.649,9.1,19,0.1066,0.0664,0.237,63.3,4,True,Low,delayed_delivery,3.0,High
+PO-CONST-00969,2025-08-01,V-CONST-010,Ramco Cements,construction,0.791,4.1,11,0.0383,0.0212,0.044,78.9,1,False,Low,on_time_delivery,3.7,Medium
+PO-CONST-00970,2024-12-05,V-CONST-010,Ramco Cements,construction,0.797,3.8,12,0.0247,0.0214,0.056,83.5,1,True,Medium,on_time_delivery,3.8,Medium
+PO-CONST-00971,2025-04-27,V-CONST-010,Ramco Cements,construction,0.855,2.1,6,0.026,0.0111,0.084,79.3,1,False,Low,on_time_delivery,3.7,Medium
+PO-CONST-00972,2023-05-09,V-CONST-010,Ramco Cements,construction,0.934,0.4,2,0.0101,0.0061,-0.016,94.2,0,True,High,on_time_delivery,4.7,Low
+PO-CONST-00973,2025-08-25,V-CONST-010,Ramco Cements,construction,0.791,4.3,12,0.0255,0.0227,0.063,74.3,0,False,Low,delayed_delivery,3.4,Medium
+PO-CONST-00974,2024-06-05,V-CONST-010,Ramco Cements,construction,0.791,3.7,5,0.035,0.0216,0.06,76.6,0,False,Medium,delayed_delivery,4.1,Medium
+PO-CONST-00975,2025-12-05,V-CONST-010,Ramco Cements,construction,0.815,4.3,7,0.0221,0.0194,0.087,75.3,1,False,Medium,delayed_delivery,3.7,Medium
+PO-CONST-00976,2024-07-18,V-CONST-010,Ramco Cements,construction,0.924,0.5,5,0.0107,0.0044,-0.016,91.9,0,True,Medium,on_time_delivery,4.8,Low
+PO-CONST-00977,2023-04-02,V-CONST-010,Ramco Cements,construction,0.623,9.1,10,0.0968,0.0664,0.182,45.8,2,False,Low,defective_shipment,2.5,High
+PO-CONST-00978,2025-07-01,V-CONST-010,Ramco Cements,construction,0.956,0.3,2,0.0104,0.0056,0.008,90.4,0,True,Medium,on_time_delivery,4.5,Low
+PO-CONST-00979,2024-12-03,V-CONST-010,Ramco Cements,construction,0.826,2.6,7,0.0287,0.0127,0.04,80.8,1,False,Medium,on_time_delivery,3.8,Medium
+PO-CONST-00980,2023-10-09,V-CONST-010,Ramco Cements,construction,0.793,2.5,9,0.0286,0.0217,0.063,78.2,1,False,Low,delayed_delivery,3.5,Medium
+PO-CONST-00981,2023-12-28,V-CONST-010,Ramco Cements,construction,0.777,3.8,9,0.0405,0.0221,0.084,83.5,1,False,Low,delayed_delivery,3.9,Medium
+PO-CONST-00982,2024-04-17,V-CONST-010,Ramco Cements,construction,0.505,5.6,12,0.1109,0.0443,0.243,52.4,3,False,Medium,delayed_delivery,3.1,High
+PO-CONST-00983,2025-05-26,V-CONST-010,Ramco Cements,construction,0.878,4.1,8,0.0201,0.0119,0.04,72.4,0,True,Medium,delayed_delivery,3.6,Medium
+PO-CONST-00984,2025-03-04,V-CONST-010,Ramco Cements,construction,0.757,2.1,8,0.0442,0.0234,0.059,75.9,1,True,Medium,delayed_delivery,4.1,Medium
+PO-CONST-00985,2024-08-26,V-CONST-010,Ramco Cements,construction,0.869,1.9,5,0.0418,0.0268,0.049,73.6,1,True,Medium,on_time_delivery,3.6,Medium
+PO-CONST-00986,2024-02-24,V-CONST-010,Ramco Cements,construction,0.968,0.3,5,0.0105,0.0002,0.005,97.5,0,False,Medium,on_time_delivery,4.9,Low
+PO-CONST-00987,2023-11-03,V-CONST-010,Ramco Cements,construction,0.875,4.1,9,0.0374,0.0136,0.053,81.4,0,True,Medium,delayed_delivery,4.2,Medium
+PO-CONST-00988,2025-07-18,V-CONST-010,Ramco Cements,construction,0.874,3.0,8,0.0373,0.0234,0.054,73.2,1,False,Medium,delayed_delivery,3.7,Medium
+PO-CONST-00989,2025-09-18,V-CONST-010,Ramco Cements,construction,0.528,10.3,15,0.0815,0.0611,0.168,63.7,3,False,Medium,defective_shipment,2.5,High
+PO-CONST-00990,2025-05-05,V-CONST-010,Ramco Cements,construction,0.793,2.6,12,0.0302,0.0197,0.074,84.5,1,True,Medium,delayed_delivery,4.1,Medium
+PO-CONST-00991,2023-12-13,V-CONST-010,Ramco Cements,construction,0.761,2.8,6,0.0447,0.0198,0.066,80.1,1,True,Low,on_time_delivery,3.8,Medium
+PO-CONST-00992,2024-09-13,V-CONST-010,Ramco Cements,construction,0.818,4.0,8,0.0336,0.0235,0.074,85.8,0,False,Low,delayed_delivery,4.0,Medium
+PO-CONST-00993,2025-02-16,V-CONST-010,Ramco Cements,construction,0.527,6.0,14,0.0707,0.0533,0.227,55.3,2,False,Low,delayed_delivery,2.1,High
+PO-CONST-00994,2023-11-03,V-CONST-010,Ramco Cements,construction,0.759,2.9,6,0.0294,0.0164,0.06,81.8,1,False,Medium,on_time_delivery,3.6,Medium
+PO-CONST-00995,2025-08-21,V-CONST-010,Ramco Cements,construction,0.83,1.6,12,0.0444,0.019,0.058,75.6,1,False,Low,on_time_delivery,4.0,Medium
+PO-CONST-00996,2024-11-16,V-CONST-010,Ramco Cements,construction,0.879,2.6,12,0.0385,0.0116,0.053,73.3,0,True,Medium,on_time_delivery,4.0,Medium
+PO-CONST-00997,2024-01-11,V-CONST-010,Ramco Cements,construction,0.79,3.8,12,0.0238,0.0174,0.041,73.8,1,True,Medium,delayed_delivery,3.8,Medium
+PO-CONST-00998,2025-10-13,V-CONST-010,Ramco Cements,construction,0.854,3.1,5,0.0248,0.0121,0.066,74.4,1,False,Low,delayed_delivery,3.6,Medium
+PO-CONST-00999,2023-11-05,V-CONST-010,Ramco Cements,construction,0.876,1.7,12,0.0311,0.0101,0.079,83.3,0,False,Low,on_time_delivery,3.5,Medium
+PO-CONST-01000,2025-10-28,V-CONST-010,Ramco Cements,construction,0.814,3.6,6,0.0207,0.0125,0.077,85.3,1,True,Medium,on_time_delivery,3.7,Medium

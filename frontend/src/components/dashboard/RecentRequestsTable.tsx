@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ocrApi } from "@/lib/api";
 import { ExternalLink, ChevronLeft, ChevronRight, Loader2, RefreshCw } from "lucide-react";
 import Link from "next/link";
-import { formatCurrency, cn } from "@/lib/utils";
+import { formatCurrency, formatDateTime, cn } from "@/lib/utils";
 import { useState } from "react";
 
 export function RecentRequestsTable() {
@@ -69,7 +69,7 @@ export function RecentRequestsTable() {
                   <td className="font-medium text-slate-500">#{req.id}</td>
                   <td className="font-medium text-slate-800 max-w-[180px] truncate">{req.requester_name}</td>
                   <td className="font-semibold text-slate-900">{formatCurrency(req.total_estimated_cost)}</td>
-                  <td className="text-slate-400 text-xs whitespace-nowrap">{req.created_at?.slice(0, 16)}</td>
+                  <td className="text-slate-500 text-xs whitespace-nowrap">{formatDateTime(req.created_at)}</td>
                   <td>
                     <TriggerButton requestId={req.id} />
                   </td>

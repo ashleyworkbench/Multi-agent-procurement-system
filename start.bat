@@ -42,8 +42,8 @@ timeout /t 10 /nobreak >nul
 
 REM 4. Start Autonomous Agents
 echo.
-echo [3/4] Starting Autonomous AI Agents (1, 2, 3, 4)...
-docker compose up -d agent1-ocr agent2-inventory agent3-vendor agent4-procurement
+echo [3/4] Starting Autonomous AI Agents (1, 2, 3, 4, Risk Agent)...
+docker compose up -d agent1-ocr agent2-inventory agent3-vendor agent4-procurement agent-risk
 if %errorlevel% neq 0 (
     echo [ERROR] Failed to start autonomous agents.
     exit /b %errorlevel%
@@ -74,6 +74,7 @@ echo   Agent 1 (OCR/LLM):   http://localhost:8009
 echo   Agent 2 (Inventory): http://localhost:8005
 echo   Agent 3 (Vendor):    http://localhost:8006
 echo   Agent 4 (Procure):   http://localhost:8008
+echo   Agent Risk:          http://localhost:8010
 echo   MinIO Console:       http://localhost:9001 (minioadmin / minioadmin)
 echo =================================================
 echo.

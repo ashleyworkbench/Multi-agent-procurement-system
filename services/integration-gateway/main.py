@@ -894,10 +894,23 @@ async def proxy_update_po_status(po_id: int, request: Request):
     )
 
 @app.get("/agent-logs")
-async def proxy_agent_logs(limit: int = 100, source_agent: Optional[str] = None):
-    params = {"limit": limit}
+async def proxy_agent_logs(
+    limit: int = 100,
+    source_agent: Optional[str] = None,
+    topic: Optional[str] = None,
+    event_type: Optional[str] = None,
+    search: Optional[str] = None,
+):
+    params: dict = {"limit": limit}
     if source_agent:
         params["source_agent"] = source_agent
+    if topic:
+        params["topic"] = topic
+    if event_type:
+        params["event_type"] = event_type
+    if search:
+        params["search"] = search
+
     async with httpx.AsyncClient(timeout=10.0) as client:
         resp = await client.get(
             f"{PROC_SVC_URL}/agent-logs",
@@ -905,6 +918,60 @@ async def proxy_agent_logs(limit: int = 100, source_agent: Optional[str] = None)
             headers={"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
         )
         return resp.json()
+
+@app.get("/kafka-logs")
+async def proxy_kafka_logs(
+    limit: int = 100,
+    source_agent: Optional[str] = None,
+    topic: Optional[str] = None,
+    event_type: Optional[str] = None,
+    search: Optional[str] = None,
+):
+    return await proxy_agent_logs(limit, source_agent, topic, event_type, search)
+
+@app.get("/kafka/status")
+async def proxy_kafka_status():
+    return {
+        "status": "connected",
+        "broker": "kafka:9092",
+        "topics": [
+            {
+                "name": "invoice-topic",
+                "producer": "agent_1",
+                "consumer": "agent_1",
+                "stage": "Document Ingestion",
+                "description": "Folder drop or upload triggers invoice ingestion into MinIO",
+            },
+            {
+                "name": "ocr-request-topic",
+                "producer": "agent_1",
+                "consumer": "agent_2",
+                "stage": "OCR & Extraction",
+                "description": "Extracted invoice line items forwarded for inventory evaluation",
+            },
+            {
+                "name": "inventory-evaluation-topic",
+                "producer": "agent_2",
+                "consumer": "agent_3",
+                "stage": "Inventory Check",
+                "description": "Shortage calculation across industry stock databases",
+            },
+            {
+                "name": "vendor-recommendation-topic",
+                "producer": "agent_3",
+                "consumer": "agent_4",
+                "stage": "Vendor Selection",
+                "description": "Multi-factor vendor scoring and ranking for shortage items",
+            },
+            {
+                "name": "purchase-order-topic",
+                "producer": "agent_4",
+                "consumer": "approval_subsystem",
+                "stage": "PO Generation & DocuSign",
+                "description": "Purchase order created, emailed, and DocuSign stamp archived in MinIO",
+            },
+        ],
+    }
 
 @app.get("/events")
 async def proxy_events(limit: int = 100):

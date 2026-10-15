@@ -1,15 +1,18 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, Fragment } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { riskApi, INDUSTRIES, getStoredUser } from "@/lib/api";
-import { cn } from "@/lib/utils";
+import { cn, formatDateTime, formatDate } from "@/lib/utils";
 import {
   ShieldAlert, RefreshCw, MessageSquarePlus,
   ChevronDown, ChevronUp, AlertTriangle, CheckCircle2,
   Loader2, Activity, WifiOff, BarChart2, ClipboardList,
+  Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
+import { AgentRationaleCard } from "@/components/common/AgentRationaleCard";
+import AdminFeedbackModal from "./AdminFeedbackModal";
 
 // ------------------------------------------------------------------ //
 // Types                                                                //
@@ -59,10 +62,17 @@ function PillarBar({ name, value }: { name: string; value: number }) {
 // ------------------------------------------------------------------ //
 export default function RiskAnalysisView() {
   const queryClient = useQueryClient();
-  const [expandedHistory, setExpandedHistory] = useState<number | null>(null);
+  const [expandedHistory, setExpandedHistory] = useState<string | number | null>(null);
   const qc = useQueryClient();
   const [companyId, setCompanyId] = useState<string>(INDUSTRIES[0]);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [feedbackVendor, setFeedbackVendor] = useState<{
+    vendor_id?: string;
+    vendor_name?: string;
+    risk_level?: string | null;
+    order_id?: string | null;
+  } | null>(null);
+  const [showFeedbackList, setShowFeedbackList] = useState(false);
 
   useEffect(() => {
     setIsAdmin(getStoredUser()?.role === "Admin");
@@ -74,6 +84,14 @@ export default function RiskAnalysisView() {
     queryFn: () => riskApi.getStatus(),
     refetchInterval: 15_000,
     retry: 1,
+  });
+
+  const { data: feedbackData } = useQuery({
+    queryKey: ["risk-feedback", companyId],
+    queryFn: () => riskApi.getFeedback(companyId),
+    refetchInterval: 15_000,
+    retry: 1,
+    enabled: !!companyId,
   });
 
   const { data: modelStatus } = useQuery({
@@ -103,7 +121,7 @@ export default function RiskAnalysisView() {
   const analyzeMut = useMutation({
     mutationFn: () => riskApi.analyzeRisk(companyId),
     onSuccess: () => {
-      toast.success("Risk analysis complete ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â scores updated");
+      toast.success("Risk analysis complete — scores updated");
     },
     onError: () => toast.error("Analysis failed. Check if the agent is running."),
   });
@@ -126,7 +144,7 @@ export default function RiskAnalysisView() {
     mutationFn: () => riskApi.syncVendorHistory(companyId),
     onSuccess: (result) => {
       toast.success(
-        `Vendor data synced successfully ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â ${result?.records_ready ?? 0} records ready`
+        `Vendor data synced successfully — ${result?.records_ready ?? 0} records ready`
       );
       qc.invalidateQueries({ queryKey: ["vendor-history-config", companyId] });
       qc.invalidateQueries({ queryKey: ["risk-model-status", companyId] });
@@ -288,7 +306,7 @@ export default function RiskAnalysisView() {
             <p className="text-xs text-slate-500">Last Synced</p>
             <p className="text-sm font-semibold text-slate-800 mt-1">
               {vendorHistoryConfig?.fetched_at
-                ? new Date(vendorHistoryConfig.fetched_at).toLocaleString()
+                ? formatDateTime(vendorHistoryConfig.fetched_at)
                 : "Never"}
             </p>
           </div>
@@ -351,7 +369,7 @@ export default function RiskAnalysisView() {
               <span className="text-slate-500">
                 Trained:{" "}
                 <strong>
-                  {new Date(modelStatus.active_model.trained_at ?? modelStatus.active_model.deployed_at).toLocaleDateString()}
+                  {formatDate(modelStatus.active_model.trained_at ?? modelStatus.active_model.deployed_at)}
                 </strong>
               </span>
             </>
@@ -363,6 +381,141 @@ export default function RiskAnalysisView() {
           )}
         </div>
       )}
+
+      {/* Continuous Learning & Feedback Loop Section */}
+      <div className="section-card bg-gradient-to-br from-white to-purple-50/20 border border-purple-100 shadow-xs">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+          <div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <div className="w-8 h-8 rounded-lg bg-purple-100/80 text-purple-700 flex items-center justify-center font-bold">
+                <Sparkles size={16} />
+              </div>
+              <h2 className="font-semibold text-slate-800 text-base">
+                Continuous Learning & Feedback Loop
+              </h2>
+              <span className="badge badge-purple text-xs">
+                Auto-Retrain Threshold: {modelStatus?.auto_retrain_threshold ?? 5} Feedbacks
+              </span>
+            </div>
+            <p className="text-xs text-slate-500 mt-1 max-w-2xl leading-relaxed">
+              When an order is completed, actual delivery performance (timeliness, defect rate, verified risk) is recorded.
+              Once <strong>{modelStatus?.auto_retrain_threshold ?? 5} unconsumed feedback records</strong> accumulate, Agent 5 automatically retrains the Random Forest model and promotes it if performance benchmarks pass.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              className="btn-primary text-xs flex items-center gap-1.5 bg-purple-600 hover:bg-purple-700 text-white shadow-xs"
+              onClick={() => setFeedbackVendor({})}
+            >
+              <MessageSquarePlus size={14} />
+              <span>+ Record Vendor Feedback</span>
+            </button>
+            <button
+              className="btn-secondary text-xs flex items-center gap-1 text-slate-600"
+              onClick={() => setShowFeedbackList(!showFeedbackList)}
+            >
+              <ClipboardList size={13} />
+              <span>{showFeedbackList ? "Hide History" : `View Feedback (${feedbackData?.count ?? 0})`}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Progress meter */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+          <div className="bg-white rounded-xl p-3 border border-slate-200/80">
+            <div className="flex items-center justify-between text-xs text-slate-500 mb-1.5">
+              <span className="font-medium text-slate-700">Auto-Retrain Buffer</span>
+              <span className="font-bold text-purple-700">
+                {modelStatus?.unconsumed_feedback_count ?? 0} / {modelStatus?.auto_retrain_threshold ?? 5}
+              </span>
+            </div>
+            <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 transition-all duration-500"
+                style={{
+                  width: `${Math.min(
+                    100,
+                    (((modelStatus?.unconsumed_feedback_count ?? 0) / (modelStatus?.auto_retrain_threshold ?? 5)) * 100)
+                  )}%`,
+                }}
+              />
+            </div>
+            <p className="text-[11px] text-slate-400 mt-1.5">
+              {(modelStatus?.auto_retrain_threshold ?? 5) - (modelStatus?.unconsumed_feedback_count ?? 0) > 0
+                ? `${(modelStatus?.auto_retrain_threshold ?? 5) - (modelStatus?.unconsumed_feedback_count ?? 0)} more feedback record(s) until automatic retraining`
+                : "Threshold reached! Model retraining triggered in background"}
+            </p>
+          </div>
+
+          <div className="bg-white rounded-xl p-3 border border-slate-200/80">
+            <span className="text-xs text-slate-500">Auto-Retrain Policy</span>
+            <p className="text-base font-bold text-slate-800 mt-0.5">
+              Every {modelStatus?.auto_retrain_threshold ?? 5} Feedback Records
+            </p>
+            <p className="text-[11px] text-slate-400 mt-0.5">
+              Safe promotion: candidate tested against thresholds
+            </p>
+          </div>
+
+          <div className="bg-white rounded-xl p-3 border border-slate-200/80">
+            <span className="text-xs text-slate-500">Total Feedback Stored</span>
+            <p className="text-base font-bold text-slate-800 mt-0.5">
+              {feedbackData?.count ?? 0} Records
+            </p>
+            <p className="text-[11px] text-slate-400 mt-0.5">
+              Continuous supervised dataset in PostgreSQL
+            </p>
+          </div>
+        </div>
+
+        {/* Collapsible Feedback List */}
+        {showFeedbackList && (
+          <div className="mt-4 pt-4 border-t border-slate-200/60">
+            <h4 className="text-xs font-semibold text-slate-700 mb-2">Recorded Feedback Records</h4>
+            {(!feedbackData?.feedback || feedbackData.feedback.length === 0) ? (
+              <p className="text-xs text-slate-400 italic py-2">
+                No feedback records recorded yet. Click &quot;+ Record Vendor Feedback&quot; or provide feedback from Purchase Orders.
+              </p>
+            ) : (
+              <div className="overflow-x-auto max-h-60 overflow-y-auto">
+                <table className="w-full text-xs bg-white rounded-lg border border-slate-200">
+                  <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 sticky top-0">
+                    <tr>
+                      <th className="p-2 text-left">Time</th>
+                      <th className="p-2 text-left">Vendor</th>
+                      <th className="p-2 text-left">Order ID</th>
+                      <th className="p-2 text-left">Rating</th>
+                      <th className="p-2 text-left">Outcome</th>
+                      <th className="p-2 text-left">Verified Risk</th>
+                      <th className="p-2 text-left">Consumed</th>
+                      <th className="p-2 text-left">Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {feedbackData.feedback.map((f: any, i: number) => (
+                      <tr key={f.id ?? i} className="border-b border-slate-100 hover:bg-slate-50/50">
+                        <td className="p-2 text-slate-500 whitespace-nowrap">{f.created_at ? formatDateTime(f.created_at) : "—"}</td>
+                        <td className="p-2 font-medium text-slate-800">{f.vendor_name || f.vendor_id}</td>
+                        <td className="p-2 text-slate-600 font-mono">{f.order_id || "—"}</td>
+                        <td className="p-2 font-semibold text-amber-600">⭐ {Number(f.rating).toFixed(1)}</td>
+                        <td className="p-2 capitalize">{f.actual_outcome?.replace(/_/g, " ") || "—"}</td>
+                        <td className="p-2"><RiskBadge label={f.verified_risk_label || f.actual_risk_label} /></td>
+                        <td className="p-2">
+                          <span className={cn("badge text-[10px]", f.consumed ? "badge-slate" : "badge-green")}>
+                            {f.consumed ? "Consumed" : "Queued"}
+                          </span>
+                        </td>
+                        <td className="p-2 text-slate-500 max-w-xs truncate">{f.notes || f.admin_notes || "—"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
 
       {/* Vendor / PO Risk Analysis History */}
       <div className="section-card">
@@ -452,306 +605,338 @@ export default function RiskAnalysisView() {
                 </thead>
 
                 <tbody>
-                  {uniqueEvents.map((event: any) => {
+                  {uniqueEvents.flatMap((event: any) => {
                     const payload = event.parsedPayload ?? {};
-                    const recommendations = Array.isArray(payload.recommendations)
+                    const recommendations = Array.isArray(payload.recommendations) && payload.recommendations.length > 0
                       ? payload.recommendations
-                      : [];
-                    const first = recommendations[0] ?? {};
-                    const best = first.best_vendor ?? null;
+                      : [{}];
                     const requestId = payload.request_id ?? event.id;
-                    const isExpanded = expandedHistory === requestId;
 
-                    return (
-                      <Fragment key={requestId}>
-                        <tr
-                          className="border-b border-slate-100 hover:bg-slate-50 cursor-pointer"
-                          onClick={() =>
-                            setExpandedHistory(isExpanded ? null : requestId)
-                          }
-                        >
-                          <td className="py-3 px-3">
-                            {isExpanded ? (
-                              <ChevronUp size={16} />
-                            ) : (
-                              <ChevronDown size={16} />
-                            )}
-                          </td>
+                    return recommendations.map((rec: any, recIdx: number) => {
+                      const best = rec.best_vendor ?? null;
+                      const rowKey = `${requestId}-${recIdx}`;
+                      const isExpanded = expandedHistory === rowKey;
 
-                          <td className="py-3 px-3 whitespace-nowrap">
-                            {event.created_at
-                              ? new Date(event.created_at).toLocaleDateString()
-                              : "—"}
-                          </td>
+                      return (
+                        <Fragment key={rowKey}>
+                          <tr
+                            className="border-b border-slate-100 hover:bg-slate-50 cursor-pointer"
+                            onClick={() =>
+                              setExpandedHistory(isExpanded ? null : rowKey)
+                            }
+                          >
+                            <td className="py-3 px-3">
+                              {isExpanded ? (
+                                <ChevronUp size={16} />
+                              ) : (
+                                <ChevronDown size={16} />
+                              )}
+                            </td>
 
-                          <td className="py-3 px-3 font-medium">
-                            #{requestId}
-                          </td>
+                            <td className="py-3 px-3 whitespace-nowrap">
+                              {event.created_at
+                                ? formatDateTime(event.created_at)
+                                : "—"}
+                            </td>
 
-                          <td className="py-3 px-3 capitalize">
-                            {first.industry ?? "—"}
-                          </td>
+                            <td className="py-3 px-3 font-medium">
+                              #{requestId}
+                            </td>
 
-                          <td className="py-3 px-3">
-                            {first.item_name ?? first.item_description ?? "—"}
-                          </td>
+                            <td className="py-3 px-3 capitalize">
+                              {rec.industry ?? "—"}
+                            </td>
 
-                          <td className="py-3 px-3">
-                            {first.requested_quantity ?? first.quantity ?? "—"}
-                          </td>
+                            <td className="py-3 px-3">
+                              {rec.item_name ?? rec.item_description ?? "—"}
+                            </td>
 
-                          <td className="py-3 px-3 font-medium">
-                            {best?.vendor_name ?? "No vendor selected"}
-                          </td>
+                            <td className="py-3 px-3">
+                              {rec.requested_quantity ?? rec.quantity ?? "—"}
+                            </td>
 
-                          <td className="py-3 px-3">
-                            {best?.risk_level ? (
-                              <RiskBadge label={best.risk_level} />
-                            ) : (
-                              "—"
-                            )}
-                          </td>
+                            <td className="py-3 px-3 font-medium">
+                              {best?.vendor_name ?? "No vendor selected"}
+                            </td>
 
-                          <td className="py-3 px-3 font-semibold">
-                            {best?.risk_score != null
-                              ? Number(best.risk_score).toFixed(1)
-                              : "—"}
-                          </td>
-                        </tr>
+                            <td className="py-3 px-3">
+                              {best?.risk_level ? (
+                                <RiskBadge label={best.risk_level} />
+                              ) : (
+                                "—"
+                              )}
+                            </td>
 
-                        {isExpanded && (
-                          <tr className="border-b border-slate-200 bg-slate-50">
-                            <td colSpan={9} className="p-4">
-                              <div className="space-y-5">
-
-                                <div>
-                                  <h3 className="font-semibold text-slate-800 mb-3">
-                                    Possible Vendors for this Order
-                                  </h3>
-
-                                  {Array.isArray(first.all_vendors) &&
-                                  first.all_vendors.length > 0 ? (
-                                    <div className="overflow-x-auto">
-                                      <table className="w-full text-sm bg-white rounded-lg">
-                                        <thead>
-                                          <tr className="border-b border-slate-200">
-                                            <th className="text-left p-3">Vendor</th>
-                                            <th className="text-left p-3">Risk</th>
-                                            <th className="text-left p-3">Risk Score</th>
-                                            <th className="text-left p-3">Suitability</th>
-                                            <th className="text-left p-3">Lead Time</th>
-                                            <th className="text-left p-3">Unit Price</th>
-                                            <th className="text-left p-3">Total Price</th>
-                                          </tr>
-                                        </thead>
-
-                                        <tbody>
-                                          {first.all_vendors.map(
-                                            (vendor: any, index: number) => {
-                                              const selected =
-                                                best &&
-                                                (vendor.vendor_id === best.vendor_id ||
-                                                  vendor.purchase_vendor_id ===
-                                                    best.purchase_vendor_id);
-
-                                              return (
-                                                <tr
-                                                  key={`${vendor.vendor_id ?? vendor.vendor_name}-${index}`}
-                                                  className={cn(
-                                                    "border-b border-slate-100",
-                                                    selected && "bg-green-50"
-                                                  )}
-                                                >
-                                                  <td className="p-3 font-medium">
-                                                    <div className="flex items-center gap-2">
-                                                      {selected && (
-                                                        <CheckCircle2
-                                                          size={15}
-                                                          className="text-green-600"
-                                                        />
-                                                      )}
-                                                      {vendor.vendor_name ?? "Unknown Vendor"}
-                                                    </div>
-                                                  </td>
-
-                                                  <td className="p-3">
-                                                    <RiskBadge label={vendor.risk_level} />
-                                                  </td>
-
-                                                  <td className="p-3">
-                                                    {vendor.risk_score != null
-                                                      ? Number(vendor.risk_score).toFixed(1)
-                                                      : "—"}
-                                                  </td>
-
-                                                  <td className="p-3">
-                                                    {vendor.suitability_score != null
-                                                      ? Number(vendor.suitability_score).toFixed(1)
-                                                      : "—"}
-                                                  </td>
-
-                                                  <td className="p-3">
-                                                    {vendor.lead_time_days != null
-                                                      ? `${vendor.lead_time_days} days`
-                                                      : "—"}
-                                                  </td>
-
-                                                  <td className="p-3">
-                                                    {vendor.unit_price != null
-                                                      ? `₹${Number(vendor.unit_price).toLocaleString("en-IN")}`
-                                                      : "—"}
-                                                  </td>
-
-                                                  <td className="p-3">
-                                                    {vendor.total_price != null
-                                                      ? `₹${Number(vendor.total_price).toLocaleString("en-IN")}`
-                                                      : "—"}
-                                                  </td>
-                                                </tr>
-                                              );
-                                            }
-                                          )}
-                                        </tbody>
-                                      </table>
-                                    </div>
-                                  ) : (
-                                    <p className="text-sm text-slate-500">
-                                      No detailed vendor list is available for this historical record.
-                                    </p>
-                                  )}
-                                </div>
-
-                                {best && (
-                                  <div className="section-card bg-white border-green-200">
-                                    <h3 className="font-semibold text-slate-800 mb-3">
-                                      Selected Vendor
-                                    </h3>
-
-                                    <div className="flex items-center gap-3 mb-4">
-                                      <CheckCircle2
-                                        size={20}
-                                        className="text-green-600"
-                                      />
-                                      <span className="text-lg font-bold">
-                                        {best.vendor_name ?? "Unknown Vendor"}
-                                      </span>
-                                      <RiskBadge label={best.risk_level} />
-                                    </div>
-
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                                      <div>
-                                        <p className="text-xs text-slate-500">Risk Score</p>
-                                        <p className="font-semibold">
-                                          {best.risk_score != null
-                                            ? Number(best.risk_score).toFixed(1)
-                                            : "—"}
-                                        </p>
-                                      </div>
-
-                                      <div>
-                                        <p className="text-xs text-slate-500">Suitability</p>
-                                        <p className="font-semibold">
-                                          {best.suitability_score != null
-                                            ? Number(best.suitability_score).toFixed(1)
-                                            : "—"}
-                                        </p>
-                                      </div>
-
-                                      <div>
-                                        <p className="text-xs text-slate-500">Lead Time</p>
-                                        <p className="font-semibold">
-                                          {best.lead_time_days != null
-                                            ? `${best.lead_time_days} days`
-                                            : "—"}
-                                        </p>
-                                      </div>
-
-                                      <div>
-                                        <p className="text-xs text-slate-500">Confidence</p>
-                                        <p className="font-semibold">
-                                          {best.confidence != null
-                                            ? `${(Number(best.confidence) * 100).toFixed(1)}%`
-                                            : "—"}
-                                        </p>
-                                      </div>
-
-                                      <div>
-                                        <p className="text-xs text-slate-500">Unit Price</p>
-                                        <p className="font-semibold">
-                                          {best.unit_price != null
-                                            ? `₹${Number(best.unit_price).toLocaleString("en-IN")}`
-                                            : "—"}
-                                        </p>
-                                      </div>
-
-                                      <div>
-                                        <p className="text-xs text-slate-500">Total Price</p>
-                                        <p className="font-semibold">
-                                          {best.total_price != null
-                                            ? `₹${Number(best.total_price).toLocaleString("en-IN")}`
-                                            : "—"}
-                                        </p>
-                                      </div>
-
-                                      <div>
-                                        <p className="text-xs text-slate-500">Can Fulfill</p>
-                                        <p className="font-semibold">
-                                          {best.can_fulfill == null
-                                            ? "—"
-                                            : best.can_fulfill
-                                              ? "Yes"
-                                              : "No"}
-                                        </p>
-                                      </div>
-                                    </div>
-
-                                    {(
-                                      best.reasons?.length ||
-                                      best.risk_factors?.length ||
-                                      first.reasons?.length
-                                    ) ? (
-                                      <div className="mt-5 pt-4 border-t border-slate-100">
-                                        <p className="text-sm font-semibold text-slate-700 mb-2">
-                                          Why This Vendor Was Chosen
-                                        </p>
-
-                                        <ul className="space-y-1 text-sm text-slate-600">
-                                          {[
-                                            ...(best.reasons ?? []),
-                                            ...(best.risk_factors ?? []),
-                                            ...(first.reasons ?? []),
-                                          ]
-                                            .filter(Boolean)
-                                            .filter(
-                                              (reason: string, index: number, arr: string[]) =>
-                                                arr.indexOf(reason) === index
-                                            )
-                                            .map((reason: string, index: number) => (
-                                              <li key={`${reason}-${index}`}>
-                                                • {reason}
-                                              </li>
-                                            ))}
-                                        </ul>
-                                      </div>
-                                    ) : null}
-                                  </div>
-                                )}
-
-                                {!best && (
-                                  <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-4 text-sm text-yellow-800">
-                                    No vendor was selected for this procurement request.
-                                    {first.notes && (
-                                      <p className="mt-1">{first.notes}</p>
-                                    )}
-                                  </div>
-                                )}
-
-                              </div>
+                            <td className="py-3 px-3 font-semibold">
+                              {best?.risk_score != null
+                                ? Number(best.risk_score).toFixed(1)
+                                : "—"}
                             </td>
                           </tr>
-                        )}
-                      </Fragment>
-                    );
+
+                          {isExpanded && (
+                            <tr className="border-b border-slate-200 bg-slate-50">
+                              <td colSpan={9} className="p-4">
+                                <div className="space-y-5">
+
+                                  <div>
+                                    <h3 className="font-semibold text-slate-800 mb-3">
+                                      Possible Vendors for {rec.item_name ?? "this Order"}
+                                    </h3>
+
+                                    {Array.isArray(rec.all_vendors) &&
+                                    rec.all_vendors.length > 0 ? (
+                                      <div className="overflow-x-auto">
+                                        <table className="w-full text-sm bg-white rounded-lg">
+                                          <thead>
+                                            <tr className="border-b border-slate-200">
+                                              <th className="text-left p-3">Vendor</th>
+                                              <th className="text-left p-3">Risk</th>
+                                              <th className="text-left p-3">Risk Score</th>
+                                              <th className="text-left p-3">Suitability</th>
+                                              <th className="text-left p-3">Lead Time</th>
+                                              <th className="text-left p-3">Unit Price</th>
+                                              <th className="text-left p-3">Total Price</th>
+                                              <th className="text-right p-3">Action</th>
+                                            </tr>
+                                          </thead>
+
+                                          <tbody>
+                                            {rec.all_vendors.map(
+                                              (vendor: any, index: number) => {
+                                                const selected =
+                                                  best &&
+                                                  (vendor.vendor_id === best.vendor_id ||
+                                                    vendor.purchase_vendor_id ===
+                                                      best.purchase_vendor_id);
+
+                                                return (
+                                                  <tr
+                                                    key={`${vendor.vendor_id ?? vendor.vendor_name}-${index}`}
+                                                    className={cn(
+                                                      "border-b border-slate-100",
+                                                      selected && "bg-green-50"
+                                                    )}
+                                                  >
+                                                    <td className="p-3 font-medium">
+                                                      <div className="flex items-center gap-2">
+                                                        {selected && (
+                                                          <CheckCircle2
+                                                            size={15}
+                                                            className="text-green-600"
+                                                          />
+                                                        )}
+                                                        {vendor.vendor_name ?? "Unknown Vendor"}
+                                                      </div>
+                                                    </td>
+
+                                                    <td className="p-3">
+                                                      <RiskBadge label={vendor.risk_level} />
+                                                    </td>
+
+                                                    <td className="p-3">
+                                                      {vendor.risk_score != null
+                                                        ? Number(vendor.risk_score).toFixed(1)
+                                                        : "—"}
+                                                    </td>
+
+                                                    <td className="p-3">
+                                                      {vendor.suitability_score != null
+                                                        ? Number(vendor.suitability_score).toFixed(1)
+                                                        : "—"}
+                                                    </td>
+
+                                                    <td className="p-3">
+                                                      {vendor.lead_time_days != null
+                                                        ? `${vendor.lead_time_days} days`
+                                                        : "—"}
+                                                    </td>
+
+                                                    <td className="p-3">
+                                                      {vendor.unit_price != null
+                                                        ? `₹${Number(vendor.unit_price).toLocaleString("en-IN")}`
+                                                        : "—"}
+                                                    </td>
+
+                                                    <td className="p-3">
+                                                      {vendor.total_price != null
+                                                        ? `₹${Number(vendor.total_price).toLocaleString("en-IN")}`
+                                                        : "—"}
+                                                    </td>
+
+                                                    <td className="p-3 text-right">
+                                                      <button
+                                                        className="btn-secondary text-xs px-2.5 py-1 inline-flex items-center gap-1 text-slate-700 hover:text-purple-600 hover:border-purple-300"
+                                                        onClick={() => setFeedbackVendor({
+                                                          vendor_id: vendor.vendor_id || vendor.purchase_vendor_id,
+                                                          vendor_name: vendor.vendor_name,
+                                                          risk_level: vendor.risk_level,
+                                                          order_id: String(requestId)
+                                                        })}
+                                                        title="Submit delivery feedback for ML retraining"
+                                                      >
+                                                        <MessageSquarePlus size={12} className="text-purple-600" />
+                                                        <span>Feedback</span>
+                                                      </button>
+                                                    </td>
+                                                  </tr>
+                                                );
+                                              }
+                                            )}
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    ) : (
+                                      <p className="text-sm text-slate-500">
+                                        No detailed vendor list is available for this historical record.
+                                      </p>
+                                    )}
+                                  </div>
+
+                                  {best && (
+                                    <div className="section-card bg-white border-green-200">
+                                      <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+                                        <h3 className="font-semibold text-slate-800">
+                                          Selected Vendor
+                                        </h3>
+                                        <button
+                                          className="btn-secondary text-xs px-2.5 py-1 inline-flex items-center gap-1.5 text-purple-700 bg-purple-50/70 border-purple-200 hover:bg-purple-100"
+                                          onClick={() => setFeedbackVendor({
+                                            vendor_id: best.vendor_id || best.purchase_vendor_id,
+                                            vendor_name: best.vendor_name,
+                                            risk_level: best.risk_level,
+                                            order_id: String(requestId)
+                                          })}
+                                        >
+                                          <MessageSquarePlus size={13} className="text-purple-600" />
+                                          <span>Provide Delivery Feedback</span>
+                                        </button>
+                                      </div>
+
+                                      <div className="flex items-center gap-3 mb-4">
+                                        <CheckCircle2
+                                          size={20}
+                                          className="text-green-600"
+                                        />
+                                        <span className="text-lg font-bold">
+                                          {best.vendor_name ?? "Unknown Vendor"}
+                                        </span>
+                                        <RiskBadge label={best.risk_level} />
+                                      </div>
+
+                                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                        <div>
+                                          <p className="text-xs text-slate-500">Risk Score</p>
+                                          <p className="font-semibold">
+                                            {best.risk_score != null
+                                              ? Number(best.risk_score).toFixed(1)
+                                              : "—"}
+                                          </p>
+                                        </div>
+
+                                        <div>
+                                          <p className="text-xs text-slate-500">Suitability</p>
+                                          <p className="font-semibold">
+                                            {best.suitability_score != null
+                                              ? Number(best.suitability_score).toFixed(1)
+                                              : "—"}
+                                          </p>
+                                        </div>
+
+                                        <div>
+                                          <p className="text-xs text-slate-500">Lead Time</p>
+                                          <p className="font-semibold">
+                                            {best.lead_time_days != null
+                                              ? `${best.lead_time_days} days`
+                                              : "—"}
+                                          </p>
+                                        </div>
+
+                                        <div>
+                                          <p className="text-xs text-slate-500">Confidence</p>
+                                          <p className="font-semibold">
+                                            {best.confidence != null
+                                              ? `${(Number(best.confidence) * 100).toFixed(1)}%`
+                                              : "—"}
+                                          </p>
+                                        </div>
+
+                                        <div>
+                                          <p className="text-xs text-slate-500">Unit Price</p>
+                                          <p className="font-semibold">
+                                            {best.unit_price != null
+                                              ? `₹${Number(best.unit_price).toLocaleString("en-IN")}`
+                                              : "—"}
+                                          </p>
+                                        </div>
+
+                                        <div>
+                                          <p className="text-xs text-slate-500">Total Price</p>
+                                          <p className="font-semibold">
+                                            {best.total_price != null
+                                              ? `₹${Number(best.total_price).toLocaleString("en-IN")}`
+                                              : "—"}
+                                          </p>
+                                        </div>
+
+                                        <div>
+                                          <p className="text-xs text-slate-500">Can Fulfill</p>
+                                          <p className="font-semibold">
+                                            {best.can_fulfill == null
+                                              ? "—"
+                                              : best.can_fulfill
+                                                ? "Yes"
+                                                : "No"}
+                                          </p>
+                                        </div>
+                                      </div>
+
+                                      {(
+                                        best.reasons?.length ||
+                                        best.risk_factors?.length ||
+                                        rec.reasons?.length ||
+                                        best.notes ||
+                                        rec.notes
+                                      ) ? (
+                                        <div className="mt-5 pt-4 border-t border-slate-100">
+                                          <AgentRationaleCard
+                                            notes={best.notes || rec.notes}
+                                            reasons={[
+                                              ...(best.reasons ?? []),
+                                              ...(best.risk_factors ?? []),
+                                              ...(rec.reasons ?? []),
+                                            ]}
+                                            riskLevel={best.risk_level}
+                                            riskScore={best.risk_score}
+                                            suitabilityScore={best.suitability_score}
+                                            title={`Why ${best.vendor_name || "This Vendor"} Was Chosen`}
+                                            subtitle={`Multi-criteria risk evaluation & selection rationale for ${rec.item_name || "this item"}`}
+                                          />
+                                        </div>
+                                      ) : null}
+                                    </div>
+                                  )}
+
+                                  {!best && (
+                                    <div className="mt-4">
+                                      <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-4 text-sm text-yellow-800">
+                                        No vendor was selected for this procurement request.
+                                      </div>
+                                      {rec.notes && (
+                                        <div className="mt-3">
+                                          <AgentRationaleCard notes={rec.notes} />
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </Fragment>
+                      );
+                    });
                   })}
                 </tbody>
               </table>
@@ -759,6 +944,16 @@ export default function RiskAnalysisView() {
           );
         })()}
       </div>
+
+      {/* Admin Feedback Modal */}
+      {feedbackVendor && (
+        <AdminFeedbackModal
+          vendor={feedbackVendor}
+          companyId={companyId}
+          orderId={feedbackVendor.order_id}
+          onClose={() => setFeedbackVendor(null)}
+        />
+      )}
     </div>
   );
 }

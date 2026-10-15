@@ -2,7 +2,8 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { procurementApi, getStoredUser, type AuthUser } from "@/lib/api";
-import { formatCurrency, cn } from "@/lib/utils";
+import { formatCurrency, formatDateTime, cn } from "@/lib/utils";
+import { AgentRationaleCard } from "./AgentRationaleCard";
 import {
   CheckCircle2, XCircle, Clock, AlertCircle, Loader2, RefreshCw,
   Download, Eye, ShieldCheck, PenTool, X, FileText, Lock,
@@ -357,7 +358,7 @@ export function ApprovalsView() {
                       <span className={cn("px-2 py-0.5 rounded text-[11px] font-semibold border", tierInfo.cls)}>
                         {tierInfo.label} &bull; {po.assigned_approver_name || tierInfo.role}
                       </span>
-                      <span className="text-xs text-slate-400">{po.created_at?.slice(0,16)}</span>
+                      <span className="text-xs text-slate-400">{po.created_at ? formatDateTime(po.created_at) : ""}</span>
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -381,9 +382,9 @@ export function ApprovalsView() {
                     </div>
 
                     {po.notes && (
-                      <p className="text-xs text-slate-500 bg-slate-50 rounded-lg px-3 py-2 border border-slate-100">
-                        {po.notes}
-                      </p>
+                      <div className="mt-3">
+                        <AgentRationaleCard notes={po.notes} />
+                      </div>
                     )}
                   </div>
 

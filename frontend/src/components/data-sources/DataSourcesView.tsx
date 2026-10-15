@@ -7,7 +7,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { useDataSourceStore, type DataSource, type ConnectionType } from "@/store/dataSourceStore";
 import { onboardingApi } from "@/lib/api";
-import { cn } from "@/lib/utils";
+import { cn, formatDateTime } from "@/lib/utils";
 import {
   Plug, Upload, CheckCircle2, XCircle, Loader2, Trash2,
   Eye, EyeOff, Plus, Key, FileSpreadsheet, RefreshCw,
@@ -191,7 +191,7 @@ function SourceCard({ source }: { source: DataSource }) {
       {/* Last tested */}
       {source.lastTested && (
         <p className="text-[11px] text-slate-400 mb-3">
-          Last tested: {new Date(source.lastTested).toLocaleString()}
+          Last tested: {formatDateTime(source.lastTested)}
         </p>
       )}
 

@@ -1,8 +1,8 @@
-﻿"use client";
+"use client";
 
 import { useState, useCallback, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { cn, formatCurrency } from "@/lib/utils";
+import { cn, formatCurrency, formatDateTime } from "@/lib/utils";
 import {
   Upload, FileText, FileImage, Loader2, CheckCircle2,
   AlertTriangle, RefreshCw, ChevronDown, ChevronUp,
@@ -131,7 +131,7 @@ function RequestCard({ request, onDelete }: { request: any; onDelete: (id: numbe
             {request.address && (
               <p className="text-xs text-slate-500 mt-0.5">{request.address}</p>
             )}
-            <p className="text-xs text-slate-400 mt-1">{new Date(request.created_at).toLocaleString()}</p>
+            <p className="text-xs text-slate-400 mt-1">{formatDateTime(request.created_at)}</p>
           </div>
           <div className="text-right flex flex-col items-end gap-1">
             <div className="flex items-center gap-2">
@@ -224,7 +224,7 @@ function DocumentCard({
           </div>
           <div>
             <p className="text-sm font-semibold text-slate-800 truncate max-w-[200px]">{d.filename}</p>
-            <p className="text-[11px] text-slate-400">{d.created_at ? new Date(d.created_at).toLocaleString() : "-"}</p>
+            <p className="text-[11px] text-slate-400">{d.created_at ? formatDateTime(d.created_at) : "-"}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">

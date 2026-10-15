@@ -1,5 +1,5 @@
 """
-Agent 5 ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Risk Analysis Agent (ProcureFlow)
+Agent 5 — Risk Analysis Agent (ProcureFlow)
 ===========================================
 Port: 8010 (proxied via Integration Gateway on 8000 at /agent-risk/*)
 
@@ -50,7 +50,7 @@ logging.basicConfig(
 log = logging.getLogger("agent-risk")
 
 app = FastAPI(
-    title="Agent 5 ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Risk Analysis Agent",
+    title="Agent 5 — Risk Analysis Agent",
     description="Evaluates vendor operational risk across Delivery, Quality, Pricing, and Compliance. "
                 "Provides automatic data cleaning, Random Forest ML prediction, admin feedback loops, and safe deployment.",
     version="1.0.0",
@@ -85,12 +85,14 @@ agent_status = {
 class FeedbackRequest(BaseModel):
     company_id: str = "construction"
     vendor_id: str
-    vendor_name: str
-    rating: float = Field(..., ge=1.0, le=5.0)
-    actual_outcome: str  # on_time_delivery, delayed_delivery, defective_shipment, price_dispute, contract_violation, perfect_execution
-    actual_risk_label: str  # Low, Medium, High
+    vendor_name: Optional[str] = None
+    rating: Optional[float] = Field(default=4.0, ge=1.0, le=5.0)
+    actual_outcome: Optional[str] = None
+    actual_risk_label: Optional[str] = None
+    verified_risk_label: Optional[str] = None
     order_id: Optional[str] = None
     notes: Optional[str] = None
+    admin_notes: Optional[str] = None
     submitted_by: Optional[str] = "Admin"
 
 
@@ -715,15 +717,24 @@ async def submit_admin_feedback(
     Records vendor rating, actual order outcomes, and ground truth risk label.
     Checks auto-retrain threshold and triggers retraining if reached.
     """
+    risk_label = fb.actual_risk_label or fb.verified_risk_label or "Low"
+    vendor_name = fb.vendor_name or fb.vendor_id
+    outcome = fb.actual_outcome or (
+        "on_time_delivery" if risk_label == "Low"
+        else "defective_shipment" if risk_label == "High"
+        else "delayed_delivery"
+    )
+    notes = fb.notes or fb.admin_notes or ""
+
     feedback_id = storage.add_feedback(
         company_id=fb.company_id,
         vendor_id=fb.vendor_id,
-        vendor_name=fb.vendor_name,
-        rating=fb.rating,
-        actual_outcome=fb.actual_outcome,
-        actual_risk_label=fb.actual_risk_label,
+        vendor_name=vendor_name,
+        rating=fb.rating or 4.0,
+        actual_outcome=outcome,
+        actual_risk_label=risk_label,
         order_id=fb.order_id,
-        notes=fb.notes,
+        notes=notes,
         submitted_by=fb.submitted_by or "Admin",
     )
 

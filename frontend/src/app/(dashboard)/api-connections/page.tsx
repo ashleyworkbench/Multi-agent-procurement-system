@@ -1,2 +1,5 @@
-import { ComingSoon } from "@/components/ui/ComingSoon";
-export default function Page() { return <ComingSoon title="API Connections" />; }
+import { ApiConnectionsView } from "@/components/data-sources/ApiConnectionsView";
+
+export default function ApiConnectionsPage() {
+  return <ApiConnectionsView />;
+}

@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { procurementApi } from "@/lib/api";
 import { ShoppingCart, FileText, Clock, Loader2, ExternalLink } from "lucide-react";
 import Link from "next/link";
-import { cn, formatCurrency } from "@/lib/utils";
+import { cn, formatCurrency, formatDate } from "@/lib/utils";
 
 export function RecentActivity() {
   const { data, isLoading } = useQuery({
@@ -63,7 +63,7 @@ export function RecentActivity() {
                 </div>
               </div>
               <span className="text-[11px] text-slate-400 whitespace-nowrap shrink-0">
-                {po.created_at?.slice(0, 10)}
+                {formatDate(po.created_at)}
               </span>
             </div>
           ))}

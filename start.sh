@@ -32,8 +32,8 @@ docker compose up -d $BUILD_FLAG api-gateway ocr-service inventory-service vendo
 echo "⏳ Waiting 10 seconds for backend microservices..."
 sleep 10
 
-echo "🚀 [3/4] Starting Autonomous AI Agents (1, 2, 3, 4)..."
-docker compose up -d $BUILD_FLAG agent1-ocr agent2-inventory agent3-vendor agent4-procurement
+echo "🚀 [3/4] Starting Autonomous AI Agents (1, 2, 3, 4, Risk Agent)..."
+docker compose up -d $BUILD_FLAG agent1-ocr agent2-inventory agent3-vendor agent4-procurement agent-risk
 
 echo "🚀 [4/4] Starting Frontend Dashboard..."
 docker compose up -d $BUILD_FLAG frontend
@@ -52,5 +52,6 @@ echo "🌐 Agent 1 (OCR):      http://localhost:8009"
 echo "🌐 Agent 2 (Inventory):http://localhost:8005"
 echo "🌐 Agent 3 (Vendor):   http://localhost:8006"
 echo "🌐 Agent 4 (Procure):  http://localhost:8008"
+echo "🌐 Agent Risk:         http://localhost:8010"
 echo "🌐 MinIO Console:      http://localhost:9001 (minioadmin / minioadmin)"
 echo ""

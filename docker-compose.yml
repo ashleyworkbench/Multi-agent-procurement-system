@@ -431,10 +431,13 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      api-gateway:
+        condition: service_started
     env_file: .env
     environment:
-      POSTGRES_HOST: postgres
-      REDIS_HOST:    redis
+      POSTGRES_HOST:           postgres
+      REDIS_HOST:              redis
+      INTEGRATION_GATEWAY_URL: http://api-gateway:8000
     ports:
       - "8010:8010"
     networks:

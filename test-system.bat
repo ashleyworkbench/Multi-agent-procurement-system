@@ -20,6 +20,7 @@ curl.exe -s -f "http://localhost:8006/health" >nul 2>&1 && echo   [OK] Agent 3 (
 curl.exe -s -f "http://localhost:8007/health" >nul 2>&1 && echo   [OK] Onboarding Service (http://localhost:8007/health) || echo   [FAIL] Onboarding Service
 curl.exe -s -f "http://localhost:8008/health" >nul 2>&1 && echo   [OK] Agent 4 (Procure)  (http://localhost:8008/health) || echo   [FAIL] Agent 4
 curl.exe -s -f "http://localhost:8009/health" >nul 2>&1 && echo   [OK] Agent 1 (OCR/LLM)  (http://localhost:8009/health) || echo   [FAIL] Agent 1
+curl.exe -s -f "http://localhost:8010/health" >nul 2>&1 && echo   [OK] Agent Risk (ML)    (http://localhost:8010/health) || echo   [FAIL] Agent Risk
 curl.exe -s -f "http://localhost:3000" >nul 2>&1 && echo   [OK] Frontend Dashboard (http://localhost:3000) || echo   [FAIL] Frontend Dashboard
 
 echo.
@@ -29,4 +30,8 @@ echo.
 echo.
 echo Testing Procurement Service PO Summary:
 curl.exe -s -H "X-API-KEY: PROC-f3a8e7d6-9645-4827-34ab-7abc56789012" "http://localhost:8004/dashboard/summary"
+echo.
+echo.
+echo Testing Agent Risk Status via Gateway:
+curl.exe -s "http://localhost:8000/agent-risk/health"
 echo.

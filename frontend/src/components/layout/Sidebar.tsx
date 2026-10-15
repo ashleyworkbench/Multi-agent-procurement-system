@@ -24,6 +24,7 @@ import {
   Box,
   LogOut,
   ShieldAlert,
+  Radio,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSidebarStore } from "@/store/sidebarStore";
@@ -53,6 +54,7 @@ const navigation = [
   {
     section: "AGENTS & AUTOMATION",
     items: [
+      { label: "Kafka Logs",     href: "/kafka-logs",      icon: Radio },
       { label: "Agent Monitor",  href: "/agents",          icon: Bot },
       { label: "Agent Logs",     href: "/agent-logs",      icon: ScrollText },
       { label: "Workflows",      href: "/workflows",       icon: GitBranch },

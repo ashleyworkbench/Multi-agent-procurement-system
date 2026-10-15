@@ -1,7 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, formatDateTime } from "@/lib/utils";
 
 interface VendorRisk {
   vendor_id: string;
@@ -73,7 +73,7 @@ export default function VendorRiskModal({ vendor, onClose }: Props) {
             <h2 className="font-semibold text-slate-800">{vendor.vendor_id}</h2>
             <p className="text-xs text-slate-500">
               {isProvisional ? "⚙ Provisional rule label" : "✓ Verified feedback label"} ·{" "}
-              Last updated {new Date(vendor.last_updated).toLocaleString()}
+              Last updated {formatDateTime(vendor.last_updated)}
             </p>
           </div>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-600">

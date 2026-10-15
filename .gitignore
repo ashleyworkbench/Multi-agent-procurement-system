@@ -436,3 +436,4 @@ api-docs/generated/
 # Whitelist frontend source folders
 !frontend/src/lib/
 !frontend/src/components/uploads/
+!services/agent-risk/data/*.csv

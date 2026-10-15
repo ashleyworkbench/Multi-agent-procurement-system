@@ -2,6 +2,7 @@ import { StatCards } from "@/components/dashboard/StatCards";
 import { ProcurementChart } from "@/components/dashboard/ProcurementChart";
 import { AgentStatusPanel } from "@/components/dashboard/AgentStatusPanel";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
+import { KafkaLogsPanel } from "@/components/dashboard/KafkaLogsPanel";
 import { RecentRequestsTable } from "@/components/dashboard/RecentRequestsTable";
 import { TopVendors } from "@/components/dashboard/TopVendors";
 import { DataSourcesPanel } from "@/components/dashboard/DataSourcesPanel";
@@ -12,14 +13,17 @@ export default function DashboardPage() {
     <div className="space-y-6">
       {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
+        <h1 className="text-2xl font-bold text-slate-900">Control Panel</h1>
         <p className="text-sm text-slate-500 mt-0.5">
-          Monitor procurement operations and AI agent performance
+          Real-time procurement operations, AI agents, and Kafka event streaming
         </p>
       </div>
 
       {/* KPI stat cards */}
       <StatCards />
+
+      {/* Live Kafka Logs & Automation Pipeline (Guidance Feedback) */}
+      <KafkaLogsPanel />
 
       {/* Row 2: Chart + Agent Status + Activity */}
       <div className="grid grid-cols-12 gap-5">

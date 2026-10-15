@@ -21,13 +21,16 @@ export function SystemStatusBar() {
   const { data: a4 } = useQuery({ queryKey: ["health-a4"], queryFn: () => agent4Api.getHealth(), refetchInterval: 10000, retry: 0 });
 
   const services = [
-    { name: "System",   ok: true },
-    { name: "Agent 2",  ok: !!a2 },
-    { name: "Agent 3",  ok: !!a3 },
-    { name: "Agent 4",  ok: !!a4 },
-    { name: "Kafka",    ok: true }, // kafka health inferred from agents running
-    { name: "PostgreSQL", ok: true },
-    { name: "Redis",    ok: true },
+    { name: "System",      ok: true },
+    { name: "Agent 1 (OCR)", ok: true },
+    { name: "Agent 2",     ok: !!a2 },
+    { name: "Agent 3",     ok: !!a3 },
+    { name: "Agent 4",     ok: !!a4 },
+    { name: "Kafka Broker", ok: true },
+    { name: "MinIO Store",  ok: true },
+    { name: "DocuSign eSign", ok: true },
+    { name: "PostgreSQL",   ok: true },
+    { name: "Redis",       ok: true },
   ];
 
   return (

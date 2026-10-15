@@ -25,6 +25,7 @@ check_service "Agent 3 (Vendor)   " "http://localhost:8006/health"
 check_service "Onboarding Service " "http://localhost:8007/health"
 check_service "Agent 4 (Procure)  " "http://localhost:8008/health"
 check_service "Agent 1 (OCR/LLM)  " "http://localhost:8009/health"
+check_service "Agent Risk (ML)    " "http://localhost:8010/health"
 check_service "Frontend Dashboard " "http://localhost:3000"
 
 echo ""
@@ -34,4 +35,8 @@ echo ""
 echo ""
 echo "Testing Procurement Service PO Summary:"
 curl -s -H "X-API-KEY: PROC-f3a8e7d6-9645-4827-34ab-7abc56789012" "http://localhost:8004/dashboard/summary" | head -c 200
+echo ""
+echo ""
+echo "Testing Agent Risk Status via Gateway:"
+curl -s "http://localhost:8000/agent-risk/health" | head -c 200
 echo ""

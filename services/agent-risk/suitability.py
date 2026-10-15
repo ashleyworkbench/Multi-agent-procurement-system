@@ -1,4 +1,4 @@
-﻿"""PO-specific vendor suitability using company history and master capabilities."""
+"""PO-specific vendor suitability using company history and master capabilities."""
 
 from __future__ import annotations
 

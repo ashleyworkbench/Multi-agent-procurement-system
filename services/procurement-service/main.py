@@ -1234,27 +1234,74 @@ async def dashboard_summary():
 
 
 @app.get("/agent-logs", dependencies=[Depends(verify_key_flexible)])
-async def get_agent_logs(limit: int = 100, source_agent: Optional[str] = None):
+async def get_agent_logs(
+    limit: int = 100,
+    source_agent: Optional[str] = None,
+    topic: Optional[str] = None,
+    event_type: Optional[str] = None,
+    search: Optional[str] = None,
+):
     conn = get_conn()
     cur  = conn.cursor()
     try:
-        if source_agent:
-            cur.execute("""
-                SELECT id, event_id, event_type, topic, source_agent,
-                       payload::text AS payload, created_at::text
-                FROM procurement_events
-                WHERE source_agent = %s
-                ORDER BY created_at DESC LIMIT %s
-            """, (source_agent, limit))
-        else:
-            cur.execute("""
-                SELECT id, event_id, event_type, topic, source_agent,
-                       payload::text AS payload, created_at::text
-                FROM procurement_events
-                ORDER BY created_at DESC LIMIT %s
-            """, (limit,))
+        conditions = []
+        params = []
+
+        if source_agent and source_agent != "all":
+            conditions.append("source_agent = %s")
+            params.append(source_agent)
+
+        if topic and topic != "all":
+            conditions.append("topic = %s")
+            params.append(topic)
+
+        if event_type and event_type != "all":
+            conditions.append("event_type = %s")
+            params.append(event_type)
+
+        if search:
+            conditions.append("(payload::text ILIKE %s OR event_type ILIKE %s OR event_id ILIKE %s)")
+            params.extend([f"%{search}%", f"%{search}%", f"%{search}%"])
+
+        where_clause = f"WHERE {' AND '.join(conditions)}" if conditions else ""
+
+        query = f"""
+            SELECT id, event_id, event_type, topic, source_agent,
+                   payload::text AS payload, created_at::text
+            FROM procurement_events
+            {where_clause}
+            ORDER BY created_at DESC LIMIT %s
+        """
+        params.append(limit)
+
+        cur.execute(query, tuple(params))
         rows = [dict(r) for r in cur.fetchall()]
-        return {"logs": rows, "total": len(rows)}
+
+        # Compute summary stats
+        cur.execute("""
+            SELECT topic, COUNT(*) AS count
+            FROM procurement_events
+            GROUP BY topic
+            ORDER BY count DESC
+        """)
+        topic_counts = [dict(r) for r in cur.fetchall()]
+
+        cur.execute("""
+            SELECT source_agent, COUNT(*) AS count
+            FROM procurement_events
+            GROUP BY source_agent
+            ORDER BY count DESC
+        """)
+        agent_counts = [dict(r) for r in cur.fetchall()]
+
+        return {
+            "logs": rows,
+            "total": len(rows),
+            "stats": {
+                "topics": topic_counts,
+                "agents": agent_counts,
+            }
+        }
     finally:
         cur.close()
         conn.close()

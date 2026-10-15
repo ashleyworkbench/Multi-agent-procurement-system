@@ -8,7 +8,11 @@ from unittest.mock import AsyncMock, patch
 import pytest
 
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+current_file = Path(__file__).resolve()
+if len(current_file.parents) > 3:
+    REPO_ROOT = current_file.parents[3]
+else:
+    REPO_ROOT = current_file.parents[1]
 
 
 def install_optional_runtime_stubs():
@@ -26,6 +30,8 @@ def install_optional_runtime_stubs():
 
 def load_module(name, relative_path):
     module_path = REPO_ROOT / relative_path
+    if not module_path.exists():
+        module_path = REPO_ROOT / Path(relative_path).name
     spec = importlib.util.spec_from_file_location(name, module_path)
     module = importlib.util.module_from_spec(spec)
     sys.modules[name] = module

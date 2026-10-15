@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { riskApi, INDUSTRIES } from "@/lib/api";
+import { formatDateTime } from "@/lib/utils";
 import { X, Loader2, Plug, RefreshCw, Key } from "lucide-react";
 import { toast } from "sonner";
 
@@ -210,7 +211,7 @@ export default function RiskConfigModal({ companyId, onCompanyChange, onClose }:
 
             <p className="text-xs text-slate-500">
               {data?.record_count
-                ? `${data.record_count} records synced${data.fetched_at ? ` · ${new Date(data.fetched_at).toLocaleString()}` : ""}`
+                ? `${data.record_count} records synced${data.fetched_at ? ` · ${formatDateTime(data.fetched_at)}` : ""}`
                 : "No history synced for this company yet."}
             </p>
           </div>

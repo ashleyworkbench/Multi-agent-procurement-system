@@ -76,10 +76,12 @@ async def get_requests():
     conn = get_conn()
     cur = conn.cursor()
     cur.execute("""
-        SELECT id, requester_name, total_estimated_cost,
-               created_at::text AS created_at
-        FROM procurement_requests
-        ORDER BY created_at DESC
+        SELECT r.id, r.requester_name, r.total_estimated_cost,
+               r.created_at::text AS created_at,
+               COALESCE(dp.status, 'completed') AS status
+        FROM procurement_requests r
+        LEFT JOIN document_processing dp ON dp.request_id = r.id
+        ORDER BY r.created_at DESC
     """)
     rows = cur.fetchall()
     cur.close()

@@ -1,7 +1,7 @@
 "use client";
 
 import { mockDataSources } from "@/lib/mockData";
-import { ExternalLink, Database, FileSpreadsheet, Plug, CheckCircle2 } from "lucide-react";
+import { ExternalLink, Database, FileSpreadsheet, Plug, CheckCircle2, HardDrive } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -9,6 +9,7 @@ const typeIcon: Record<string, React.ElementType> = {
   "API Connection":      Plug,
   "CSV Upload":          FileSpreadsheet,
   "Database Connection": Database,
+  "Storage Connection":  HardDrive,
   "XLSX Upload":         FileSpreadsheet,
 };
 
@@ -16,6 +17,7 @@ const typeColor: Record<string, string> = {
   "API Connection":      "bg-blue-50 text-blue-600",
   "CSV Upload":          "bg-emerald-50 text-emerald-600",
   "Database Connection": "bg-purple-50 text-purple-600",
+  "Storage Connection":  "bg-indigo-50 text-indigo-600",
   "XLSX Upload":         "bg-green-50 text-green-600",
 };
 

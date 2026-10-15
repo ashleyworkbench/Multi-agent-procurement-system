@@ -7,10 +7,11 @@ import { formatCurrency, cn } from "@/lib/utils";
 import {
   ShoppingCart, CheckCircle2, XCircle, Truck, Clock, Package,
   ChevronLeft, ChevronRight, Eye, Loader2, RefreshCw, Download,
-  ShieldCheck, FileText, Trash2, X,
+  ShieldCheck, FileText, Trash2, X, MessageSquarePlus,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useState, useMemo, useEffect } from "react";
+import AdminFeedbackModal from "@/components/risk/AdminFeedbackModal";
 
 const statusConfig: Record<string, { label: string; cls: string; icon: React.ElementType }> = {
   PENDING_APPROVAL: { label: "Pending Approval", cls: "badge-yellow", icon: Clock },
@@ -36,6 +37,7 @@ export function PurchaseOrdersView() {
   const [filter, setFilter] = useState("ALL");
   const [page, setPage]     = useState(1);
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(() => getStoredUser());
+  const [feedbackPO, setFeedbackPO]   = useState<any>(null);
   const qc = useQueryClient();
 
   useEffect(() => {
@@ -269,6 +271,16 @@ export function PurchaseOrdersView() {
                               <Trash2 size={13} />
                             </button>
 
+                            {/* Feedback Button */}
+                            <button
+                              onClick={() => setFeedbackPO(po)}
+                              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg shadow-2xs transition-colors"
+                              title="Rate Vendor / Record delivery feedback for AI model retraining"
+                            >
+                              <MessageSquarePlus size={12} className="text-purple-600" />
+                              <span>Feedback</span>
+                            </button>
+
                             {/* Status quick actions */}
                             {po.status === "PENDING_APPROVAL" && (
                               <div className="flex gap-1 ml-1">
@@ -311,6 +323,19 @@ export function PurchaseOrdersView() {
           </>
         )}
       </div>
+
+      {/* Vendor Feedback Modal for continuous ML retraining */}
+      {feedbackPO && (
+        <AdminFeedbackModal
+          vendor={{
+            vendor_id: String(feedbackPO.vendor_id || feedbackPO.vendor_name),
+            vendor_name: feedbackPO.vendor_name,
+          }}
+          companyId="construction"
+          orderId={feedbackPO.po_number || String(feedbackPO.id)}
+          onClose={() => setFeedbackPO(null)}
+        />
+      )}
     </div>
   );
 }

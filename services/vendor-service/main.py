@@ -1,5 +1,5 @@
-﻿"""
-Vendor Service ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â FastAPI
+"""
+Vendor Service — FastAPI
 ========================
 Provides vendor data from PostgreSQL (construction, manufacturing)
 and MySQL (pharma, electronics) databases.

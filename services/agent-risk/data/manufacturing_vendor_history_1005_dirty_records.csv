@@ -1,0 +1,1001 @@
+order_id,order_date,vendor_id,vendor_name,company_id,on_time_rate,delay_days,lead_time,defect_rate,return_rate,price_variance,compliance_score,violations,iso_certified,spend_tier,actual_order_outcome,rating,ground_truth_risk
+PO-MFG-00001,2023-12-17,V-MFG-001,SKF India Ltd,manufacturing,0.983,0.4,6,0.0025,0.0038,-0.006,95.0,0,False,Medium,on_time_delivery,4.4,Low
+PO-MFG-00001,2025-06-16,V-MFG-001,SKF India Ltd,manufacturing,0.948,1.1,3,0.0027,0.0013,0.009,96.0,0,False,High,on_time_delivery,4.9,Low
+PO-MFG-00003,2024-08-03,V-MFG-001,SKF India Ltd,manufacturing,0.988,0.8,6,0.0068,0.0045,-0.008,91.3,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00004,2023-09-26,V-MFG-001,SKF India Ltd,manufacturing,0.921,0.6,4,0.0092,0.0001,0.024,91.2,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00005,2024-08-16,V-MFG-001,SKF India Ltd,manufacturing,0.935,0.2,6,0.0099,0.0043,0.02,91.3,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00006,2024-09-03,V-MFG-001,SKF India Ltd,manufacturing,0.96,0.3,5,0.0128,0.0029,-0.009,92.4,0,True,High,on_time_delivery,4.4,Low
+PO-MFG-00007,2024-01-07,V-MFG-001,SKF India Ltd,manufacturing,0.967,1.1,5,0.0073,0.0067,-0.009,98.2,0,False,High,on_time_delivery,4.9,Low
+PO-MFG-00008,2024-11-28,V-MFG-001,SKF India Ltd,manufacturing,0.973,0.2,6,0.0083,0.004,-0.016,95.4,0,False,Medium,on_time_delivery,4.7,Low
+PO-MFG-00009,2023-11-02,V-MFG-001,SKF India Ltd,manufacturing,0.946,0.5,5,0.0101,0.0079,-0.003,97.5,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00010,2024-07-25,V-MFG-001,SKF India Ltd,manufacturing,0.981,0.8,7,0.0088,0.0055,0.01,97.1,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00011,2024-09-17,V-MFG-001,SKF India Ltd,manufacturing,0.963,0.1,7,0.0048,0.0022,-0.006,94.6,0,True,High,on_time_delivery,4.9,Low
+PO-MFG-00012,2024-05-07,V-MFG-001,SKF India Ltd,manufacturing,0.978,0.6,5,0.0049,0.0048,0.013,91.7,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00013,2024-12-18,V-MFG-001,SKF India Ltd,manufacturing,0.959,0.2,5,0.0091,0.0014,0.016,97.9,0,True,Medium,on_time_delivery,4.7,Low
+PO-MFG-00014,2024-03-21,V-MFG-001,SKF India Ltd,manufacturing,0.977,0.4,5,0.0078,0.0022,0.008,94.8,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00015,2024-09-13,V-MFG-001,SKF India Ltd,manufacturing,0.92,0.2,4,0.014,0.0036,0.03,95.3,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00016,2023-07-21,V-MFG-001,SKF India Ltd,manufacturing,0.989,,5,,0.0025,-0.013,91.1,0,True,Medium,on_time_delivery,4.8,Low
+PO-MFG-00017,2025-09-09,V-MFG-001,SKF India Ltd,manufacturing,0.929,0.1,7,0.0106,0.0016,0.025,95.1,0,True,Medium,on_time_delivery,4.6,Low
+PO-MFG-00018,2024-05-14,V-MFG-001,SKF India Ltd,manufacturing,0.937,0.3,6,0.009,0.0021,0.008,97.6,0,True,Medium,on_time_delivery,4.7,Low
+PO-MFG-00019,2023-03-26,V-MFG-001,SKF India Ltd,manufacturing,0.988,0.5,6,0.0096,0.0076,-0.015,96.7,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00020,2024-04-08,V-MFG-001,SKF India Ltd,manufacturing,0.952,0.2,3,0.0138,0.0022,-0.02,96.0,0,False,High,on_time_delivery,4.8,Low
+PO-MFG-00021,2024-04-08,V-MFG-001,SKF India Ltd,manufacturing,0.927,0.1,7,0.0072,0.0012,0.024,97.7,0,False,Medium,on_time_delivery,4.7,Low
+PO-MFG-00022,2025-08-14,V-MFG-001,SKF India Ltd,manufacturing,0.975,0.6,4,0.0013,0.0041,-0.001,94.0,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00023,2025-11-13,V-MFG-001,SKF India Ltd,manufacturing,1.35,0.5,3,0.0054,0.0032,-0.008,115.0,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00024,2023-11-19,V-MFG-001,SKF India Ltd,manufacturing,0.937,0.8,5,0.011,0.0002,0.009,93.2,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00025,2024-02-14,V-MFG-001,SKF India Ltd,manufacturing,0.938,0.3,4,0.0138,0.0021,-0.012,92.0,0,True,Medium,on_time_delivery,4.9,Low
+PO-MFG-00026,2023-02-23,V-MFG-001,SKF India Ltd,manufacturing,0.984,0.1,7,0.0087,0.002,0.006,92.3,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00027,2023-04-14,V-MFG-001,SKF India Ltd,manufacturing,0.942,0.6,3,0.0132,0.005,0.009,97.0,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00028,2023-04-01,V-MFG-001,SKF India Ltd,manufacturing,0.855,2.1,6,0.0198,0.0118,0.081,74.5,0,False,Medium,delayed_delivery,3.5,Medium
+PO-MFG-00029,2023-01-11,V-MFG-001,SKF India Ltd,manufacturing,0.861,3.8,5,0.0315,0.0261,0.06,74.3,1,True,Low,delayed_delivery,4.1,Medium
+PO-MFG-00030,2025-05-15,V-MFG-001,SKF India Ltd,manufacturing,0.937,0.2,2,0.011,0.0013,0.01,90.4,0,False,Medium,on_time_delivery,4.4,Low
+PO-MFG-00031,2024-11-25,V-MFG-001,SKF India Ltd,manufacturing,0.948,0.6,5,0.0134,0.0037,0.012,94.7,0,False,High,on_time_delivery,4.7,Low
+PO-MFG-00032,2025-08-05,V-MFG-001,SKF India Ltd,manufacturing,0.976,0.2,6,0.0149,0.0067,-0.014,98.1,0,False,High,on_time_delivery,4.5,Low
+PO-MFG-00033,2024-04-25,V-MFG-001,SKF India Ltd,manufacturing,0.921,0.5,7,0.0115,0.0036,0.01,96.8,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00034,2023-01-08,V-MFG-001,SKF India Ltd,manufacturing,0.983,0.3,5,0.0075,0.0037,0.024,94.2,0,False,Medium,on_time_delivery,4.5,Low
+PO-MFG-00035,2025-02-10,V-MFG-001,SKF India Ltd,manufacturing,0.946,0.4,5,0.0134,0.007,-0.016,92.6,0,False,Medium,on_time_delivery,4.9,Low
+PO-MFG-00036,2024-02-12,V-MFG-001,SKF India Ltd,manufacturing,0.793,2.4,7,0.0183,0.0118,0.077,79.9,0,True,Low,on_time_delivery,3.4,Medium
+PO-MFG-00037,2025-08-12,V-MFG-001,SKF India Ltd,manufacturing,0.964,0.3,2,0.0122,0.0047,0.024,96.8,0,False,High,on_time_delivery,4.4,Low
+PO-MFG-00038,2025-12-19,V-MFG-001,SKF India Ltd,manufacturing,0.955,1.2,3,0.0141,0.003,0.013,94.0,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00039,2023-10-13,V-MFG-001,SKF India Ltd,manufacturing,0.786,2.2,5,0.0262,0.0272,0.05,80.0,1,True,Medium,on_time_delivery,4.2,Medium
+PO-MFG-00040,2023-03-28,V-MFG-001,SKF India Ltd,manufacturing,0.923,0.9,2,0.0041,0.0073,-0.012,96.1,0,True,Medium,on_time_delivery,4.7,Low
+PO-MFG-00041,2024-10-24,V-MFG-001,SKF India Ltd,manufacturing,0.989,1.0,4,0.0091,0.0044,0.025,96.7,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00042,2025-10-17,V-MFG-001,SKF India Ltd,manufacturing,0.968,1.0,3,0.0042,0.0002,0.004,93.0,0,True,High,on_time_delivery,4.9,Low
+PO-MFG-00043,2023-10-10,V-MFG-001,SKF India Ltd,manufacturing,0.652,7.2,12,0.0911,0.073,0.148,63.2,3,False,Low,defective_shipment,2.6,High
+PO-MFG-00044,2025-06-10,V-MFG-001,SKF India Ltd,manufacturing,0.926,0.2,5,0.0143,0.0053,0.019,98.3,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00045,2024-08-01,V-MFG-001,SKF India Ltd,manufacturing,0.943,0.4,4,0.0043,0.007,0.005,98.6,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00046,2023-10-26,V-MFG-001,SKF India Ltd,manufacturing,0.932,0.2,4,0.0093,0.0068,-0.015,90.7,0,True,Medium,on_time_delivery,4.7,Low
+PO-MFG-00047,2023-12-21,V-MFG-001,SKF India Ltd,manufacturing,0.931,0.1,5,0.0035,0.0011,0.029,93.3,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00048,2024-06-04,V-MFG-001,SKF India Ltd,manufacturing,0.923,0.7,2,0.0096,0.0066,-0.01,91.5,0,False,High,on_time_delivery,4.5,Low
+PO-MFG-00049,2025-09-03,V-MFG-001,SKF India Ltd,manufacturing,0.978,0.3,2,0.0075,0.0068,-0.012,97.0,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00050,2023-07-28,V-MFG-001,SKF India Ltd,manufacturing,0.944,0.2,5,0.0123,0.0029,0.005,92.6,0,False,High,on_time_delivery,4.8,Low
+PO-MFG-00051,2024-11-11,V-MFG-001,SKF India Ltd,manufacturing,0.935,0.6,7,0.0032,0.0006,0.009,91.1,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00052,2024-06-23,V-MFG-001,SKF India Ltd,manufacturing,0.942,0.3,5,0.0071,0.001,0.012,98.5,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00053,2023-06-06,V-MFG-001,SKF India Ltd,manufacturing,0.947,0.4,2,0.0014,0.0068,-0.007,91.7,0,False,High,on_time_delivery,4.7,Low
+PO-MFG-00054,2025-06-15,V-MFG-001,SKF India Ltd,manufacturing,0.929,0.4,7,0.0069,0.0025,0.026,95.1,0,True,Medium,on_time_delivery,4.8,Low
+PO-MFG-00055,2024-07-03,V-MFG-001,SKF India Ltd,manufacturing,0.954,1.2,3,0.0016,0.0011,0.006,94.5,0,True,Medium,on_time_delivery,4.8,Low
+PO-MFG-00056,2023-11-12,V-MFG-001,SKF India Ltd,manufacturing,0.97,1.0,4,0.0057,0.0008,0.019,98.7,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00057,2025-12-17,V-MFG-001,SKF India Ltd,manufacturing,0.939,0.5,6,0.0149,0.0049,0.011,93.9,0,True,High,on_time_delivery,4.9,Low
+PO-MFG-00058,2024-09-25,V-MFG-001,SKF India Ltd,manufacturing,0.952,0.3,2,0.0067,0.005,0.02,94.3,0,False,High,on_time_delivery,4.9,Low
+PO-MFG-00059,2023-06-27,V-MFG-001,SKF India Ltd,manufacturing,0.961,0.5,4,0.0135,0.0068,0.021,96.0,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00060,2023-04-27,V-MFG-001,SKF India Ltd,manufacturing,0.951,0.5,5,0.0017,0.0006,0.02,94.8,0,False,Medium,on_time_delivery,4.7,Low
+PO-MFG-00061,2025-05-25,V-MFG-001,SKF India Ltd,manufacturing,0.828,1.7,8,0.0324,0.0199,0.079,84.0,1,False,Low,delayed_delivery,3.4,Medium
+PO-MFG-00062,2024-11-08,V-MFG-001,SKF India Ltd,manufacturing,0.986,0.0,3,0.014,0.0058,-0.012,92.6,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00063,2025-03-12,V-MFG-001,SKF India Ltd,manufacturing,0.927,1.1,4,0.015,0.0055,0.012,90.7,0,True,Medium,on_time_delivery,4.8,Low
+PO-MFG-00064,2023-02-25,V-MFG-001,SKF India Ltd,manufacturing,0.974,0.9,4,0.0145,0.0009,0.003,91.1,0,False,High,on_time_delivery,4.5,Low
+PO-MFG-00065,2024-02-12,V-MFG-001,SKF India Ltd,manufacturing,0.975,0.4,5,0.0123,0.0044,-0.007,90.2,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00066,2025-12-18,V-MFG-001,SKF India Ltd,manufacturing,0.934,1.2,7,0.0059,0.0027,-0.001,96.8,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00067,2023-04-20,V-MFG-001,SKF India Ltd,manufacturing,0.965,0.9,7,0.0108,0.0078,0.017,97.5,0,False,High,on_time_delivery,4.8,Low
+PO-MFG-00068,2025-06-07,V-MFG-001,SKF India Ltd,manufacturing,0.983,0.0,3,0.0011,0.0028,0.029,98.4,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00069,2024-08-03,V-MFG-001,SKF India Ltd,manufacturing,0.929,0.1,6,0.0089,0.0009,-0.013,94.4,0,True,Medium,on_time_delivery,4.7,Low
+PO-MFG-00070,2025-06-08,V-MFG-001,SKF India Ltd,manufacturing,0.942,1.0,4,0.0015,0.0009,0.027,96.0,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00071,2023-05-11,V-MFG-001,SKF India Ltd,manufacturing,0.979,1.2,6,0.0061,0.004,0.017,93.7,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00072,2023-09-20,V-MFG-001,SKF India Ltd,manufacturing,0.962,0.1,2,0.0023,0.0021,-0.003,98.0,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00073,2023-01-09,V-MFG-001,SKF India Ltd,manufacturing,0.942,0.9,6,0.0138,0.0006,0.016,98.4,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00074,2024-01-10,V-MFG-001,SKF India Ltd,manufacturing,0.984,0.5,7,0.0057,0.0059,-0.013,90.8,0,True,Medium,on_time_delivery,4.8,Low
+PO-MFG-00075,2024-07-18,V-MFG-001,SKF India Ltd,manufacturing,0.927,0.2,6,0.0135,0.002,-0.003,91.7,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00076,2025-12-05,V-MFG-001,SKF India Ltd,manufacturing,0.932,,7,,0.0079,-0.02,94.7,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00077,2023-08-18,V-MFG-001,SKF India Ltd,manufacturing,0.937,0.5,6,0.0103,0.0015,0.006,93.1,0,False,High,on_time_delivery,4.6,Low
+PO-MFG-00078,2024-04-20,V-MFG-001,SKF India Ltd,manufacturing,0.98,0.1,5,0.0046,0.0048,-0.02,91.0,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00079,2023-11-19,V-MFG-001,SKF India Ltd,manufacturing,0.928,0.8,3,0.011,0.0018,-0.008,90.4,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00080,2024-02-19,V-MFG-001,SKF India Ltd,manufacturing,0.75,2.1,6,0.0404,0.0102,0.045,74.9,0,True,Low,on_time_delivery,3.7,Medium
+PO-MFG-00081,2025-09-22,V-MFG-001,SKF India Ltd,manufacturing,0.939,0.8,7,0.003,0.0031,-0.011,96.0,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00082,2023-05-01,V-MFG-001,SKF India Ltd,manufacturing,0.95,0.2,2,0.0115,0.0042,-0.01,91.0,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00083,2023-08-26,V-MFG-001,SKF India Ltd,manufacturing,0.973,0.1,5,0.0059,0.0052,0.002,96.2,0,True,High,on_time_delivery,4.9,Low
+PO-MFG-00084,2024-04-15,V-MFG-001,SKF India Ltd,manufacturing,0.983,0.0,3,0.01,0.0031,0.029,95.0,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00085,2024-12-04,V-MFG-001,SKF India Ltd,manufacturing,0.939,0.8,4,0.0114,0.0002,0.008,98.0,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00086,2025-09-28,V-MFG-001,SKF India Ltd,manufacturing,0.963,1.0,6,0.0139,0.005,0.029,90.0,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00087,2024-10-11,V-MFG-001,SKF India Ltd,manufacturing,0.92,0.2,2,0.0113,0.0058,0.001,96.3,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00088,2025-10-19,V-MFG-001,SKF India Ltd,manufacturing,0.945,0.5,6,0.0037,0.002,-0.018,93.0,0,False,Medium,on_time_delivery,4.7,Low
+PO-MFG-00089,2024-09-01,V-MFG-001,SKF India Ltd,manufacturing,0.968,0.1,3,0.0042,0.0069,-0.01,93.7,0,True,Medium,on_time_delivery,4.7,Low
+PO-MFG-00090,2024-12-05,V-MFG-001,SKF India Ltd,manufacturing,0.542,6.9,15,0.0613,0.0465,0.239,52.8,3,True,Medium,delayed_delivery,2.2,High
+PO-MFG-00091,2025-02-03,V-MFG-001,SKF India Ltd,manufacturing,0.855,3.9,8,0.0192,0.0224,0.067,81.2,1,True,Medium,delayed_delivery,4.0,Medium
+PO-MFG-00092,2023-02-17,V-MFG-001,SKF India Ltd,manufacturing,0.826,4.3,9,0.018,0.0225,0.087,82.5,1,True,Low,delayed_delivery,4.2,Medium
+PO-MFG-00093,2025-05-07,V-MFG-001,SKF India Ltd,manufacturing,0.932,0.2,7,0.0016,0.0014,0.021,91.8,0,True,High,on_time_delivery,4.4,Low
+PO-MFG-00094,2025-03-02,V-MFG-001,SKF India Ltd,manufacturing,0.928,1.1,3,0.0061,0.0061,0.018,97.5,0,False,Medium,on_time_delivery,4.7,Low
+PO-MFG-00095,2023-08-13,V-MFG-001,SKF India Ltd,manufacturing,0.921,0.4,6,0.0035,0.0067,0.001,90.8,0,True,Medium,on_time_delivery,4.4,Low
+PO-MFG-00096,2024-04-23,V-MFG-001,SKF India Ltd,manufacturing,0.977,0.3,6,0.011,0.0071,0.007,98.1,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00097,2025-11-19,V-MFG-001,SKF India Ltd,manufacturing,0.541,8.4,12,0.0947,0.0708,0.156,49.9,2,True,Low,delayed_delivery,2.5,High
+PO-MFG-00098,2025-08-03,V-MFG-001,SKF India Ltd,manufacturing,0.981,0.1,7,0.0028,0.0004,0.017,94.8,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00099,2025-12-24,V-MFG-001,SKF India Ltd,manufacturing,0.856,1.7,7,0.0326,0.0142,0.046,84.7,1,True,Low,delayed_delivery,3.7,Medium
+PO-MFG-00100,2024-05-11,V-MFG-001,SKF India Ltd,manufacturing,0.958,1.0,2,0.007,0.0068,-0.01,97.2,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00101,2025-08-03,V-MFG-002,Bosch India,manufacturing,0.95,0.8,2,0.0113,0.0026,-0.012,92.5,0,True,Medium,on_time_delivery,4.4,Low
+PO-MFG-00101,2023-11-23,V-MFG-002,Bosch India,manufacturing,0.922,1.0,2,0.0022,0.0013,0.017,95.7,0,True,Medium,on_time_delivery,4.7,Low
+PO-MFG-00103,2023-08-26,V-MFG-002,Bosch India,manufacturing,0.983,0.8,2,0.012,0.006,0.01,96.5,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00104,2025-11-10,V-MFG-002,Bosch India,manufacturing,0.973,0.3,2,0.0086,0.0012,0.013,94.9,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00105,2023-03-27,V-MFG-002,Bosch India,manufacturing,0.973,0.6,2,0.0054,0.0038,0.005,94.2,0,True,High,on_time_delivery,4.4,Low
+PO-MFG-00106,2023-07-12,V-MFG-002,Bosch India,manufacturing,0.965,0.1,7,0.0082,0.0042,0.0,95.1,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00107,2023-06-12,V-MFG-002,Bosch India,manufacturing,0.966,0.4,3,0.012,0.003,-0.018,96.4,0,False,Medium,on_time_delivery,4.6,Low
+PO-MFG-00108,2025-10-18,V-MFG-002,Bosch India,manufacturing,0.952,0.4,2,0.0118,0.0062,0.028,97.7,0,True,Medium,on_time_delivery,4.4,Low
+PO-MFG-00109,2023-02-28,V-MFG-002,Bosch India,manufacturing,0.947,1.0,2,0.0135,0.0073,0.017,92.4,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00110,2024-04-17,V-MFG-002,Bosch India,manufacturing,0.775,3.7,8,0.0323,0.0112,0.053,74.2,0,True,Medium,on_time_delivery,4.0,Medium
+PO-MFG-00111,2025-11-22,V-MFG-002,Bosch India,manufacturing,1.35,0.5,3,0.0013,0.007,0.018,115.0,0,False,Medium,on_time_delivery,4.5,Low
+PO-MFG-00112,2024-02-15,V-MFG-002,Bosch India,manufacturing,0.864,4.0,9,0.0435,0.0214,0.048,85.2,1,False,Low,delayed_delivery,3.7,Medium
+PO-MFG-00113,2025-06-11,V-MFG-002,Bosch India,manufacturing,0.958,0.2,3,0.0144,0.0073,-0.019,90.8,0,False,High,on_time_delivery,4.6,Low
+PO-MFG-00114,2024-09-19,V-MFG-002,Bosch India,manufacturing,0.987,0.6,2,0.0118,0.0058,-0.002,95.0,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00115,2024-10-27,V-MFG-002,Bosch India,manufacturing,0.632,9.9,15,0.0574,0.0659,0.127,61.2,2,False,Low,delayed_delivery,3.2,High
+PO-MFG-00116,2023-09-09,V-MFG-002,Bosch India,manufacturing,0.961,1.1,2,0.0065,0.0018,-0.013,90.9,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00117,2025-02-18,V-MFG-002,Bosch India,manufacturing,0.923,1.2,3,0.0093,0.005,-0.01,92.0,0,False,High,on_time_delivery,4.6,Low
+PO-MFG-00118,2024-01-24,V-MFG-002,Bosch India,manufacturing,0.925,0.1,6,0.0117,0.004,0.028,98.9,0,True,High,on_time_delivery,4.9,Low
+PO-MFG-00119,2025-12-28,V-MFG-002,Bosch India,manufacturing,0.818,1.5,7,0.0236,0.0105,0.081,80.2,1,False,Low,delayed_delivery,4.1,Medium
+PO-MFG-00120,2023-04-23,V-MFG-002,Bosch India,manufacturing,0.946,0.6,7,0.008,0.0058,0.021,95.4,0,False,Medium,on_time_delivery,4.8,Low
+PO-MFG-00121,2024-06-20,V-MFG-002,Bosch India,manufacturing,0.975,0.2,2,0.0021,0.0048,0.02,97.8,0,True,Medium,on_time_delivery,4.7,Low
+PO-MFG-00122,2024-09-16,V-MFG-002,Bosch India,manufacturing,0.944,0.0,3,0.0116,0.0033,-0.011,96.5,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00123,2023-08-09,V-MFG-002,Bosch India,manufacturing,0.943,0.5,2,0.0046,0.0003,0.017,96.6,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00124,2023-06-21,V-MFG-002,Bosch India,manufacturing,0.753,3.9,8,0.0313,0.0171,0.062,83.1,0,True,Low,delayed_delivery,3.7,Medium
+PO-MFG-00125,2023-04-28,V-MFG-002,Bosch India,manufacturing,0.989,0.6,3,0.0061,0.0032,0.01,97.4,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00126,2024-12-07,V-MFG-002,Bosch India,manufacturing,0.927,0.2,3,0.0046,0.0027,-0.017,93.9,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00127,2024-07-25,V-MFG-002,Bosch India,manufacturing,0.959,1.1,6,0.004,0.0042,-0.007,96.7,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00128,2023-09-15,V-MFG-002,Bosch India,manufacturing,0.851,2.5,8,0.0309,0.022,0.068,84.5,0,False,Low,delayed_delivery,3.6,Medium
+PO-MFG-00129,2025-02-02,V-MFG-002,Bosch India,manufacturing,0.927,0.4,7,0.0107,0.0048,-0.018,93.3,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00130,2023-12-15,V-MFG-002,Bosch India,manufacturing,0.989,0.7,3,0.0066,0.0048,0.009,98.5,0,False,High,on_time_delivery,4.7,Low
+PO-MFG-00131,2025-05-27,V-MFG-002,Bosch India,manufacturing,0.959,0.7,6,0.0114,0.0054,0.018,97.7,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00132,2024-10-13,V-MFG-002,Bosch India,manufacturing,0.965,0.7,3,0.0056,0.0008,-0.019,94.5,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00133,2023-03-07,V-MFG-002,Bosch India,manufacturing,0.521,11.0,13,0.0741,0.0414,0.246,52.7,4,False,Medium,delayed_delivery,3.2,High
+PO-MFG-00134,2024-11-04,V-MFG-002,Bosch India,manufacturing,0.952,0.5,2,0.01,0.0014,-0.009,95.1,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00135,2025-10-12,V-MFG-002,Bosch India,manufacturing,0.966,1.1,6,0.0029,0.0072,0.018,97.5,0,True,Medium,on_time_delivery,4.8,Low
+PO-MFG-00136,2025-02-05,V-MFG-002,Bosch India,manufacturing,0.867,3.2,11,0.0272,0.0199,0.082,74.1,1,False,Low,on_time_delivery,3.9,Medium
+PO-MFG-00137,2025-07-19,V-MFG-002,Bosch India,manufacturing,0.946,0.5,2,0.0139,0.0017,0.008,97.3,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00138,2023-09-11,V-MFG-002,Bosch India,manufacturing,0.824,4.4,6,0.0248,0.0135,0.053,79.6,0,False,Medium,delayed_delivery,4.1,Medium
+PO-MFG-00139,2023-08-25,V-MFG-002,Bosch India,manufacturing,0.936,0.0,6,0.0071,0.0031,0.024,90.6,0,True,Medium,on_time_delivery,4.8,Low
+PO-MFG-00140,2025-04-03,V-MFG-002,Bosch India,manufacturing,0.926,0.2,6,0.0057,0.0078,0.023,90.4,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00141,2024-02-10,V-MFG-002,Bosch India,manufacturing,0.964,0.1,7,0.0055,0.0036,0.019,97.8,0,True,High,on_time_delivery,4.9,Low
+PO-MFG-00142,2025-03-02,V-MFG-002,Bosch India,manufacturing,0.971,0.3,4,0.0048,0.0072,0.002,95.4,0,False,Medium,on_time_delivery,4.4,Low
+PO-MFG-00143,2023-12-13,V-MFG-002,Bosch India,manufacturing,0.849,2.7,7,0.0341,0.0162,0.068,73.3,1,False,Medium,delayed_delivery,4.2,Medium
+PO-MFG-00144,2025-02-25,V-MFG-002,Bosch India,manufacturing,0.974,0.0,6,0.0104,0.0021,0.029,91.8,0,False,Medium,on_time_delivery,4.4,Low
+PO-MFG-00145,2024-06-23,V-MFG-002,Bosch India,manufacturing,0.985,0.2,5,0.0025,0.0044,-0.016,90.1,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00146,2023-07-04,V-MFG-002,Bosch India,manufacturing,0.935,0.5,6,0.0147,0.0025,0.003,94.9,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00147,2023-11-18,V-MFG-002,Bosch India,manufacturing,0.941,0.3,2,0.0112,0.0013,0.009,90.4,0,False,High,on_time_delivery,4.7,Low
+PO-MFG-00148,2023-07-09,V-MFG-002,Bosch India,manufacturing,0.554,5.8,17,0.0683,0.0463,0.133,53.9,2,False,Medium,defective_shipment,2.8,High
+PO-MFG-00149,2023-02-01,V-MFG-002,Bosch India,manufacturing,0.978,0.8,5,0.0135,0.0047,0.021,90.9,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00150,2023-10-18,V-MFG-002,Bosch India,manufacturing,0.565,10.9,20,0.0944,0.0455,0.175,60.7,4,False,Low,delayed_delivery,2.7,High
+PO-MFG-00151,2024-01-11,V-MFG-002,Bosch India,manufacturing,0.543,10.4,10,0.087,0.0666,0.191,57.1,3,True,Low,defective_shipment,2.6,High
+PO-MFG-00152,2024-04-13,V-MFG-002,Bosch India,manufacturing,0.956,1.0,2,0.0061,0.0,0.007,90.8,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00153,2025-03-03,V-MFG-002,Bosch India,manufacturing,0.989,0.8,7,0.0061,0.0062,0.007,94.0,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00154,2025-02-17,V-MFG-002,Bosch India,manufacturing,0.966,1.1,2,0.0147,0.0011,0.008,98.7,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00155,2024-04-14,V-MFG-002,Bosch India,manufacturing,0.964,0.7,6,0.0132,0.0076,-0.014,98.3,0,True,Medium,on_time_delivery,4.9,Low
+PO-MFG-00156,2023-11-27,V-MFG-002,Bosch India,manufacturing,0.958,1.2,6,0.011,0.002,0.028,95.8,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00157,2025-09-21,V-MFG-002,Bosch India,manufacturing,0.925,0.1,4,0.0073,0.0044,0.003,97.3,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00158,2023-04-18,V-MFG-002,Bosch India,manufacturing,0.948,0.5,3,0.0085,0.0078,-0.011,98.4,0,False,High,on_time_delivery,4.6,Low
+PO-MFG-00159,2025-02-24,V-MFG-002,Bosch India,manufacturing,0.964,1.2,5,0.0095,0.0039,0.007,97.7,0,False,High,on_time_delivery,4.6,Low
+PO-MFG-00160,2023-06-17,V-MFG-002,Bosch India,manufacturing,0.96,0.6,7,0.0015,0.0051,-0.004,94.7,0,False,High,on_time_delivery,4.5,Low
+PO-MFG-00161,2023-06-02,V-MFG-002,Bosch India,manufacturing,0.969,1.1,7,0.0135,0.0029,0.03,93.4,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00162,2025-02-06,V-MFG-002,Bosch India,manufacturing,0.94,0.7,7,0.0058,0.003,-0.007,98.4,0,False,High,on_time_delivery,4.7,Low
+PO-MFG-00163,2024-10-10,V-MFG-002,Bosch India,manufacturing,0.933,0.3,3,0.0106,0.0059,0.022,97.1,0,True,Medium,on_time_delivery,4.7,Low
+PO-MFG-00164,2025-02-11,V-MFG-002,Bosch India,manufacturing,0.803,2.3,10,0.023,0.0237,0.076,85.1,0,False,Medium,delayed_delivery,4.2,Medium
+PO-MFG-00165,2025-04-28,V-MFG-002,Bosch India,manufacturing,0.969,0.4,6,0.0119,0.003,-0.009,98.9,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00166,2023-11-16,V-MFG-002,Bosch India,manufacturing,0.956,1.1,6,0.0055,0.0049,0.018,97.0,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00167,2025-10-04,V-MFG-002,Bosch India,manufacturing,0.981,1.1,6,0.002,0.0067,0.026,95.4,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00168,2024-10-08,V-MFG-002,Bosch India,manufacturing,0.939,0.0,4,0.0039,0.0025,-0.004,94.1,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00169,2023-06-20,V-MFG-002,Bosch India,manufacturing,0.982,1.0,5,0.0112,0.0076,-0.015,97.2,0,False,High,on_time_delivery,4.4,Low
+PO-MFG-00170,2024-03-23,V-MFG-002,Bosch India,manufacturing,0.862,3.9,9,0.0437,0.0243,0.042,77.0,1,False,Low,on_time_delivery,3.8,Medium
+PO-MFG-00171,2023-08-01,V-MFG-002,Bosch India,manufacturing,0.939,0.2,6,0.0084,0.0069,-0.003,91.5,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00172,2024-07-02,V-MFG-002,Bosch India,manufacturing,0.874,4.1,11,0.0394,0.0181,0.062,76.2,0,True,Medium,on_time_delivery,3.8,Medium
+PO-MFG-00173,2025-05-18,V-MFG-002,Bosch India,manufacturing,0.62,10.3,16,0.1177,0.0708,0.161,58.5,4,False,Low,delayed_delivery,2.4,High
+PO-MFG-00174,2023-02-26,V-MFG-002,Bosch India,manufacturing,0.969,1.2,2,0.0029,0.0068,0.024,90.4,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00175,2023-02-08,V-MFG-002,Bosch India,manufacturing,0.929,1.1,2,0.0122,0.0069,-0.017,90.1,0,True,High,on_time_delivery,4.4,Low
+PO-MFG-00176,2025-07-18,V-MFG-002,Bosch India,manufacturing,0.972,0.8,4,0.0052,0.0068,0.006,93.4,0,False,Medium,on_time_delivery,4.6,Low
+PO-MFG-00177,2023-07-15,V-MFG-002,Bosch India,manufacturing,0.867,3.9,9,0.0354,0.0127,0.04,77.1,1,True,Medium,on_time_delivery,3.6,Medium
+PO-MFG-00178,2025-04-26,V-MFG-002,Bosch India,manufacturing,0.856,3.6,6,0.0379,0.0134,0.043,74.8,0,True,Medium,delayed_delivery,3.4,Medium
+PO-MFG-00179,2023-09-08,V-MFG-002,Bosch India,manufacturing,0.949,0.6,3,0.011,0.0037,-0.019,91.5,0,False,High,on_time_delivery,4.7,Low
+PO-MFG-00180,2024-03-26,V-MFG-002,Bosch India,manufacturing,0.933,0.4,5,0.0055,0.006,-0.002,95.6,0,False,Medium,on_time_delivery,4.6,Low
+PO-MFG-00181,2023-06-05,V-MFG-002,Bosch India,manufacturing,0.83,,12,,0.0218,0.052,73.4,0,True,Medium,delayed_delivery,3.9,Medium
+PO-MFG-00182,2024-11-07,V-MFG-002,Bosch India,manufacturing,0.934,0.9,7,0.004,0.0045,0.009,91.7,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00183,2025-10-07,V-MFG-002,Bosch India,manufacturing,0.972,1.1,2,0.0113,0.0064,0.013,95.3,0,True,Medium,on_time_delivery,4.7,Low
+PO-MFG-00184,2023-06-21,V-MFG-002,Bosch India,manufacturing,0.945,1.2,6,0.013,0.0043,-0.004,98.5,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00185,2024-12-24,V-MFG-002,Bosch India,manufacturing,0.982,0.3,5,0.0051,0.0075,0.009,92.3,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00186,2025-12-24,V-MFG-002,Bosch India,manufacturing,0.928,1.1,6,0.0125,0.0069,0.002,91.7,0,True,High,on_time_delivery,4.4,Low
+PO-MFG-00187,2023-11-20,V-MFG-002,Bosch India,manufacturing,0.953,0.6,5,0.0111,0.0017,0.015,97.4,0,True,High,on_time_delivery,4.9,Low
+PO-MFG-00188,2025-04-05,V-MFG-002,Bosch India,manufacturing,0.769,3.9,6,0.0216,0.0166,0.076,82.2,0,True,Low,delayed_delivery,4.1,Medium
+PO-MFG-00189,2025-08-20,V-MFG-002,Bosch India,manufacturing,0.977,0.8,5,0.0083,0.004,0.008,93.1,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00190,2024-11-17,V-MFG-002,Bosch India,manufacturing,0.945,0.3,6,0.0065,0.0005,0.022,96.8,0,True,Medium,on_time_delivery,4.4,Low
+PO-MFG-00191,2023-07-21,V-MFG-002,Bosch India,manufacturing,0.516,9.2,19,0.0758,0.0557,0.165,61.6,2,True,Low,delayed_delivery,3.0,High
+PO-MFG-00192,2023-12-19,V-MFG-002,Bosch India,manufacturing,0.972,0.8,2,0.0052,0.0038,0.013,96.6,0,True,Medium,on_time_delivery,4.7,Low
+PO-MFG-00193,2023-10-14,V-MFG-002,Bosch India,manufacturing,0.989,0.1,7,0.0093,0.0007,0.028,91.3,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00194,2023-03-04,V-MFG-002,Bosch India,manufacturing,0.981,1.1,5,0.0067,0.006,-0.013,91.0,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00195,2023-03-02,V-MFG-002,Bosch India,manufacturing,0.928,0.9,5,0.0029,0.0027,0.017,94.8,0,False,Medium,on_time_delivery,4.5,Low
+PO-MFG-00196,2025-04-02,V-MFG-002,Bosch India,manufacturing,0.941,0.2,5,0.0057,0.0043,0.013,94.1,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00197,2024-03-04,V-MFG-002,Bosch India,manufacturing,0.926,0.0,6,0.0106,0.005,-0.013,93.0,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00198,2023-10-10,V-MFG-002,Bosch India,manufacturing,0.571,5.6,19,0.0676,0.0731,0.249,51.6,3,False,Low,delayed_delivery,2.9,High
+PO-MFG-00199,2024-03-25,V-MFG-002,Bosch India,manufacturing,0.969,0.6,2,0.0119,0.0018,0.003,91.3,0,True,High,on_time_delivery,4.9,Low
+PO-MFG-00200,2025-06-13,V-MFG-002,Bosch India,manufacturing,0.941,1.1,3,0.0128,0.0021,-0.016,96.7,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00201,2023-07-04,V-MFG-003,Siemens India,manufacturing,0.945,0.2,3,0.0088,0.0022,-0.012,95.6,0,False,High,on_time_delivery,4.8,Low
+PO-MFG-00202,2024-10-01,V-MFG-003,Siemens India,manufacturing,0.949,0.2,4,0.0084,0.0076,-0.015,92.9,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00203,2025-12-28,V-MFG-003,Siemens India,manufacturing,0.94,0.3,2,0.0012,0.0029,0.025,98.6,0,False,High,on_time_delivery,4.6,Low
+PO-MFG-00204,2025-02-12,V-MFG-003,Siemens India,manufacturing,0.951,0.8,4,0.0062,0.0034,-0.011,92.2,0,False,Medium,on_time_delivery,4.5,Low
+PO-MFG-00205,2024-07-01,V-MFG-003,Siemens India,manufacturing,0.928,0.7,2,0.0122,0.0041,-0.018,90.2,0,False,High,on_time_delivery,4.5,Low
+PO-MFG-00206,2024-02-16,V-MFG-003,Siemens India,manufacturing,0.931,0.6,6,0.0012,0.0008,0.016,93.3,0,True,Medium,on_time_delivery,4.7,Low
+PO-MFG-00207,2023-06-23,V-MFG-003,Siemens India,manufacturing,0.758,1.8,5,0.029,0.0118,0.043,82.0,1,True,Low,on_time_delivery,3.7,Medium
+PO-MFG-00208,2024-08-10,V-MFG-003,Siemens India,manufacturing,0.934,0.5,2,0.0109,0.0002,0.008,91.6,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00209,2024-08-01,V-MFG-003,Siemens India,manufacturing,0.934,0.7,4,0.0038,0.0054,0.024,91.8,0,False,Medium,on_time_delivery,4.8,Low
+PO-MFG-00210,2024-05-27,V-MFG-003,Siemens India,manufacturing,0.807,2.7,7,0.0201,0.0205,0.066,83.6,1,False,Low,delayed_delivery,3.4,Medium
+PO-MFG-00211,2024-07-04,V-MFG-003,Siemens India,manufacturing,0.942,0.4,6,0.0013,0.0005,-0.014,94.0,0,False,High,on_time_delivery,4.6,Low
+PO-MFG-00212,2023-01-24,V-MFG-003,Siemens India,manufacturing,0.835,3.3,6,0.0402,0.0201,0.075,81.9,1,False,Low,on_time_delivery,3.6,Medium
+PO-MFG-00213,2023-06-26,V-MFG-003,Siemens India,manufacturing,0.533,7.2,19,0.0876,0.0714,0.159,60.8,3,False,Medium,delayed_delivery,2.8,High
+PO-MFG-00214,2025-08-22,V-MFG-003,Siemens India,manufacturing,0.928,0.5,6,0.0088,0.0023,0.001,93.4,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00215,2023-08-16,V-MFG-003,Siemens India,manufacturing,0.96,0.3,3,0.0117,0.0035,-0.009,96.2,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00216,2025-08-26,V-MFG-003,Siemens India,manufacturing,0.921,0.9,4,0.0033,0.0034,0.029,95.9,0,True,Medium,on_time_delivery,4.6,Low
+PO-MFG-00217,2025-03-04,V-MFG-003,Siemens India,manufacturing,0.926,0.1,3,0.0103,0.0053,0.012,95.9,0,True,Medium,on_time_delivery,4.8,Low
+PO-MFG-00218,2025-02-08,V-MFG-003,Siemens India,manufacturing,0.798,3.6,12,0.0423,0.0262,0.044,78.2,0,False,Low,delayed_delivery,4.2,Medium
+PO-MFG-00219,2024-05-18,V-MFG-003,Siemens India,manufacturing,0.768,3.8,12,0.0436,0.0259,0.066,82.3,0,False,Medium,on_time_delivery,4.1,Medium
+PO-MFG-00220,2023-01-09,V-MFG-003,Siemens India,manufacturing,0.958,0.5,4,0.0076,0.0007,0.022,97.6,0,False,High,on_time_delivery,4.4,Low
+PO-MFG-00221,2023-11-22,V-MFG-003,Siemens India,manufacturing,0.926,0.2,5,0.0104,0.0047,0.02,95.4,0,False,High,on_time_delivery,4.9,Low
+PO-MFG-00222,2025-07-19,V-MFG-003,Siemens India,manufacturing,0.986,0.8,5,0.0103,0.0004,-0.018,93.2,0,True,High,on_time_delivery,4.9,Low
+PO-MFG-00223,2025-07-04,V-MFG-003,Siemens India,manufacturing,0.945,0.1,6,0.01,0.0014,-0.006,98.0,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00224,2024-10-26,V-MFG-003,Siemens India,manufacturing,0.98,0.8,7,0.0066,0.0023,-0.018,95.4,0,False,High,on_time_delivery,4.7,Low
+PO-MFG-00225,2024-07-18,V-MFG-003,Siemens India,manufacturing,0.937,0.3,6,0.007,0.0021,0.006,91.4,0,False,Medium,on_time_delivery,4.5,Low
+PO-MFG-00226,2024-03-06,V-MFG-003,Siemens India,manufacturing,0.989,0.4,3,0.0126,0.0033,0.007,91.1,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00227,2025-04-20,V-MFG-003,Siemens India,manufacturing,0.923,0.5,4,0.0065,0.0012,0.029,94.7,0,True,High,on_time_delivery,4.4,Low
+PO-MFG-00228,2023-05-03,V-MFG-003,Siemens India,manufacturing,0.935,1.0,6,0.0135,0.008,-0.008,96.0,0,True,Medium,on_time_delivery,4.8,Low
+PO-MFG-00229,2023-08-24,V-MFG-003,Siemens India,manufacturing,0.949,0.0,3,0.0147,0.0004,-0.007,95.0,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00230,2023-03-12,V-MFG-003,Siemens India,manufacturing,0.983,0.3,4,0.0079,0.0021,0.011,93.9,0,True,Medium,on_time_delivery,4.7,Low
+PO-MFG-00231,2025-07-13,V-MFG-003,Siemens India,manufacturing,0.979,0.6,7,0.0078,0.0073,0.017,97.0,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00232,2025-11-02,V-MFG-003,Siemens India,manufacturing,0.958,1.1,7,0.001,0.0032,0.022,91.3,0,True,Medium,on_time_delivery,4.6,Low
+PO-MFG-00233,2023-04-27,V-MFG-003,Siemens India,manufacturing,0.943,0.2,5,0.0098,0.0076,0.007,95.5,0,True,High,on_time_delivery,4.9,Low
+PO-MFG-00234,2025-09-15,V-MFG-003,Siemens India,manufacturing,0.942,0.6,6,0.0054,0.0071,-0.015,93.1,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00235,2023-10-05,V-MFG-003,Siemens India,manufacturing,0.971,0.8,2,0.0128,0.0062,0.03,92.2,0,False,High,on_time_delivery,4.4,Low
+PO-MFG-00236,2024-02-14,V-MFG-003,Siemens India,manufacturing,0.968,0.1,6,0.0085,0.0062,0.02,91.9,0,True,Medium,on_time_delivery,4.6,Low
+PO-MFG-00237,2023-02-17,V-MFG-003,Siemens India,manufacturing,0.961,0.4,6,0.0018,0.0039,-0.018,95.3,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00238,2024-03-02,V-MFG-003,Siemens India,manufacturing,0.556,7.9,16,0.0994,0.0473,0.237,61.4,4,False,Medium,defective_shipment,2.6,High
+PO-MFG-00239,2024-05-06,V-MFG-003,Siemens India,manufacturing,0.921,0.9,4,0.0054,0.0069,0.005,94.0,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00240,2024-04-07,V-MFG-003,Siemens India,manufacturing,0.852,3.9,5,0.0295,0.0144,0.079,75.6,1,False,Low,delayed_delivery,4.0,Medium
+PO-MFG-00241,2024-01-04,V-MFG-003,Siemens India,manufacturing,0.948,0.4,6,0.0059,0.0074,-0.02,98.4,0,False,Medium,on_time_delivery,4.8,Low
+PO-MFG-00242,2023-05-06,V-MFG-003,Siemens India,manufacturing,0.987,1.0,5,0.0145,0.0038,0.013,92.8,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00243,2023-02-06,V-MFG-003,Siemens India,manufacturing,0.94,1.2,2,0.0062,0.0078,0.005,98.6,0,False,Medium,on_time_delivery,4.4,Low
+PO-MFG-00244,2025-01-04,V-MFG-003,Siemens India,manufacturing,0.812,3.0,11,0.031,0.0189,0.068,74.7,0,True,Medium,on_time_delivery,4.1,Medium
+PO-MFG-00245,2024-08-05,V-MFG-003,Siemens India,manufacturing,0.879,2.7,9,0.041,0.0215,0.061,74.1,0,True,Low,delayed_delivery,3.8,Medium
+PO-MFG-00246,2024-06-08,V-MFG-003,Siemens India,manufacturing,0.95,0.8,7,0.0064,0.006,-0.018,95.0,0,True,High,on_time_delivery,4.9,Low
+PO-MFG-00247,2023-05-05,V-MFG-003,Siemens India,manufacturing,0.766,3.2,8,0.0316,0.0258,0.058,82.5,1,True,Low,on_time_delivery,3.6,Medium
+PO-MFG-00248,2024-11-15,V-MFG-003,Siemens India,manufacturing,0.944,0.2,3,0.0128,0.0006,-0.013,91.7,0,False,High,on_time_delivery,4.8,Low
+PO-MFG-00249,2025-12-16,V-MFG-003,Siemens India,manufacturing,0.968,0.7,2,0.0073,0.0072,-0.0,91.9,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00250,2024-03-01,V-MFG-003,Siemens India,manufacturing,0.933,1.0,6,0.0063,0.0014,-0.016,94.3,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00251,2023-10-26,V-MFG-003,Siemens India,manufacturing,1.35,0.3,2,0.0046,0.0057,-0.01,115.0,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00252,2023-05-20,V-MFG-003,Siemens India,manufacturing,0.983,0.4,3,0.0133,0.0001,0.023,97.8,0,True,High,on_time_delivery,4.4,Low
+PO-MFG-00253,2024-08-17,V-MFG-003,Siemens India,manufacturing,0.787,4.2,11,0.0273,0.0131,0.053,84.8,1,False,Medium,on_time_delivery,3.4,Medium
+PO-MFG-00254,2025-06-23,V-MFG-003,Siemens India,manufacturing,0.925,0.7,3,0.0073,0.0063,-0.015,95.8,0,True,Medium,on_time_delivery,4.7,Low
+PO-MFG-00255,2025-08-17,V-MFG-003,Siemens India,manufacturing,0.956,0.3,6,0.0113,0.0064,0.008,93.8,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00256,2024-08-19,V-MFG-003,Siemens India,manufacturing,0.969,1.0,2,0.0048,0.0036,-0.013,93.4,0,True,Medium,on_time_delivery,4.8,Low
+PO-MFG-00257,2025-12-13,V-MFG-003,Siemens India,manufacturing,0.635,6.6,12,0.1138,0.0724,0.204,56.3,2,True,Low,delayed_delivery,2.7,High
+PO-MFG-00258,2023-11-22,V-MFG-003,Siemens India,manufacturing,0.958,0.0,3,0.0142,0.0045,0.029,94.7,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00259,2023-03-04,V-MFG-003,Siemens India,manufacturing,0.756,1.9,7,0.0242,0.026,0.041,81.7,1,False,Medium,on_time_delivery,3.5,Medium
+PO-MFG-00260,2025-11-20,V-MFG-003,Siemens India,manufacturing,0.837,3.2,12,0.0373,0.0122,0.067,83.4,0,False,Medium,delayed_delivery,3.6,Medium
+PO-MFG-00261,2023-09-10,V-MFG-003,Siemens India,manufacturing,0.871,3.4,6,0.0339,0.0236,0.079,75.9,1,True,Low,on_time_delivery,3.6,Medium
+PO-MFG-00262,2025-06-27,V-MFG-003,Siemens India,manufacturing,0.838,1.8,5,0.0234,0.0239,0.041,83.7,1,True,Low,on_time_delivery,4.1,Medium
+PO-MFG-00263,2024-12-19,V-MFG-003,Siemens India,manufacturing,0.947,1.0,4,0.0013,0.0055,0.002,98.8,0,False,High,on_time_delivery,4.5,Low
+PO-MFG-00264,2025-07-12,V-MFG-003,Siemens India,manufacturing,0.941,0.1,2,0.0109,0.0071,0.027,98.9,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00265,2025-10-09,V-MFG-003,Siemens India,manufacturing,0.974,0.6,6,0.0096,0.0029,0.008,91.8,0,False,High,on_time_delivery,4.5,Low
+PO-MFG-00266,2024-09-24,V-MFG-003,Siemens India,manufacturing,0.96,0.7,3,0.0064,0.0037,-0.019,92.1,0,False,High,on_time_delivery,4.7,Low
+PO-MFG-00267,2025-02-16,V-MFG-003,Siemens India,manufacturing,0.819,3.5,12,0.0391,0.0113,0.042,83.2,1,True,Medium,on_time_delivery,4.1,Medium
+PO-MFG-00268,2024-01-23,V-MFG-003,Siemens India,manufacturing,0.962,0.2,2,0.0029,0.007,0.018,93.2,0,True,High,on_time_delivery,4.4,Low
+PO-MFG-00269,2025-01-25,V-MFG-003,Siemens India,manufacturing,0.679,11.3,15,0.1157,0.0773,0.222,51.9,4,False,Low,defective_shipment,2.6,High
+PO-MFG-00270,2023-11-24,V-MFG-003,Siemens India,manufacturing,0.93,0.4,6,0.0036,0.0006,0.007,97.2,0,True,High,on_time_delivery,4.4,Low
+PO-MFG-00271,2024-03-14,V-MFG-003,Siemens India,manufacturing,0.939,0.2,6,0.0142,0.0027,0.009,94.0,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00272,2023-02-27,V-MFG-003,Siemens India,manufacturing,0.959,0.8,4,0.0078,0.0067,-0.004,97.0,0,True,Medium,on_time_delivery,4.8,Low
+PO-MFG-00273,2024-08-27,V-MFG-003,Siemens India,manufacturing,0.92,0.7,7,0.0017,0.0051,-0.009,96.3,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00274,2023-04-27,V-MFG-003,Siemens India,manufacturing,0.93,1.0,5,0.0149,0.004,0.026,95.5,0,True,Medium,on_time_delivery,4.4,Low
+PO-MFG-00275,2025-09-06,V-MFG-003,Siemens India,manufacturing,0.931,0.3,5,0.0044,0.0011,0.001,93.5,0,True,Medium,on_time_delivery,4.6,Low
+PO-MFG-00276,2024-09-21,V-MFG-003,Siemens India,manufacturing,0.969,1.1,2,0.0026,0.003,-0.02,91.6,0,False,Medium,on_time_delivery,4.9,Low
+PO-MFG-00277,2024-03-14,V-MFG-003,Siemens India,manufacturing,0.926,1.1,7,0.0061,0.0076,0.023,94.0,0,True,Medium,on_time_delivery,4.4,Low
+PO-MFG-00278,2024-10-11,V-MFG-003,Siemens India,manufacturing,0.968,0.0,5,0.0046,0.0056,0.029,90.8,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00279,2023-11-05,V-MFG-003,Siemens India,manufacturing,0.976,0.6,5,0.0093,0.0046,0.023,93.7,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00280,2023-07-27,V-MFG-003,Siemens India,manufacturing,0.845,4.4,7,0.0444,0.0136,0.056,79.5,0,True,Low,on_time_delivery,3.7,Medium
+PO-MFG-00281,2025-11-20,V-MFG-003,Siemens India,manufacturing,0.948,0.8,2,0.0076,0.0024,0.029,97.1,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00282,2023-06-28,V-MFG-003,Siemens India,manufacturing,0.984,0.5,2,0.0067,0.0022,0.007,90.4,0,False,High,on_time_delivery,4.5,Low
+PO-MFG-00283,2025-05-10,V-MFG-003,Siemens India,manufacturing,0.985,0.6,6,0.0053,0.0014,0.02,93.4,0,True,High,on_time_delivery,4.9,Low
+PO-MFG-00284,2024-06-02,V-MFG-003,Siemens India,manufacturing,0.951,0.5,4,0.0109,0.0031,0.002,93.0,0,True,High,on_time_delivery,4.9,Low
+PO-MFG-00285,2025-03-24,V-MFG-003,Siemens India,manufacturing,0.978,0.7,6,0.0141,0.0072,-0.004,90.4,0,True,High,on_time_delivery,4.4,Low
+PO-MFG-00286,2023-04-04,V-MFG-003,Siemens India,manufacturing,0.681,12.0,17,0.1056,0.0774,0.132,63.7,2,False,Medium,defective_shipment,2.9,High
+PO-MFG-00287,2024-01-22,V-MFG-003,Siemens India,manufacturing,0.969,0.2,2,0.0067,0.005,0.026,92.8,0,True,High,on_time_delivery,4.9,Low
+PO-MFG-00288,2023-02-22,V-MFG-003,Siemens India,manufacturing,0.929,0.5,4,0.012,0.0072,-0.002,98.7,0,True,Medium,on_time_delivery,4.8,Low
+PO-MFG-00289,2025-01-03,V-MFG-003,Siemens India,manufacturing,0.942,0.4,7,0.014,0.0073,-0.003,97.2,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00290,2023-08-10,V-MFG-003,Siemens India,manufacturing,0.923,1.0,2,0.0117,0.0056,0.022,94.2,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00291,2024-11-01,V-MFG-003,Siemens India,manufacturing,0.984,0.8,2,0.0017,0.0079,-0.006,96.1,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00292,2025-10-04,V-MFG-003,Siemens India,manufacturing,0.92,0.4,2,0.0133,0.0034,0.005,96.3,0,True,Medium,on_time_delivery,4.4,Low
+PO-MFG-00293,2025-02-08,V-MFG-003,Siemens India,manufacturing,0.989,0.4,6,0.0096,0.0014,0.007,93.1,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00294,2023-06-13,V-MFG-003,Siemens India,manufacturing,0.925,0.1,5,0.009,0.0046,0.012,93.6,0,False,High,on_time_delivery,4.4,Low
+PO-MFG-00295,2025-08-16,V-MFG-003,Siemens India,manufacturing,0.938,0.9,3,0.0149,0.004,0.015,91.1,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00296,2024-10-23,V-MFG-003,Siemens India,manufacturing,0.987,0.4,3,0.0013,0.0031,0.003,96.8,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00297,2025-06-27,V-MFG-003,Siemens India,manufacturing,0.921,0.6,5,0.0054,0.001,-0.0,92.6,0,False,High,on_time_delivery,4.5,Low
+PO-MFG-00298,2025-03-22,V-MFG-003,Siemens India,manufacturing,0.986,0.8,3,0.0041,0.0018,-0.003,90.9,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00299,2025-07-27,V-MFG-003,Siemens India,manufacturing,0.967,0.4,2,0.0099,0.0077,0.008,93.7,0,True,Medium,on_time_delivery,4.4,Low
+PO-MFG-00300,2023-02-13,V-MFG-003,Siemens India,manufacturing,0.801,2.2,7,0.0346,0.0101,0.085,76.7,1,False,Medium,on_time_delivery,4.1,Medium
+PO-MFG-00301,2023-03-19,V-MFG-004,ABB India,manufacturing,0.64,10.5,14,0.0659,0.0371,0.244,49.6,4,False,Low,delayed_delivery,2.6,High
+PO-MFG-00302,2023-02-09,V-MFG-004,ABB India,manufacturing,0.81,2.9,5,0.0368,0.0123,0.085,73.6,1,True,Low,delayed_delivery,3.5,Medium
+PO-MFG-00303,2023-02-21,V-MFG-004,ABB India,manufacturing,0.853,3.7,7,0.0198,0.0263,0.066,73.7,1,False,Low,on_time_delivery,3.9,Medium
+PO-MFG-00304,2023-09-14,V-MFG-004,ABB India,manufacturing,0.777,2.6,6,0.0377,0.0259,0.068,78.5,1,True,Low,on_time_delivery,3.8,Medium
+PO-MFG-00305,2023-06-08,V-MFG-004,ABB India,manufacturing,0.812,3.8,8,0.0198,0.0276,0.07,74.2,1,False,Low,on_time_delivery,3.7,Medium
+PO-MFG-00306,2023-11-04,V-MFG-004,ABB India,manufacturing,0.689,6.4,17,0.0656,0.0374,0.192,56.7,4,False,Low,delayed_delivery,2.8,High
+PO-MFG-00307,2024-02-09,V-MFG-004,ABB India,manufacturing,0.786,4.5,8,0.0377,0.0266,0.083,82.5,0,False,Medium,delayed_delivery,4.0,Medium
+PO-MFG-00308,2025-11-24,V-MFG-004,ABB India,manufacturing,0.752,1.6,8,0.0444,0.015,0.076,74.1,0,True,Medium,on_time_delivery,3.7,Medium
+PO-MFG-00309,2025-02-08,V-MFG-004,ABB India,manufacturing,0.571,6.8,12,0.0877,0.0538,0.235,52.7,3,False,Low,delayed_delivery,2.5,High
+PO-MFG-00310,2023-08-15,V-MFG-004,ABB India,manufacturing,0.952,0.5,6,0.0023,0.0043,-0.013,90.6,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00311,2024-11-27,V-MFG-004,ABB India,manufacturing,0.839,3.7,12,0.0261,0.0256,0.042,85.2,1,True,Low,delayed_delivery,3.6,Medium
+PO-MFG-00312,2025-09-27,V-MFG-004,ABB India,manufacturing,0.939,0.7,5,0.0033,0.0045,0.02,91.8,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00313,2024-07-18,V-MFG-004,ABB India,manufacturing,0.865,4.4,11,0.0407,0.0263,0.063,82.5,0,False,Low,on_time_delivery,4.1,Medium
+PO-MFG-00314,2025-07-12,V-MFG-004,ABB India,manufacturing,0.797,2.4,9,0.039,0.0241,0.055,72.5,1,False,Low,on_time_delivery,3.9,Medium
+PO-MFG-00315,2023-10-14,V-MFG-004,ABB India,manufacturing,0.795,2.4,11,0.0225,0.0134,0.082,77.4,1,True,Low,on_time_delivery,4.2,Medium
+PO-MFG-00316,2024-11-05,V-MFG-004,ABB India,manufacturing,0.87,3.7,10,0.0252,0.0127,0.074,83.9,1,True,Medium,delayed_delivery,4.0,Medium
+PO-MFG-00317,2023-11-08,V-MFG-004,ABB India,manufacturing,0.638,11.4,11,0.0978,0.0607,0.169,49.2,4,False,Low,delayed_delivery,2.9,High
+PO-MFG-00318,2024-08-06,V-MFG-004,ABB India,manufacturing,0.669,9.8,15,0.0896,0.0451,0.154,48.8,2,True,Low,delayed_delivery,2.2,High
+PO-MFG-00319,2025-09-16,V-MFG-004,ABB India,manufacturing,0.948,0.4,7,0.0047,0.0069,0.019,93.5,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00320,2025-12-24,V-MFG-004,ABB India,manufacturing,0.854,2.3,10,0.0436,0.0165,0.052,77.2,1,False,Medium,on_time_delivery,4.1,Medium
+PO-MFG-00321,2025-07-26,V-MFG-004,ABB India,manufacturing,0.758,2.1,9,0.0214,0.0132,0.054,72.3,1,True,Medium,on_time_delivery,3.8,Medium
+PO-MFG-00322,2023-07-20,V-MFG-004,ABB India,manufacturing,0.93,0.9,4,0.0091,0.0032,0.022,91.6,0,True,Medium,on_time_delivery,4.6,Low
+PO-MFG-00323,2023-04-12,V-MFG-004,ABB India,manufacturing,0.648,9.3,11,0.0723,0.0523,0.241,50.4,4,False,Low,delayed_delivery,3.0,High
+PO-MFG-00324,2024-02-10,V-MFG-004,ABB India,manufacturing,0.851,4.2,8,0.0374,0.011,0.068,75.1,1,True,Low,delayed_delivery,3.4,Medium
+PO-MFG-00325,2025-02-16,V-MFG-004,ABB India,manufacturing,0.872,4.0,7,0.0218,0.0122,0.058,79.7,0,False,Medium,delayed_delivery,3.6,Medium
+PO-MFG-00326,2025-05-24,V-MFG-004,ABB India,manufacturing,0.983,0.5,6,0.0122,0.0021,0.022,95.9,0,False,Medium,on_time_delivery,4.5,Low
+PO-MFG-00327,2023-11-27,V-MFG-004,ABB India,manufacturing,0.838,3.6,11,0.0395,0.0258,0.081,75.1,1,False,Medium,delayed_delivery,3.9,Medium
+PO-MFG-00328,2024-07-07,V-MFG-004,ABB India,manufacturing,0.775,1.5,9,0.0426,0.0216,0.042,82.7,1,False,Low,on_time_delivery,4.1,Medium
+PO-MFG-00329,2024-06-21,V-MFG-004,ABB India,manufacturing,0.817,4.5,5,0.0187,0.0127,0.083,74.5,0,True,Medium,delayed_delivery,3.7,Medium
+PO-MFG-00330,2023-02-14,V-MFG-004,ABB India,manufacturing,0.753,2.4,6,0.0388,0.0139,0.06,83.3,1,True,Medium,delayed_delivery,4.1,Medium
+PO-MFG-00331,2023-07-20,V-MFG-004,ABB India,manufacturing,0.795,3.6,11,0.0228,0.023,0.07,74.6,1,False,Low,on_time_delivery,3.5,Medium
+PO-MFG-00332,2025-06-27,V-MFG-004,ABB India,manufacturing,0.866,3.5,8,0.0426,0.0127,0.048,81.7,1,True,Low,delayed_delivery,3.4,Medium
+PO-MFG-00333,2024-12-23,V-MFG-004,ABB India,manufacturing,0.858,3.8,8,0.0391,0.0141,0.051,78.0,1,False,Low,on_time_delivery,3.7,Medium
+PO-MFG-00334,2025-08-02,V-MFG-004,ABB India,manufacturing,0.597,8.0,17,0.1062,0.0404,0.186,48.0,2,False,Low,delayed_delivery,2.1,High
+PO-MFG-00335,2024-02-12,V-MFG-004,ABB India,manufacturing,0.834,4.4,8,0.0421,0.02,0.068,85.5,1,True,Medium,on_time_delivery,4.1,Medium
+PO-MFG-00336,2025-05-25,V-MFG-004,ABB India,manufacturing,0.948,0.2,5,0.0116,0.001,-0.01,98.7,0,True,High,on_time_delivery,4.9,Low
+PO-MFG-00337,2023-12-17,V-MFG-004,ABB India,manufacturing,0.752,1.8,9,0.0249,0.0128,0.068,81.4,1,True,Low,delayed_delivery,4.0,Medium
+PO-MFG-00338,2023-07-06,V-MFG-004,ABB India,manufacturing,0.857,3.4,10,0.0237,0.0218,0.085,75.4,1,False,Low,delayed_delivery,4.1,Medium
+PO-MFG-00339,2023-05-13,V-MFG-004,ABB India,manufacturing,0.839,3.0,6,0.0403,0.0101,0.073,75.2,1,False,Low,on_time_delivery,3.5,Medium
+PO-MFG-00340,2023-04-25,V-MFG-004,ABB India,manufacturing,0.573,8.1,10,0.0881,0.0479,0.172,55.8,4,False,Medium,defective_shipment,2.2,High
+PO-MFG-00341,2024-01-12,V-MFG-004,ABB India,manufacturing,0.942,0.7,3,0.0141,0.0053,-0.002,93.9,0,True,Medium,on_time_delivery,4.4,Low
+PO-MFG-00342,2025-06-11,V-MFG-004,ABB India,manufacturing,0.95,0.0,7,0.0023,0.0058,0.01,91.9,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00343,2023-01-16,V-MFG-004,ABB India,manufacturing,0.854,3.9,5,0.0248,0.0178,0.048,72.2,1,False,Low,delayed_delivery,4.0,Medium
+PO-MFG-00344,2024-02-07,V-MFG-004,ABB India,manufacturing,0.824,3.8,11,0.0425,0.0212,0.063,79.9,1,False,Low,on_time_delivery,3.6,Medium
+PO-MFG-00345,2024-08-08,V-MFG-004,ABB India,manufacturing,0.76,3.3,7,0.0216,0.0217,0.074,72.4,1,False,Medium,on_time_delivery,3.6,Medium
+PO-MFG-00346,2023-11-22,V-MFG-004,ABB India,manufacturing,0.824,4.2,9,0.0235,0.0208,0.071,77.4,1,True,Low,on_time_delivery,3.5,Medium
+PO-MFG-00347,2023-03-04,V-MFG-004,ABB India,manufacturing,0.826,2.6,5,0.0389,0.0188,0.059,85.9,1,False,Medium,on_time_delivery,3.4,Medium
+PO-MFG-00348,2023-07-18,V-MFG-004,ABB India,manufacturing,0.81,2.4,11,0.0314,0.0154,0.062,78.3,1,True,Medium,delayed_delivery,3.7,Medium
+PO-MFG-00349,2025-01-09,V-MFG-004,ABB India,manufacturing,0.862,1.6,11,0.0246,0.0157,0.051,74.8,1,False,Medium,on_time_delivery,3.9,Medium
+PO-MFG-00350,2024-02-04,V-MFG-004,ABB India,manufacturing,0.668,9.2,15,0.0639,0.0663,0.149,48.9,4,False,Medium,delayed_delivery,2.3,High
+PO-MFG-00351,2023-09-06,V-MFG-004,ABB India,manufacturing,0.81,3.5,11,0.0261,0.0278,0.083,80.6,1,False,Medium,on_time_delivery,4.1,Medium
+PO-MFG-00352,2024-04-10,V-MFG-004,ABB India,manufacturing,0.876,3.8,9,0.0381,0.0155,0.053,73.0,1,True,Medium,delayed_delivery,4.0,Medium
+PO-MFG-00353,2025-05-09,V-MFG-004,ABB India,manufacturing,0.825,2.4,9,0.0417,0.0147,0.066,81.5,1,True,Low,delayed_delivery,3.4,Medium
+PO-MFG-00354,2024-03-20,V-MFG-004,ABB India,manufacturing,0.844,3.7,8,0.0447,0.022,0.067,82.8,1,False,Low,delayed_delivery,3.5,Medium
+PO-MFG-00355,2025-08-05,V-MFG-004,ABB India,manufacturing,0.512,6.6,17,0.1045,0.0566,0.159,61.2,3,False,Medium,defective_shipment,2.5,High
+PO-MFG-00356,2025-03-28,V-MFG-004,ABB India,manufacturing,0.851,1.6,5,0.0192,0.015,0.062,76.3,0,True,Low,delayed_delivery,4.1,Medium
+PO-MFG-00357,2025-06-04,V-MFG-004,ABB India,manufacturing,0.768,1.8,12,0.027,0.0171,0.058,81.9,1,True,Medium,on_time_delivery,3.9,Medium
+PO-MFG-00358,2023-09-14,V-MFG-004,ABB India,manufacturing,0.988,0.1,6,0.0095,0.0076,-0.007,93.2,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00359,2024-04-03,V-MFG-004,ABB India,manufacturing,0.759,4.3,10,0.0193,0.0137,0.085,74.7,1,True,Low,delayed_delivery,4.1,Medium
+PO-MFG-00360,2024-05-06,V-MFG-004,ABB India,manufacturing,0.784,2.1,6,0.0185,0.0142,0.063,80.1,1,False,Low,delayed_delivery,3.8,Medium
+PO-MFG-00361,2025-06-23,V-MFG-004,ABB India,manufacturing,0.634,6.4,14,0.0798,0.0612,0.127,61.8,4,False,Medium,defective_shipment,3.1,High
+PO-MFG-00362,2024-04-02,V-MFG-004,ABB India,manufacturing,0.789,4.0,5,0.0222,0.0197,0.08,77.1,0,True,Low,on_time_delivery,3.7,Medium
+PO-MFG-00363,2024-06-24,V-MFG-004,ABB India,manufacturing,0.863,4.3,7,0.0234,0.0124,0.09,80.7,0,True,Low,delayed_delivery,3.5,Medium
+PO-MFG-00364,2023-04-07,V-MFG-004,ABB India,manufacturing,0.864,2.2,8,0.0233,0.0173,0.062,82.3,0,False,Medium,on_time_delivery,4.1,Medium
+PO-MFG-00365,2024-03-25,V-MFG-004,ABB India,manufacturing,0.812,3.3,10,0.0247,0.0235,0.049,81.0,0,True,Low,delayed_delivery,4.1,Medium
+PO-MFG-00366,2025-05-27,V-MFG-004,ABB India,manufacturing,0.954,0.3,3,0.0048,0.0073,0.02,90.4,0,True,High,on_time_delivery,4.4,Low
+PO-MFG-00367,2025-12-26,V-MFG-004,ABB India,manufacturing,0.69,10.5,11,0.0845,0.0423,0.141,60.1,3,False,Medium,delayed_delivery,2.6,High
+PO-MFG-00368,2024-05-22,V-MFG-004,ABB India,manufacturing,0.668,8.5,11,0.1091,0.0564,0.203,54.4,3,False,Low,delayed_delivery,3.1,High
+PO-MFG-00369,2024-11-18,V-MFG-004,ABB India,manufacturing,0.78,4.1,12,0.0222,0.0222,0.071,76.8,0,True,Low,on_time_delivery,3.9,Medium
+PO-MFG-00370,2025-12-11,V-MFG-004,ABB India,manufacturing,0.947,0.9,4,0.011,0.0073,0.016,91.3,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00371,2025-02-26,V-MFG-004,ABB India,manufacturing,0.774,1.9,6,0.0444,0.0121,0.063,79.2,0,False,Medium,delayed_delivery,3.9,Medium
+PO-MFG-00372,2023-08-28,V-MFG-004,ABB India,manufacturing,0.509,10.9,14,0.1001,0.0709,0.241,56.4,3,False,Medium,defective_shipment,2.3,High
+PO-MFG-00373,2023-08-04,V-MFG-004,ABB India,manufacturing,0.772,1.9,12,0.0435,0.0235,0.052,79.8,0,True,Low,on_time_delivery,4.1,Medium
+PO-MFG-00374,2023-07-06,V-MFG-004,ABB India,manufacturing,0.799,2.5,9,0.034,0.0216,0.082,74.7,0,True,Low,delayed_delivery,4.2,Medium
+PO-MFG-00375,2024-01-10,V-MFG-004,ABB India,manufacturing,0.815,3.1,10,0.0183,0.0184,0.08,72.1,1,False,Medium,delayed_delivery,3.9,Medium
+PO-MFG-00376,2023-11-15,V-MFG-004,ABB India,manufacturing,0.594,9.6,12,0.0808,0.0636,0.147,63.0,4,True,Medium,defective_shipment,2.4,High
+PO-MFG-00377,2024-08-11,V-MFG-004,ABB India,manufacturing,0.853,2.0,10,0.0333,0.0103,0.044,77.6,1,True,Low,delayed_delivery,3.4,Medium
+PO-MFG-00378,2025-03-05,V-MFG-004,ABB India,manufacturing,0.827,1.9,10,0.0429,0.0272,0.078,75.1,0,False,Medium,on_time_delivery,3.6,Medium
+PO-MFG-00379,2025-12-26,V-MFG-004,ABB India,manufacturing,0.77,2.7,9,0.0359,0.0272,0.042,77.3,1,False,Low,on_time_delivery,3.5,Medium
+PO-MFG-00380,2023-04-21,V-MFG-004,ABB India,manufacturing,0.82,4.1,5,0.0254,0.0196,0.083,81.9,0,True,Low,delayed_delivery,4.1,Medium
+PO-MFG-00381,2023-02-12,V-MFG-004,ABB India,manufacturing,0.847,3.0,6,0.0372,0.0197,0.083,79.6,1,False,Medium,on_time_delivery,4.1,Medium
+PO-MFG-00382,2025-02-17,V-MFG-004,ABB India,manufacturing,0.792,3.2,5,0.0285,0.0278,0.078,83.7,1,True,Low,on_time_delivery,3.5,Medium
+PO-MFG-00383,2024-08-21,V-MFG-004,ABB India,manufacturing,0.6,7.1,15,0.0889,0.0699,0.245,57.1,3,False,Medium,delayed_delivery,2.8,High
+PO-MFG-00384,2023-05-22,V-MFG-004,ABB India,manufacturing,0.933,0.7,7,0.014,0.0065,-0.011,91.7,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00385,2023-10-09,V-MFG-004,ABB India,manufacturing,0.819,3.9,6,0.0256,0.0187,0.066,84.3,1,True,Low,on_time_delivery,4.1,Medium
+PO-MFG-00386,2024-10-20,V-MFG-004,ABB India,manufacturing,0.827,3.3,6,0.0356,0.0192,0.05,82.3,0,True,Low,on_time_delivery,3.7,Medium
+PO-MFG-00387,2025-12-06,V-MFG-004,ABB India,manufacturing,0.842,1.7,10,0.0433,0.0235,0.067,74.7,1,True,Low,delayed_delivery,3.7,Medium
+PO-MFG-00388,2023-05-08,V-MFG-004,ABB India,manufacturing,0.865,4.2,5,0.0433,0.02,0.048,77.9,1,True,Low,delayed_delivery,3.8,Medium
+PO-MFG-00389,2024-03-27,V-MFG-004,ABB India,manufacturing,0.809,2.8,8,0.0412,0.0132,0.068,84.5,1,False,Low,delayed_delivery,4.1,Medium
+PO-MFG-00390,2025-02-17,V-MFG-004,ABB India,manufacturing,0.794,1.8,11,0.0228,0.0182,0.052,79.7,0,True,Low,delayed_delivery,3.5,Medium
+PO-MFG-00391,2023-04-08,V-MFG-004,ABB India,manufacturing,0.843,2.0,8,0.0274,0.0134,0.077,82.2,0,False,Medium,delayed_delivery,3.7,Medium
+PO-MFG-00392,2024-07-04,V-MFG-004,ABB India,manufacturing,0.624,8.2,20,0.102,0.0721,0.142,57.1,4,True,Low,defective_shipment,2.4,High
+PO-MFG-00393,2023-08-20,V-MFG-004,ABB India,manufacturing,0.808,2.7,12,0.0428,0.0225,0.058,80.3,1,True,Medium,on_time_delivery,3.9,Medium
+PO-MFG-00394,2025-01-23,V-MFG-004,ABB India,manufacturing,0.857,2.0,11,0.0282,0.0225,0.081,79.5,0,False,Low,delayed_delivery,3.7,Medium
+PO-MFG-00395,2025-09-19,V-MFG-004,ABB India,manufacturing,0.824,4.4,10,0.0268,0.0208,0.074,80.8,0,False,Medium,delayed_delivery,3.9,Medium
+PO-MFG-00396,2024-05-21,V-MFG-004,ABB India,manufacturing,0.812,3.8,11,0.0294,0.0278,0.055,82.7,1,False,Medium,delayed_delivery,3.8,Medium
+PO-MFG-00397,2025-08-10,V-MFG-004,ABB India,manufacturing,0.839,3.0,10,0.0365,0.0253,0.054,75.9,1,True,Medium,delayed_delivery,3.7,Medium
+PO-MFG-00398,2024-09-21,V-MFG-004,ABB India,manufacturing,0.795,2.7,6,0.0449,0.0153,0.069,72.4,1,False,Low,delayed_delivery,3.9,Medium
+PO-MFG-00399,2024-01-11,V-MFG-004,ABB India,manufacturing,0.875,1.9,5,0.0224,0.0125,0.063,77.6,1,True,Low,delayed_delivery,3.6,Medium
+PO-MFG-00400,2024-09-04,V-MFG-004,ABB India,manufacturing,0.974,0.0,6,0.009,0.0015,0.013,90.4,0,False,High,on_time_delivery,4.7,Low
+PO-MFG-00401,2023-10-20,V-MFG-005,Hindalco Industries,manufacturing,0.846,2.3,6,0.0329,0.0175,0.083,72.2,1,False,Low,delayed_delivery,3.4,Medium
+PO-MFG-00401,2024-12-13,V-MFG-005,Hindalco Industries,manufacturing,0.849,2.7,10,0.0354,0.0103,0.088,77.0,1,True,Medium,delayed_delivery,4.1,Medium
+PO-MFG-00403,2025-05-14,V-MFG-005,Hindalco Industries,manufacturing,0.585,5.8,17,0.1144,0.0761,0.205,55.1,2,False,Low,delayed_delivery,2.2,High
+PO-MFG-00404,2024-06-23,V-MFG-005,Hindalco Industries,manufacturing,0.929,0.3,4,0.0052,0.0078,-0.013,95.4,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00405,2024-09-13,V-MFG-005,Hindalco Industries,manufacturing,0.856,2.6,9,0.0434,0.0168,0.079,73.8,1,False,Medium,on_time_delivery,3.5,Medium
+PO-MFG-00406,2023-03-28,V-MFG-005,Hindalco Industries,manufacturing,0.534,9.5,15,0.0703,0.0769,0.204,50.6,2,False,Medium,defective_shipment,2.6,High
+PO-MFG-00407,2025-05-22,V-MFG-005,Hindalco Industries,manufacturing,0.852,2.6,8,0.0342,0.0159,0.045,83.5,0,True,Medium,delayed_delivery,3.8,Medium
+PO-MFG-00408,2023-05-11,V-MFG-005,Hindalco Industries,manufacturing,0.845,2.2,7,0.0369,0.0255,0.07,72.0,0,False,Low,delayed_delivery,4.2,Medium
+PO-MFG-00409,2023-12-25,V-MFG-005,Hindalco Industries,manufacturing,0.59,11.5,20,0.0643,0.0786,0.184,53.1,3,True,Low,defective_shipment,2.7,High
+PO-MFG-00410,2024-09-11,V-MFG-005,Hindalco Industries,manufacturing,0.932,0.7,4,0.0034,0.0067,-0.013,97.7,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00411,2024-06-20,V-MFG-005,Hindalco Industries,manufacturing,0.761,1.7,10,0.0427,0.0195,0.072,77.1,1,True,Medium,on_time_delivery,3.8,Medium
+PO-MFG-00412,2023-06-21,V-MFG-005,Hindalco Industries,manufacturing,0.778,3.8,9,0.0298,0.0195,0.077,82.3,0,False,Low,on_time_delivery,3.9,Medium
+PO-MFG-00413,2025-08-07,V-MFG-005,Hindalco Industries,manufacturing,0.938,1.0,6,0.0038,0.0027,0.004,94.8,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00414,2023-02-23,V-MFG-005,Hindalco Industries,manufacturing,0.776,4.0,7,0.0295,0.0107,0.064,79.5,0,True,Medium,delayed_delivery,3.8,Medium
+PO-MFG-00415,2023-05-27,V-MFG-005,Hindalco Industries,manufacturing,0.822,2.1,6,0.0265,0.0122,0.075,77.7,1,True,Medium,delayed_delivery,3.8,Medium
+PO-MFG-00416,2025-01-04,V-MFG-005,Hindalco Industries,manufacturing,0.956,1.0,4,0.0069,0.0038,-0.005,97.8,0,False,Medium,on_time_delivery,4.8,Low
+PO-MFG-00417,2024-03-19,V-MFG-005,Hindalco Industries,manufacturing,0.855,3.3,6,0.0446,0.014,0.081,73.9,1,False,Medium,on_time_delivery,3.6,Medium
+PO-MFG-00418,2023-10-19,V-MFG-005,Hindalco Industries,manufacturing,0.609,10.6,10,0.0623,0.059,0.192,54.1,4,False,Low,defective_shipment,2.3,High
+PO-MFG-00419,2025-10-14,V-MFG-005,Hindalco Industries,manufacturing,0.966,0.3,4,0.0034,0.0024,-0.006,98.4,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00420,2025-10-24,V-MFG-005,Hindalco Industries,manufacturing,0.587,7.9,12,0.0915,0.0745,0.227,61.9,3,True,Medium,delayed_delivery,3.1,High
+PO-MFG-00421,2025-01-06,V-MFG-005,Hindalco Industries,manufacturing,0.93,,6,,0.0043,0.013,96.0,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00422,2025-10-28,V-MFG-005,Hindalco Industries,manufacturing,0.809,1.7,5,0.043,0.0235,0.066,84.8,1,False,Low,on_time_delivery,4.0,Medium
+PO-MFG-00423,2024-03-17,V-MFG-005,Hindalco Industries,manufacturing,0.879,4.4,6,0.0202,0.0231,0.072,74.9,1,False,Medium,delayed_delivery,4.0,Medium
+PO-MFG-00424,2025-08-27,V-MFG-005,Hindalco Industries,manufacturing,0.82,2.3,10,0.0336,0.026,0.041,83.1,1,True,Low,on_time_delivery,3.8,Medium
+PO-MFG-00425,2024-03-18,V-MFG-005,Hindalco Industries,manufacturing,0.862,4.3,8,0.024,0.0242,0.044,83.6,1,True,Medium,delayed_delivery,4.0,Medium
+PO-MFG-00426,2023-03-22,V-MFG-005,Hindalco Industries,manufacturing,0.801,3.7,6,0.0213,0.0143,0.069,72.1,1,True,Medium,on_time_delivery,3.5,Medium
+PO-MFG-00427,2024-02-08,V-MFG-005,Hindalco Industries,manufacturing,0.637,5.8,10,0.0999,0.0498,0.19,46.9,4,True,Low,delayed_delivery,2.4,High
+PO-MFG-00428,2023-05-07,V-MFG-005,Hindalco Industries,manufacturing,0.843,2.1,6,0.0425,0.0268,0.08,79.4,0,False,Medium,delayed_delivery,4.1,Medium
+PO-MFG-00429,2025-06-17,V-MFG-005,Hindalco Industries,manufacturing,0.844,2.7,8,0.0236,0.0144,0.071,81.9,1,False,Medium,on_time_delivery,3.5,Medium
+PO-MFG-00430,2024-08-22,V-MFG-005,Hindalco Industries,manufacturing,0.782,3.5,11,0.0402,0.0143,0.064,74.6,1,True,Low,on_time_delivery,3.6,Medium
+PO-MFG-00431,2025-10-02,V-MFG-005,Hindalco Industries,manufacturing,0.836,4.0,8,0.0307,0.0133,0.041,74.2,1,False,Medium,on_time_delivery,3.4,Medium
+PO-MFG-00432,2024-03-17,V-MFG-005,Hindalco Industries,manufacturing,0.516,10.7,14,0.0595,0.0667,0.174,45.7,2,True,Medium,defective_shipment,2.8,High
+PO-MFG-00433,2025-11-10,V-MFG-005,Hindalco Industries,manufacturing,0.803,2.3,10,0.044,0.0107,0.073,79.7,0,False,Low,delayed_delivery,3.6,Medium
+PO-MFG-00434,2023-07-05,V-MFG-005,Hindalco Industries,manufacturing,0.871,3.0,6,0.0251,0.0147,0.054,73.6,1,True,Medium,delayed_delivery,4.1,Medium
+PO-MFG-00435,2025-01-14,V-MFG-005,Hindalco Industries,manufacturing,0.814,2.3,5,0.0334,0.0131,0.067,84.0,1,False,Medium,on_time_delivery,4.0,Medium
+PO-MFG-00436,2025-04-27,V-MFG-005,Hindalco Industries,manufacturing,0.858,2.5,12,0.0217,0.0188,0.063,84.4,0,False,Low,delayed_delivery,4.0,Medium
+PO-MFG-00437,2024-12-25,V-MFG-005,Hindalco Industries,manufacturing,0.978,0.2,3,0.0093,0.0061,0.025,94.6,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00438,2024-09-08,V-MFG-005,Hindalco Industries,manufacturing,0.845,2.1,9,0.0385,0.0181,0.081,73.3,1,True,Low,delayed_delivery,4.2,Medium
+PO-MFG-00439,2025-11-28,V-MFG-005,Hindalco Industries,manufacturing,0.804,1.6,7,0.0287,0.0163,0.079,85.6,1,True,Low,delayed_delivery,4.1,Medium
+PO-MFG-00440,2025-11-12,V-MFG-005,Hindalco Industries,manufacturing,0.809,1.9,9,0.0385,0.0112,0.043,81.7,1,False,Low,delayed_delivery,3.5,Medium
+PO-MFG-00441,2023-09-21,V-MFG-005,Hindalco Industries,manufacturing,0.76,3.4,9,0.0207,0.0214,0.047,82.5,1,False,Low,on_time_delivery,3.5,Medium
+PO-MFG-00442,2024-10-14,V-MFG-005,Hindalco Industries,manufacturing,0.777,2.0,6,0.0448,0.0252,0.08,74.6,0,False,Low,delayed_delivery,3.7,Medium
+PO-MFG-00443,2025-01-02,V-MFG-005,Hindalco Industries,manufacturing,0.775,2.6,11,0.0207,0.0169,0.043,72.2,1,False,Medium,delayed_delivery,3.4,Medium
+PO-MFG-00444,2023-01-20,V-MFG-005,Hindalco Industries,manufacturing,0.564,10.7,16,0.1131,0.0536,0.138,55.9,2,False,Low,delayed_delivery,2.5,High
+PO-MFG-00445,2024-01-02,V-MFG-005,Hindalco Industries,manufacturing,0.762,2.2,10,0.0438,0.0201,0.041,83.2,0,False,Low,delayed_delivery,4.0,Medium
+PO-MFG-00446,2024-03-06,V-MFG-005,Hindalco Industries,manufacturing,0.762,2.1,11,0.0333,0.0234,0.064,73.1,1,False,Low,delayed_delivery,3.5,Medium
+PO-MFG-00447,2024-06-28,V-MFG-005,Hindalco Industries,manufacturing,0.985,0.9,7,0.0067,0.0009,0.005,95.1,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00448,2024-04-14,V-MFG-005,Hindalco Industries,manufacturing,0.757,4.4,8,0.0385,0.0153,0.079,84.6,0,False,Low,delayed_delivery,3.9,Medium
+PO-MFG-00449,2024-03-07,V-MFG-005,Hindalco Industries,manufacturing,0.868,2.3,6,0.0218,0.0232,0.087,82.2,1,False,Medium,on_time_delivery,4.0,Medium
+PO-MFG-00450,2023-07-20,V-MFG-005,Hindalco Industries,manufacturing,0.753,3.5,11,0.0353,0.0164,0.045,84.9,1,False,Low,on_time_delivery,3.9,Medium
+PO-MFG-00451,2025-01-22,V-MFG-005,Hindalco Industries,manufacturing,0.767,4.3,10,0.0338,0.0163,0.059,73.8,0,True,Medium,delayed_delivery,3.5,Medium
+PO-MFG-00452,2024-12-10,V-MFG-005,Hindalco Industries,manufacturing,0.845,3.9,11,0.0249,0.02,0.08,84.7,1,False,Low,delayed_delivery,3.8,Medium
+PO-MFG-00453,2023-09-17,V-MFG-005,Hindalco Industries,manufacturing,0.551,8.5,10,0.0882,0.0454,0.227,55.6,2,True,Low,delayed_delivery,2.6,High
+PO-MFG-00454,2025-03-03,V-MFG-005,Hindalco Industries,manufacturing,0.807,1.6,11,0.0334,0.0231,0.066,83.5,0,False,Low,delayed_delivery,4.0,Medium
+PO-MFG-00455,2024-09-09,V-MFG-005,Hindalco Industries,manufacturing,0.597,7.3,10,0.0878,0.0403,0.195,55.0,3,False,Medium,delayed_delivery,2.3,High
+PO-MFG-00456,2023-02-06,V-MFG-005,Hindalco Industries,manufacturing,0.538,10.2,20,0.116,0.0417,0.122,62.2,2,False,Low,delayed_delivery,2.2,High
+PO-MFG-00457,2025-07-08,V-MFG-005,Hindalco Industries,manufacturing,0.853,3.7,11,0.0302,0.0207,0.071,72.0,1,True,Low,on_time_delivery,3.5,Medium
+PO-MFG-00458,2023-10-28,V-MFG-005,Hindalco Industries,manufacturing,0.98,0.5,7,0.0098,0.0066,-0.013,94.5,0,False,High,on_time_delivery,4.8,Low
+PO-MFG-00459,2025-12-15,V-MFG-005,Hindalco Industries,manufacturing,0.846,3.4,11,0.0182,0.0243,0.057,79.6,0,False,Medium,on_time_delivery,3.7,Medium
+PO-MFG-00460,2023-10-27,V-MFG-005,Hindalco Industries,manufacturing,0.859,3.3,9,0.0365,0.0145,0.046,73.4,0,False,Low,delayed_delivery,3.8,Medium
+PO-MFG-00461,2023-11-20,V-MFG-005,Hindalco Industries,manufacturing,0.822,2.6,9,0.0269,0.0125,0.069,83.3,0,True,Low,on_time_delivery,4.0,Medium
+PO-MFG-00462,2023-06-07,V-MFG-005,Hindalco Industries,manufacturing,0.792,2.2,11,0.0291,0.018,0.059,80.0,1,False,Medium,on_time_delivery,4.1,Medium
+PO-MFG-00463,2023-12-02,V-MFG-005,Hindalco Industries,manufacturing,0.762,3.2,9,0.0418,0.023,0.081,81.9,1,True,Low,delayed_delivery,3.9,Medium
+PO-MFG-00464,2025-05-01,V-MFG-005,Hindalco Industries,manufacturing,0.769,4.2,7,0.0189,0.0162,0.084,79.0,1,False,Low,on_time_delivery,3.6,Medium
+PO-MFG-00465,2025-04-14,V-MFG-005,Hindalco Industries,manufacturing,0.559,11.7,13,0.0774,0.0554,0.121,46.7,4,False,Low,defective_shipment,2.2,High
+PO-MFG-00466,2024-02-21,V-MFG-005,Hindalco Industries,manufacturing,0.773,3.4,10,0.0273,0.0103,0.073,84.5,0,True,Low,on_time_delivery,3.9,Medium
+PO-MFG-00467,2024-07-14,V-MFG-005,Hindalco Industries,manufacturing,0.753,1.8,8,0.0321,0.0182,0.041,82.1,1,True,Low,delayed_delivery,3.9,Medium
+PO-MFG-00468,2025-07-03,V-MFG-005,Hindalco Industries,manufacturing,0.567,6.3,20,0.1138,0.0776,0.213,45.2,4,False,Medium,defective_shipment,2.3,High
+PO-MFG-00469,2025-05-10,V-MFG-005,Hindalco Industries,manufacturing,0.947,0.1,4,0.0102,0.0072,0.029,93.8,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00470,2023-02-20,V-MFG-005,Hindalco Industries,manufacturing,0.926,0.3,4,0.008,0.0059,0.011,91.8,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00471,2024-09-14,V-MFG-005,Hindalco Industries,manufacturing,0.761,4.5,7,0.0224,0.0157,0.045,81.5,1,True,Medium,on_time_delivery,4.2,Medium
+PO-MFG-00472,2024-12-26,V-MFG-005,Hindalco Industries,manufacturing,0.8,2.6,11,0.0437,0.0254,0.054,73.1,1,False,Medium,on_time_delivery,3.8,Medium
+PO-MFG-00473,2025-05-16,V-MFG-005,Hindalco Industries,manufacturing,0.953,0.1,3,0.0091,0.0051,-0.002,90.3,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00474,2024-03-05,V-MFG-005,Hindalco Industries,manufacturing,0.781,4.1,8,0.0263,0.0155,0.061,82.3,1,True,Low,delayed_delivery,3.5,Medium
+PO-MFG-00475,2024-05-20,V-MFG-005,Hindalco Industries,manufacturing,0.972,0.4,4,0.0046,0.0063,-0.019,93.6,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00476,2023-02-22,V-MFG-005,Hindalco Industries,manufacturing,0.842,3.0,8,0.0328,0.0114,0.047,75.5,1,False,Low,on_time_delivery,3.6,Medium
+PO-MFG-00477,2024-09-28,V-MFG-005,Hindalco Industries,manufacturing,0.862,3.9,6,0.0323,0.015,0.08,79.5,1,False,Medium,delayed_delivery,3.7,Medium
+PO-MFG-00478,2023-01-06,V-MFG-005,Hindalco Industries,manufacturing,0.762,3.9,10,0.0264,0.0218,0.054,83.2,0,True,Low,delayed_delivery,4.0,Medium
+PO-MFG-00479,2025-12-17,V-MFG-005,Hindalco Industries,manufacturing,0.805,4.0,8,0.0314,0.0118,0.076,84.2,1,True,Low,delayed_delivery,3.5,Medium
+PO-MFG-00480,2023-02-20,V-MFG-005,Hindalco Industries,manufacturing,0.585,10.9,19,0.0943,0.0781,0.13,60.3,2,False,Low,defective_shipment,3.1,High
+PO-MFG-00481,2023-04-04,V-MFG-005,Hindalco Industries,manufacturing,0.848,3.0,6,0.0339,0.0184,0.073,77.8,1,True,Medium,delayed_delivery,4.0,Medium
+PO-MFG-00482,2025-12-20,V-MFG-005,Hindalco Industries,manufacturing,0.686,11.9,18,0.0718,0.0612,0.157,63.6,3,True,Medium,defective_shipment,3.1,High
+PO-MFG-00483,2023-04-15,V-MFG-005,Hindalco Industries,manufacturing,0.794,2.5,7,0.0371,0.0104,0.086,79.8,1,False,Low,on_time_delivery,3.5,Medium
+PO-MFG-00484,2023-12-08,V-MFG-005,Hindalco Industries,manufacturing,0.811,4.3,6,0.0295,0.0199,0.066,82.9,1,True,Low,delayed_delivery,3.9,Medium
+PO-MFG-00485,2025-11-13,V-MFG-005,Hindalco Industries,manufacturing,0.548,8.7,11,0.0898,0.0568,0.229,45.8,3,True,Low,delayed_delivery,2.3,High
+PO-MFG-00486,2023-11-24,V-MFG-005,Hindalco Industries,manufacturing,0.843,2.6,10,0.0306,0.0275,0.042,74.4,1,False,Low,delayed_delivery,3.6,Medium
+PO-MFG-00487,2023-03-27,V-MFG-005,Hindalco Industries,manufacturing,0.766,3.3,11,0.0343,0.0237,0.068,83.9,1,False,Medium,delayed_delivery,3.7,Medium
+PO-MFG-00488,2025-06-03,V-MFG-005,Hindalco Industries,manufacturing,0.807,3.6,8,0.0336,0.0277,0.087,81.8,0,True,Medium,delayed_delivery,4.0,Medium
+PO-MFG-00489,2024-03-13,V-MFG-005,Hindalco Industries,manufacturing,0.925,0.6,2,0.004,0.0029,0.029,98.6,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00490,2025-12-04,V-MFG-005,Hindalco Industries,manufacturing,0.831,4.1,7,0.0258,0.0254,0.065,75.1,0,False,Low,on_time_delivery,3.9,Medium
+PO-MFG-00491,2023-06-28,V-MFG-005,Hindalco Industries,manufacturing,0.936,0.2,4,0.0138,0.003,0.016,96.9,0,False,High,on_time_delivery,4.5,Low
+PO-MFG-00492,2023-04-22,V-MFG-005,Hindalco Industries,manufacturing,0.981,0.7,4,0.0043,0.0044,-0.015,92.9,0,True,High,on_time_delivery,4.9,Low
+PO-MFG-00493,2023-08-17,V-MFG-005,Hindalco Industries,manufacturing,0.857,3.3,11,0.0411,0.0122,0.064,79.7,1,True,Low,delayed_delivery,4.1,Medium
+PO-MFG-00494,2024-02-05,V-MFG-005,Hindalco Industries,manufacturing,0.544,7.9,19,0.0874,0.0394,0.167,47.9,4,False,Medium,delayed_delivery,2.3,High
+PO-MFG-00495,2023-05-26,V-MFG-005,Hindalco Industries,manufacturing,0.788,3.8,10,0.0388,0.0176,0.063,74.0,1,True,Medium,delayed_delivery,3.4,Medium
+PO-MFG-00496,2025-08-04,V-MFG-005,Hindalco Industries,manufacturing,0.797,3.9,12,0.0324,0.0215,0.051,81.3,0,True,Low,on_time_delivery,3.7,Medium
+PO-MFG-00497,2025-01-25,V-MFG-005,Hindalco Industries,manufacturing,0.535,8.4,11,0.1096,0.0576,0.162,53.7,2,False,Low,delayed_delivery,2.7,High
+PO-MFG-00498,2024-11-17,V-MFG-005,Hindalco Industries,manufacturing,0.802,1.9,12,0.023,0.0193,0.055,72.6,1,False,Medium,delayed_delivery,3.4,Medium
+PO-MFG-00499,2024-11-07,V-MFG-005,Hindalco Industries,manufacturing,0.769,4.3,8,0.0435,0.0137,0.067,84.9,1,False,Low,on_time_delivery,3.9,Medium
+PO-MFG-00500,2025-07-24,V-MFG-005,Hindalco Industries,manufacturing,0.816,2.9,5,0.029,0.0221,0.042,75.7,1,False,Low,delayed_delivery,3.4,Medium
+PO-MFG-00501,2024-04-09,V-MFG-006,Havells India,manufacturing,1.35,0.9,7,0.0083,0.0067,0.019,115.0,0,False,High,on_time_delivery,4.4,Low
+PO-MFG-00502,2025-08-14,V-MFG-006,Havells India,manufacturing,0.874,3.8,10,0.0232,0.0218,0.056,78.3,1,False,Medium,on_time_delivery,4.0,Medium
+PO-MFG-00503,2023-07-28,V-MFG-006,Havells India,manufacturing,0.925,0.8,2,0.0044,0.0063,-0.007,97.6,0,False,Medium,on_time_delivery,4.8,Low
+PO-MFG-00504,2023-08-24,V-MFG-006,Havells India,manufacturing,0.934,0.1,3,0.0035,0.0051,0.004,91.0,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00505,2024-07-20,V-MFG-006,Havells India,manufacturing,0.928,0.6,5,0.0033,0.0062,-0.012,97.9,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00506,2024-10-18,V-MFG-006,Havells India,manufacturing,0.936,0.4,2,0.0127,0.0076,-0.02,95.3,0,True,Medium,on_time_delivery,4.4,Low
+PO-MFG-00507,2024-10-26,V-MFG-006,Havells India,manufacturing,0.958,0.1,4,0.0036,0.0032,0.005,90.7,0,False,High,on_time_delivery,4.4,Low
+PO-MFG-00508,2024-01-07,V-MFG-006,Havells India,manufacturing,0.976,0.1,3,0.0072,0.0062,0.024,96.2,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00509,2024-08-06,V-MFG-006,Havells India,manufacturing,0.938,0.3,6,0.0041,0.0009,0.02,91.4,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00510,2025-01-18,V-MFG-006,Havells India,manufacturing,0.936,0.7,7,0.0066,0.0074,-0.007,91.4,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00511,2025-06-04,V-MFG-006,Havells India,manufacturing,0.969,0.3,6,0.0041,0.0037,-0.012,96.8,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00512,2025-02-27,V-MFG-006,Havells India,manufacturing,0.947,0.4,2,0.0052,0.0062,0.021,90.5,0,False,High,on_time_delivery,4.6,Low
+PO-MFG-00513,2024-03-15,V-MFG-006,Havells India,manufacturing,0.98,0.7,4,0.006,0.0016,0.004,95.6,0,True,Medium,on_time_delivery,4.6,Low
+PO-MFG-00514,2025-07-10,V-MFG-006,Havells India,manufacturing,0.977,0.5,5,0.0149,0.006,0.022,90.2,0,True,High,on_time_delivery,4.4,Low
+PO-MFG-00515,2023-10-27,V-MFG-006,Havells India,manufacturing,0.979,0.7,3,0.0036,0.0006,-0.001,97.4,0,True,Medium,on_time_delivery,4.7,Low
+PO-MFG-00516,2025-10-02,V-MFG-006,Havells India,manufacturing,0.961,0.2,3,0.0059,0.0015,-0.01,90.1,0,True,Medium,on_time_delivery,4.6,Low
+PO-MFG-00517,2024-11-26,V-MFG-006,Havells India,manufacturing,0.943,1.0,2,0.0026,0.0071,-0.009,93.0,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00518,2024-10-17,V-MFG-006,Havells India,manufacturing,0.977,1.0,4,0.0107,0.0017,-0.01,97.0,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00519,2023-10-14,V-MFG-006,Havells India,manufacturing,0.929,1.0,2,0.0059,0.006,0.007,95.8,0,True,Medium,on_time_delivery,4.8,Low
+PO-MFG-00520,2024-02-06,V-MFG-006,Havells India,manufacturing,0.982,0.1,4,0.0115,0.0031,0.025,95.5,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00521,2024-07-07,V-MFG-006,Havells India,manufacturing,0.925,0.6,6,0.0062,0.0013,0.025,93.5,0,True,High,on_time_delivery,4.4,Low
+PO-MFG-00522,2024-06-20,V-MFG-006,Havells India,manufacturing,0.989,0.1,3,0.0035,0.0036,0.015,90.9,0,True,Medium,on_time_delivery,4.8,Low
+PO-MFG-00523,2024-05-16,V-MFG-006,Havells India,manufacturing,0.942,0.8,6,0.0098,0.0032,-0.001,98.1,0,True,High,on_time_delivery,4.4,Low
+PO-MFG-00524,2023-08-26,V-MFG-006,Havells India,manufacturing,0.974,0.0,6,0.0093,0.0053,0.024,98.1,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00525,2025-02-03,V-MFG-006,Havells India,manufacturing,0.945,0.3,4,0.006,0.0025,-0.006,96.5,0,True,Medium,on_time_delivery,4.7,Low
+PO-MFG-00526,2023-11-27,V-MFG-006,Havells India,manufacturing,0.923,1.0,5,0.0138,0.0037,-0.013,94.2,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00527,2023-03-03,V-MFG-006,Havells India,manufacturing,0.955,0.3,4,0.0098,0.0054,0.015,94.9,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00528,2023-05-25,V-MFG-006,Havells India,manufacturing,0.821,3.0,11,0.0313,0.0169,0.069,85.5,0,True,Medium,on_time_delivery,3.5,Medium
+PO-MFG-00529,2023-03-11,V-MFG-006,Havells India,manufacturing,0.811,3.1,9,0.0439,0.0149,0.084,76.7,1,False,Low,delayed_delivery,4.2,Medium
+PO-MFG-00530,2024-12-26,V-MFG-006,Havells India,manufacturing,0.953,0.5,3,0.0013,0.0041,-0.0,91.1,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00531,2025-06-24,V-MFG-006,Havells India,manufacturing,0.946,0.9,5,0.0034,0.0013,-0.011,93.2,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00532,2025-11-13,V-MFG-006,Havells India,manufacturing,0.932,1.1,4,0.0073,0.0044,-0.011,96.8,0,True,High,on_time_delivery,4.4,Low
+PO-MFG-00533,2023-03-08,V-MFG-006,Havells India,manufacturing,0.87,1.8,7,0.034,0.0242,0.07,81.2,1,True,Medium,delayed_delivery,3.5,Medium
+PO-MFG-00534,2024-06-27,V-MFG-006,Havells India,manufacturing,0.979,1.2,4,0.007,0.0015,0.004,92.6,0,True,Medium,on_time_delivery,4.8,Low
+PO-MFG-00535,2023-12-25,V-MFG-006,Havells India,manufacturing,0.926,0.3,4,0.0117,0.0043,-0.011,91.4,0,False,Medium,on_time_delivery,4.4,Low
+PO-MFG-00536,2024-01-23,V-MFG-006,Havells India,manufacturing,0.923,1.2,6,0.003,0.0039,-0.018,93.6,0,False,Medium,on_time_delivery,4.9,Low
+PO-MFG-00537,2023-08-14,V-MFG-006,Havells India,manufacturing,0.981,0.5,3,0.0109,0.0057,-0.002,90.1,0,True,Medium,on_time_delivery,4.6,Low
+PO-MFG-00538,2024-02-15,V-MFG-006,Havells India,manufacturing,0.978,0.8,3,0.0104,0.0016,0.023,91.8,0,False,Medium,on_time_delivery,4.4,Low
+PO-MFG-00539,2025-05-10,V-MFG-006,Havells India,manufacturing,0.843,4.4,9,0.0217,0.0136,0.045,76.9,1,True,Low,on_time_delivery,3.5,Medium
+PO-MFG-00540,2024-09-12,V-MFG-006,Havells India,manufacturing,0.953,0.5,2,0.0069,0.0055,0.02,95.4,0,True,High,on_time_delivery,4.9,Low
+PO-MFG-00541,2024-02-16,V-MFG-006,Havells India,manufacturing,0.943,0.4,6,0.0087,0.0002,-0.016,97.6,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00542,2023-05-18,V-MFG-006,Havells India,manufacturing,0.935,0.4,4,0.0021,0.004,-0.009,93.1,0,True,Medium,on_time_delivery,4.7,Low
+PO-MFG-00543,2024-08-19,V-MFG-006,Havells India,manufacturing,0.973,0.0,4,0.0132,0.0062,-0.002,92.0,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00544,2025-08-06,V-MFG-006,Havells India,manufacturing,0.934,0.5,7,0.0047,0.0052,0.029,90.0,0,True,Medium,on_time_delivery,4.7,Low
+PO-MFG-00545,2024-08-24,V-MFG-006,Havells India,manufacturing,0.986,0.2,5,0.0112,0.0019,0.019,95.4,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00546,2023-05-22,V-MFG-006,Havells India,manufacturing,0.95,0.4,7,0.0099,0.0059,-0.005,94.1,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00547,2025-07-03,V-MFG-006,Havells India,manufacturing,0.958,0.5,7,0.0145,0.0028,0.001,98.1,0,False,Medium,on_time_delivery,4.7,Low
+PO-MFG-00548,2023-07-18,V-MFG-006,Havells India,manufacturing,0.985,1.1,2,0.0061,0.0024,0.015,94.7,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00549,2025-03-19,V-MFG-006,Havells India,manufacturing,0.979,0.0,6,0.0053,0.0003,0.003,97.6,0,False,Medium,on_time_delivery,4.5,Low
+PO-MFG-00550,2024-07-02,V-MFG-006,Havells India,manufacturing,0.944,0.0,7,0.0045,0.0021,0.001,94.6,0,True,Medium,on_time_delivery,4.6,Low
+PO-MFG-00551,2025-04-01,V-MFG-006,Havells India,manufacturing,0.977,0.6,2,0.0087,0.0011,0.017,93.8,0,False,High,on_time_delivery,4.7,Low
+PO-MFG-00552,2025-01-25,V-MFG-006,Havells India,manufacturing,0.956,0.6,6,0.007,0.0017,0.018,96.1,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00553,2024-04-10,V-MFG-006,Havells India,manufacturing,0.968,0.2,6,0.0107,0.0069,0.005,94.3,0,False,Medium,on_time_delivery,4.8,Low
+PO-MFG-00554,2025-06-28,V-MFG-006,Havells India,manufacturing,0.922,0.8,4,0.009,0.0011,-0.014,94.1,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00555,2025-02-18,V-MFG-006,Havells India,manufacturing,0.981,0.8,5,0.0014,0.0031,-0.011,90.6,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00556,2025-01-16,V-MFG-006,Havells India,manufacturing,0.933,1.0,6,0.0035,0.0067,0.022,90.7,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00557,2025-06-25,V-MFG-006,Havells India,manufacturing,0.934,1.0,5,0.0023,0.0059,0.026,94.8,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00558,2024-03-01,V-MFG-006,Havells India,manufacturing,0.934,0.8,6,0.0106,0.0053,0.029,90.8,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00559,2025-12-01,V-MFG-006,Havells India,manufacturing,0.521,7.8,19,0.0947,0.0538,0.123,52.2,2,False,Medium,defective_shipment,2.3,High
+PO-MFG-00560,2025-09-06,V-MFG-006,Havells India,manufacturing,0.987,0.3,6,0.0138,0.0059,-0.006,97.1,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00561,2025-12-03,V-MFG-006,Havells India,manufacturing,0.811,3.1,11,0.0307,0.0255,0.04,80.9,1,False,Low,delayed_delivery,3.7,Medium
+PO-MFG-00562,2025-01-04,V-MFG-006,Havells India,manufacturing,0.947,1.0,6,0.0139,0.0053,0.025,95.9,0,True,High,on_time_delivery,4.4,Low
+PO-MFG-00563,2023-02-16,V-MFG-006,Havells India,manufacturing,0.757,3.3,7,0.0291,0.0154,0.062,72.7,0,True,Low,on_time_delivery,3.5,Medium
+PO-MFG-00564,2023-10-14,V-MFG-006,Havells India,manufacturing,0.959,0.8,4,0.0127,0.0067,-0.004,98.5,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00565,2025-06-19,V-MFG-006,Havells India,manufacturing,0.933,0.8,7,0.0049,0.0006,0.007,93.8,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00566,2023-03-26,V-MFG-006,Havells India,manufacturing,0.811,2.7,5,0.0331,0.0195,0.082,75.4,0,False,Low,delayed_delivery,4.2,Medium
+PO-MFG-00567,2025-05-09,V-MFG-006,Havells India,manufacturing,0.939,0.4,6,0.0063,0.0052,0.012,93.0,0,False,Medium,on_time_delivery,4.4,Low
+PO-MFG-00568,2025-05-26,V-MFG-006,Havells India,manufacturing,0.966,0.8,4,0.0033,0.007,-0.009,95.4,0,True,Medium,on_time_delivery,4.9,Low
+PO-MFG-00569,2023-01-06,V-MFG-006,Havells India,manufacturing,0.959,0.3,5,0.0067,0.0065,0.015,92.2,0,False,High,on_time_delivery,4.8,Low
+PO-MFG-00570,2024-04-13,V-MFG-006,Havells India,manufacturing,0.942,1.0,7,0.0053,0.0028,-0.009,96.9,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00571,2024-06-25,V-MFG-006,Havells India,manufacturing,0.986,0.8,3,0.0132,0.0066,-0.006,97.9,0,True,Medium,on_time_delivery,4.6,Low
+PO-MFG-00572,2024-08-08,V-MFG-006,Havells India,manufacturing,0.956,0.3,7,0.0066,0.0012,-0.01,91.1,0,False,Medium,on_time_delivery,4.6,Low
+PO-MFG-00573,2025-10-17,V-MFG-006,Havells India,manufacturing,0.949,0.7,3,0.0062,0.0025,0.021,98.7,0,True,Medium,on_time_delivery,4.8,Low
+PO-MFG-00574,2023-10-17,V-MFG-006,Havells India,manufacturing,0.8,2.0,11,0.0332,0.0123,0.059,77.6,1,False,Low,delayed_delivery,4.1,Medium
+PO-MFG-00575,2025-10-22,V-MFG-006,Havells India,manufacturing,0.977,0.7,7,0.0094,0.0076,0.007,91.9,0,False,High,on_time_delivery,4.7,Low
+PO-MFG-00576,2024-08-20,V-MFG-006,Havells India,manufacturing,0.933,1.1,5,0.0012,0.001,-0.007,91.6,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00577,2023-10-17,V-MFG-006,Havells India,manufacturing,0.972,1.2,6,0.0022,0.0079,0.0,90.3,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00578,2025-12-15,V-MFG-006,Havells India,manufacturing,0.985,0.2,6,0.0111,0.0076,0.028,92.7,0,True,Medium,on_time_delivery,4.8,Low
+PO-MFG-00579,2025-02-07,V-MFG-006,Havells India,manufacturing,0.941,0.0,6,0.0124,0.004,-0.012,95.7,0,False,Medium,on_time_delivery,4.4,Low
+PO-MFG-00580,2024-11-11,V-MFG-006,Havells India,manufacturing,0.978,0.5,3,0.0114,0.0053,0.015,92.7,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00581,2023-01-17,V-MFG-006,Havells India,manufacturing,0.933,0.4,3,0.0014,0.0075,0.03,93.9,0,True,High,on_time_delivery,4.9,Low
+PO-MFG-00582,2025-07-05,V-MFG-006,Havells India,manufacturing,0.984,0.7,6,0.0139,0.0078,-0.018,98.9,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00583,2023-08-22,V-MFG-006,Havells India,manufacturing,0.797,3.4,5,0.0301,0.0174,0.045,79.4,1,False,Medium,delayed_delivery,4.0,Medium
+PO-MFG-00584,2025-11-25,V-MFG-006,Havells India,manufacturing,0.94,1.0,4,0.0045,0.0075,0.005,91.1,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00585,2023-08-22,V-MFG-006,Havells India,manufacturing,0.963,1.0,2,0.0012,0.004,0.005,95.8,0,True,High,on_time_delivery,4.9,Low
+PO-MFG-00586,2023-07-03,V-MFG-006,Havells India,manufacturing,0.973,0.9,3,0.0145,0.0012,-0.003,95.6,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00587,2023-08-02,V-MFG-006,Havells India,manufacturing,0.933,0.9,4,0.0129,0.0025,0.022,92.6,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00588,2025-09-14,V-MFG-006,Havells India,manufacturing,0.981,0.9,4,0.0148,0.0074,0.024,96.2,0,False,High,on_time_delivery,4.6,Low
+PO-MFG-00589,2025-02-26,V-MFG-006,Havells India,manufacturing,0.953,0.0,7,0.0088,0.0062,-0.002,94.3,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00590,2024-02-09,V-MFG-006,Havells India,manufacturing,0.945,0.2,4,0.0015,0.0065,0.008,93.2,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00591,2025-12-26,V-MFG-006,Havells India,manufacturing,0.927,1.1,5,0.0046,0.0057,0.011,96.0,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00592,2023-11-16,V-MFG-006,Havells India,manufacturing,0.857,1.5,9,0.0183,0.0144,0.081,72.2,1,False,Medium,delayed_delivery,3.8,Medium
+PO-MFG-00593,2023-10-26,V-MFG-006,Havells India,manufacturing,0.635,6.5,11,0.1073,0.0361,0.147,52.3,2,True,Low,delayed_delivery,2.7,High
+PO-MFG-00594,2025-09-13,V-MFG-006,Havells India,manufacturing,0.839,2.3,5,0.0358,0.0196,0.041,77.5,0,False,Low,on_time_delivery,3.6,Medium
+PO-MFG-00595,2025-04-28,V-MFG-006,Havells India,manufacturing,0.934,0.3,7,0.0068,0.0016,0.027,95.4,0,False,High,on_time_delivery,4.5,Low
+PO-MFG-00596,2025-01-25,V-MFG-006,Havells India,manufacturing,0.974,0.5,2,0.0081,0.0077,0.008,98.9,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00597,2025-02-20,V-MFG-006,Havells India,manufacturing,0.633,6.1,20,0.1126,0.0477,0.149,46.7,4,False,Medium,defective_shipment,2.2,High
+PO-MFG-00598,2024-09-11,V-MFG-006,Havells India,manufacturing,0.959,0.4,5,0.0044,0.0053,-0.014,95.9,0,True,High,on_time_delivery,4.9,Low
+PO-MFG-00599,2025-03-05,V-MFG-006,Havells India,manufacturing,0.921,0.3,5,0.0105,0.0038,0.028,93.3,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00600,2023-09-22,V-MFG-006,Havells India,manufacturing,0.982,0.9,7,0.0135,0.0006,0.018,92.6,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00601,2025-05-14,V-MFG-007,Polycab India,manufacturing,0.981,0.6,5,0.015,0.0011,0.0,92.2,0,False,Medium,on_time_delivery,4.6,Low
+PO-MFG-00602,2023-12-13,V-MFG-007,Polycab India,manufacturing,0.514,9.0,10,0.0634,0.0569,0.192,53.5,2,False,Medium,delayed_delivery,2.5,High
+PO-MFG-00603,2024-04-02,V-MFG-007,Polycab India,manufacturing,0.948,0.3,2,0.0062,0.001,0.007,95.8,0,False,High,on_time_delivery,4.8,Low
+PO-MFG-00604,2025-02-01,V-MFG-007,Polycab India,manufacturing,0.862,3.3,6,0.0447,0.0111,0.077,80.9,0,False,Low,delayed_delivery,3.9,Medium
+PO-MFG-00605,2025-04-25,V-MFG-007,Polycab India,manufacturing,0.873,3.8,12,0.0368,0.0166,0.083,80.0,0,False,Low,delayed_delivery,3.9,Medium
+PO-MFG-00606,2023-03-28,V-MFG-007,Polycab India,manufacturing,0.876,2.5,12,0.0432,0.0219,0.053,75.8,1,True,Low,on_time_delivery,3.6,Medium
+PO-MFG-00607,2025-05-23,V-MFG-007,Polycab India,manufacturing,0.787,2.5,6,0.0214,0.0103,0.068,82.1,1,False,Medium,on_time_delivery,3.8,Medium
+PO-MFG-00608,2024-06-13,V-MFG-007,Polycab India,manufacturing,0.877,2.0,7,0.0341,0.0223,0.047,78.9,1,True,Medium,on_time_delivery,3.7,Medium
+PO-MFG-00609,2024-02-26,V-MFG-007,Polycab India,manufacturing,0.805,1.9,11,0.0188,0.0102,0.062,81.0,1,False,Low,delayed_delivery,3.6,Medium
+PO-MFG-00610,2023-06-17,V-MFG-007,Polycab India,manufacturing,0.946,0.1,3,0.0105,0.0005,-0.008,96.5,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00611,2024-01-12,V-MFG-007,Polycab India,manufacturing,0.818,3.2,10,0.0215,0.0146,0.044,75.4,1,False,Medium,on_time_delivery,3.4,Medium
+PO-MFG-00612,2024-12-24,V-MFG-007,Polycab India,manufacturing,0.797,1.8,10,0.0367,0.0278,0.063,72.8,1,False,Low,delayed_delivery,4.0,Medium
+PO-MFG-00613,2025-10-18,V-MFG-007,Polycab India,manufacturing,0.576,11.8,14,0.1101,0.0532,0.148,51.3,2,True,Low,delayed_delivery,3.1,High
+PO-MFG-00614,2024-05-21,V-MFG-007,Polycab India,manufacturing,0.967,0.6,6,0.0144,0.003,0.003,96.9,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00615,2025-02-18,V-MFG-007,Polycab India,manufacturing,0.939,1.0,7,0.0024,0.0015,-0.019,93.2,0,False,Medium,on_time_delivery,4.5,Low
+PO-MFG-00616,2023-12-23,V-MFG-007,Polycab India,manufacturing,0.615,8.6,20,0.0637,0.0604,0.232,50.5,2,False,Low,defective_shipment,2.4,High
+PO-MFG-00617,2024-08-13,V-MFG-007,Polycab India,manufacturing,0.83,3.3,7,0.025,0.0179,0.086,80.7,1,True,Low,on_time_delivery,3.9,Medium
+PO-MFG-00618,2023-11-06,V-MFG-007,Polycab India,manufacturing,0.753,1.8,5,0.0198,0.0211,0.051,83.2,1,False,Medium,delayed_delivery,3.6,Medium
+PO-MFG-00619,2025-02-20,V-MFG-007,Polycab India,manufacturing,0.827,1.9,5,0.0396,0.0187,0.081,84.1,1,False,Medium,delayed_delivery,4.1,Medium
+PO-MFG-00620,2024-06-14,V-MFG-007,Polycab India,manufacturing,0.824,3.3,6,0.0234,0.0273,0.046,72.1,1,False,Low,delayed_delivery,3.9,Medium
+PO-MFG-00621,2024-11-24,V-MFG-007,Polycab India,manufacturing,0.851,4.2,12,0.0301,0.0184,0.05,73.1,1,True,Medium,on_time_delivery,4.1,Medium
+PO-MFG-00622,2023-08-01,V-MFG-007,Polycab India,manufacturing,0.935,0.4,3,0.0063,0.0003,0.011,91.5,0,True,Medium,on_time_delivery,4.7,Low
+PO-MFG-00623,2023-11-16,V-MFG-007,Polycab India,manufacturing,0.853,2.4,5,0.0216,0.0189,0.041,81.1,1,False,Medium,delayed_delivery,3.7,Medium
+PO-MFG-00624,2024-10-01,V-MFG-007,Polycab India,manufacturing,0.859,2.8,7,0.0184,0.0107,0.075,74.7,1,False,Medium,on_time_delivery,4.2,Medium
+PO-MFG-00625,2024-10-15,V-MFG-007,Polycab India,manufacturing,0.939,0.7,7,0.0092,0.0008,0.026,98.8,0,False,High,on_time_delivery,4.7,Low
+PO-MFG-00626,2024-10-26,V-MFG-007,Polycab India,manufacturing,0.76,3.3,11,0.0189,0.0233,0.084,83.4,0,False,Low,delayed_delivery,4.1,Medium
+PO-MFG-00627,2024-05-07,V-MFG-007,Polycab India,manufacturing,0.929,0.9,6,0.0046,0.003,-0.013,91.4,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00628,2025-05-18,V-MFG-007,Polycab India,manufacturing,0.871,2.2,5,0.0181,0.0113,0.074,78.1,1,True,Low,delayed_delivery,4.1,Medium
+PO-MFG-00629,2025-05-16,V-MFG-007,Polycab India,manufacturing,0.557,10.9,20,0.0655,0.0529,0.18,54.6,3,False,Low,delayed_delivery,2.3,High
+PO-MFG-00630,2025-11-16,V-MFG-007,Polycab India,manufacturing,0.758,3.5,9,0.0198,0.0194,0.059,73.1,1,True,Medium,on_time_delivery,3.7,Medium
+PO-MFG-00631,2025-10-18,V-MFG-007,Polycab India,manufacturing,0.876,4.4,11,0.0187,0.0222,0.066,81.6,1,False,Medium,delayed_delivery,4.1,Medium
+PO-MFG-00632,2023-10-28,V-MFG-007,Polycab India,manufacturing,0.869,2.0,11,0.0397,0.0109,0.067,80.0,0,False,Low,on_time_delivery,3.7,Medium
+PO-MFG-00633,2024-06-12,V-MFG-007,Polycab India,manufacturing,0.867,3.7,11,0.0437,0.0159,0.073,79.3,1,False,Medium,on_time_delivery,4.1,Medium
+PO-MFG-00634,2023-05-16,V-MFG-007,Polycab India,manufacturing,0.806,1.5,5,0.0284,0.018,0.066,83.3,1,True,Medium,delayed_delivery,3.7,Medium
+PO-MFG-00635,2024-05-11,V-MFG-007,Polycab India,manufacturing,0.764,2.0,9,0.0413,0.0147,0.078,80.2,1,False,Low,delayed_delivery,4.0,Medium
+PO-MFG-00636,2023-09-14,V-MFG-007,Polycab India,manufacturing,0.984,1.2,2,0.0082,0.0019,-0.004,94.2,0,True,High,on_time_delivery,4.4,Low
+PO-MFG-00637,2023-07-07,V-MFG-007,Polycab India,manufacturing,0.756,3.4,9,0.0222,0.0138,0.072,72.9,0,False,Low,delayed_delivery,3.4,Medium
+PO-MFG-00638,2024-12-03,V-MFG-007,Polycab India,manufacturing,0.778,3.5,5,0.0338,0.0178,0.043,80.5,1,False,Medium,delayed_delivery,4.1,Medium
+PO-MFG-00639,2023-09-09,V-MFG-007,Polycab India,manufacturing,0.764,2.6,9,0.0322,0.0154,0.086,78.5,1,False,Medium,on_time_delivery,4.2,Medium
+PO-MFG-00640,2023-10-11,V-MFG-007,Polycab India,manufacturing,0.595,9.7,13,0.0922,0.0655,0.235,56.1,4,True,Low,delayed_delivery,2.8,High
+PO-MFG-00641,2023-12-20,V-MFG-007,Polycab India,manufacturing,0.783,1.9,5,0.0396,0.0275,0.058,79.4,0,False,Medium,delayed_delivery,3.8,Medium
+PO-MFG-00642,2023-01-08,V-MFG-007,Polycab India,manufacturing,0.927,0.9,7,0.0074,0.0023,0.002,93.3,0,True,Medium,on_time_delivery,4.7,Low
+PO-MFG-00643,2024-12-09,V-MFG-007,Polycab India,manufacturing,0.879,3.6,7,0.0234,0.019,0.078,73.8,1,False,Medium,on_time_delivery,3.5,Medium
+PO-MFG-00644,2023-11-25,V-MFG-007,Polycab India,manufacturing,0.779,4.4,11,0.0188,0.0216,0.076,77.3,1,False,Low,on_time_delivery,3.7,Medium
+PO-MFG-00645,2025-04-04,V-MFG-007,Polycab India,manufacturing,0.86,2.8,5,0.0284,0.0133,0.07,81.2,1,True,Medium,delayed_delivery,4.2,Medium
+PO-MFG-00646,2023-08-18,V-MFG-007,Polycab India,manufacturing,0.815,2.4,7,0.0419,0.0248,0.081,79.9,1,True,Medium,delayed_delivery,3.6,Medium
+PO-MFG-00647,2023-04-21,V-MFG-007,Polycab India,manufacturing,0.812,2.9,5,0.0445,0.0259,0.051,81.5,1,True,Low,on_time_delivery,3.7,Medium
+PO-MFG-00648,2025-09-21,V-MFG-007,Polycab India,manufacturing,0.833,1.7,9,0.0399,0.0277,0.069,81.8,0,False,Medium,on_time_delivery,3.7,Medium
+PO-MFG-00649,2025-02-27,V-MFG-007,Polycab India,manufacturing,0.864,3.1,5,0.0408,0.0235,0.063,72.9,1,True,Medium,on_time_delivery,3.9,Medium
+PO-MFG-00650,2024-06-17,V-MFG-007,Polycab India,manufacturing,0.878,3.8,11,0.0225,0.0249,0.051,75.7,1,False,Medium,delayed_delivery,3.8,Medium
+PO-MFG-00651,2023-11-16,V-MFG-007,Polycab India,manufacturing,0.576,,19,,0.0399,0.135,57.0,4,True,Low,defective_shipment,2.9,High
+PO-MFG-00652,2025-02-05,V-MFG-007,Polycab India,manufacturing,0.871,3.4,11,0.0409,0.0241,0.045,82.7,0,False,Low,on_time_delivery,3.7,Medium
+PO-MFG-00653,2025-01-28,V-MFG-007,Polycab India,manufacturing,0.928,0.5,3,0.0041,0.0062,0.009,91.3,0,True,Medium,on_time_delivery,4.5,Low
+PO-MFG-00654,2025-07-22,V-MFG-007,Polycab India,manufacturing,0.941,1.1,2,0.0044,0.0025,0.001,93.0,0,False,High,on_time_delivery,4.8,Low
+PO-MFG-00655,2023-06-12,V-MFG-007,Polycab India,manufacturing,0.631,5.6,17,0.0837,0.0683,0.22,61.0,4,False,Low,defective_shipment,2.5,High
+PO-MFG-00656,2025-06-15,V-MFG-007,Polycab India,manufacturing,0.838,1.6,7,0.0354,0.0194,0.071,81.5,1,True,Medium,on_time_delivery,3.6,Medium
+PO-MFG-00657,2025-09-07,V-MFG-007,Polycab India,manufacturing,0.764,1.7,6,0.0263,0.0187,0.043,84.9,0,True,Low,on_time_delivery,4.1,Medium
+PO-MFG-00658,2025-08-04,V-MFG-007,Polycab India,manufacturing,0.792,3.8,6,0.0381,0.0205,0.062,84.2,1,False,Low,delayed_delivery,3.6,Medium
+PO-MFG-00659,2025-05-12,V-MFG-007,Polycab India,manufacturing,0.581,7.4,16,0.1185,0.0609,0.158,62.4,2,False,Medium,defective_shipment,3.0,High
+PO-MFG-00660,2023-03-20,V-MFG-007,Polycab India,manufacturing,0.792,2.2,12,0.0317,0.0137,0.046,80.2,1,False,Medium,delayed_delivery,3.9,Medium
+PO-MFG-00661,2023-11-15,V-MFG-007,Polycab India,manufacturing,0.936,0.6,6,0.0118,0.0017,-0.018,95.1,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00662,2025-05-21,V-MFG-007,Polycab India,manufacturing,0.531,10.8,13,0.0664,0.0391,0.231,59.0,2,True,Medium,defective_shipment,2.7,High
+PO-MFG-00663,2024-01-15,V-MFG-007,Polycab India,manufacturing,0.868,2.4,11,0.0409,0.0228,0.059,82.2,1,False,Medium,delayed_delivery,4.1,Medium
+PO-MFG-00664,2025-10-04,V-MFG-007,Polycab India,manufacturing,0.805,2.8,10,0.0184,0.0129,0.048,79.2,0,False,Low,on_time_delivery,4.1,Medium
+PO-MFG-00665,2024-05-22,V-MFG-007,Polycab India,manufacturing,0.812,3.6,5,0.037,0.0146,0.068,81.7,1,False,Low,delayed_delivery,3.9,Medium
+PO-MFG-00666,2023-09-13,V-MFG-007,Polycab India,manufacturing,0.94,0.8,3,0.0146,0.0062,-0.019,91.4,0,True,High,on_time_delivery,4.4,Low
+PO-MFG-00667,2025-07-23,V-MFG-007,Polycab India,manufacturing,0.977,0.1,3,0.0068,0.0036,-0.014,96.7,0,False,High,on_time_delivery,4.6,Low
+PO-MFG-00668,2023-06-24,V-MFG-007,Polycab India,manufacturing,0.801,2.2,7,0.0399,0.0266,0.047,83.9,0,True,Low,on_time_delivery,3.9,Medium
+PO-MFG-00669,2023-04-24,V-MFG-007,Polycab India,manufacturing,0.807,2.8,8,0.0421,0.0188,0.071,72.2,1,False,Low,on_time_delivery,3.5,Medium
+PO-MFG-00670,2024-02-09,V-MFG-007,Polycab India,manufacturing,0.788,3.4,8,0.0246,0.0255,0.043,76.3,1,False,Medium,on_time_delivery,3.5,Medium
+PO-MFG-00671,2023-02-18,V-MFG-007,Polycab India,manufacturing,0.947,0.6,3,0.0063,0.0005,0.009,96.8,0,False,High,on_time_delivery,4.7,Low
+PO-MFG-00672,2023-11-06,V-MFG-007,Polycab India,manufacturing,0.813,2.8,9,0.0399,0.0154,0.042,75.0,1,False,Low,delayed_delivery,4.0,Medium
+PO-MFG-00673,2023-12-24,V-MFG-007,Polycab India,manufacturing,0.877,4.0,9,0.039,0.0267,0.053,79.7,1,True,Low,delayed_delivery,3.9,Medium
+PO-MFG-00674,2023-04-03,V-MFG-007,Polycab India,manufacturing,0.783,2.6,11,0.0377,0.0225,0.059,78.8,1,True,Low,on_time_delivery,3.5,Medium
+PO-MFG-00675,2025-08-17,V-MFG-007,Polycab India,manufacturing,0.817,3.3,10,0.0238,0.0124,0.074,76.1,1,False,Medium,delayed_delivery,3.8,Medium
+PO-MFG-00676,2024-02-17,V-MFG-007,Polycab India,manufacturing,0.775,3.6,10,0.0316,0.0111,0.076,79.5,0,True,Medium,delayed_delivery,3.9,Medium
+PO-MFG-00677,2023-05-08,V-MFG-007,Polycab India,manufacturing,0.806,3.1,7,0.035,0.027,0.041,83.2,0,False,Low,delayed_delivery,3.9,Medium
+PO-MFG-00678,2025-06-14,V-MFG-007,Polycab India,manufacturing,0.789,2.5,12,0.0407,0.0173,0.067,83.7,0,False,Low,delayed_delivery,4.1,Medium
+PO-MFG-00679,2024-05-06,V-MFG-007,Polycab India,manufacturing,0.969,0.2,5,0.0015,0.0015,-0.017,98.6,0,False,High,on_time_delivery,4.9,Low
+PO-MFG-00680,2024-12-01,V-MFG-007,Polycab India,manufacturing,0.838,4.2,7,0.0225,0.0233,0.045,83.0,0,False,Medium,on_time_delivery,3.4,Medium
+PO-MFG-00681,2024-06-24,V-MFG-007,Polycab India,manufacturing,0.827,1.9,6,0.0445,0.0172,0.085,74.9,1,True,Low,delayed_delivery,4.1,Medium
+PO-MFG-00682,2023-06-08,V-MFG-007,Polycab India,manufacturing,0.863,3.3,7,0.036,0.0108,0.059,81.2,0,True,Low,delayed_delivery,4.0,Medium
+PO-MFG-00683,2024-04-08,V-MFG-007,Polycab India,manufacturing,0.825,2.1,7,0.0278,0.0193,0.088,73.6,0,True,Low,on_time_delivery,3.7,Medium
+PO-MFG-00684,2025-05-11,V-MFG-007,Polycab India,manufacturing,0.524,7.5,18,0.081,0.0698,0.159,53.4,2,False,Medium,defective_shipment,2.6,High
+PO-MFG-00685,2025-01-24,V-MFG-007,Polycab India,manufacturing,0.855,4.4,8,0.0298,0.0182,0.074,80.8,0,False,Medium,delayed_delivery,3.9,Medium
+PO-MFG-00686,2024-07-27,V-MFG-007,Polycab India,manufacturing,0.974,0.4,3,0.015,0.0079,0.0,97.3,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00687,2023-06-26,V-MFG-007,Polycab India,manufacturing,0.547,9.7,10,0.0953,0.0537,0.159,50.1,3,False,Low,defective_shipment,3.0,High
+PO-MFG-00688,2023-05-15,V-MFG-007,Polycab India,manufacturing,0.851,4.3,11,0.0297,0.0157,0.052,74.9,1,False,Low,on_time_delivery,4.0,Medium
+PO-MFG-00689,2023-12-25,V-MFG-007,Polycab India,manufacturing,0.879,3.0,7,0.026,0.0161,0.044,81.0,1,False,Low,delayed_delivery,3.7,Medium
+PO-MFG-00690,2025-05-14,V-MFG-007,Polycab India,manufacturing,0.821,3.0,11,0.0247,0.0204,0.061,73.4,1,True,Medium,on_time_delivery,3.9,Medium
+PO-MFG-00691,2025-09-26,V-MFG-007,Polycab India,manufacturing,0.835,2.7,10,0.0412,0.0221,0.065,73.4,1,True,Medium,delayed_delivery,3.4,Medium
+PO-MFG-00692,2023-08-05,V-MFG-007,Polycab India,manufacturing,0.799,2.9,7,0.0389,0.0239,0.087,75.8,1,False,Medium,delayed_delivery,3.8,Medium
+PO-MFG-00693,2025-05-19,V-MFG-007,Polycab India,manufacturing,0.777,1.9,6,0.0444,0.0172,0.05,82.8,1,False,Low,on_time_delivery,3.9,Medium
+PO-MFG-00694,2025-10-27,V-MFG-007,Polycab India,manufacturing,0.964,0.5,7,0.0052,0.006,-0.01,97.3,0,True,High,on_time_delivery,4.5,Low
+PO-MFG-00695,2025-11-10,V-MFG-007,Polycab India,manufacturing,0.502,8.1,19,0.072,0.0731,0.13,57.7,2,True,Medium,defective_shipment,2.9,High
+PO-MFG-00696,2023-10-14,V-MFG-007,Polycab India,manufacturing,0.809,3.5,11,0.0364,0.0199,0.051,75.1,0,True,Low,on_time_delivery,3.5,Medium
+PO-MFG-00697,2025-01-04,V-MFG-007,Polycab India,manufacturing,0.802,3.7,9,0.0377,0.0106,0.078,74.7,0,False,Medium,delayed_delivery,3.8,Medium
+PO-MFG-00698,2024-11-26,V-MFG-007,Polycab India,manufacturing,0.777,3.6,6,0.0256,0.0249,0.067,81.7,0,True,Low,on_time_delivery,3.8,Medium
+PO-MFG-00699,2023-05-18,V-MFG-007,Polycab India,manufacturing,0.762,2.7,9,0.0336,0.0228,0.073,73.2,0,True,Medium,delayed_delivery,4.1,Medium
+PO-MFG-00700,2025-09-27,V-MFG-007,Polycab India,manufacturing,0.865,4.1,6,0.0289,0.0198,0.042,85.5,1,True,Low,on_time_delivery,3.5,Medium
+PO-MFG-00701,2023-05-17,V-MFG-008,Tata Metaliks,manufacturing,0.983,1.1,4,0.0087,0.0071,0.03,91.9,0,True,Medium,on_time_delivery,4.6,Low
+PO-MFG-00702,2025-11-04,V-MFG-008,Tata Metaliks,manufacturing,0.592,11.6,19,0.0615,0.0764,0.17,46.5,3,False,Low,defective_shipment,2.2,High
+PO-MFG-00703,2025-02-19,V-MFG-008,Tata Metaliks,manufacturing,0.839,4.3,5,0.0449,0.0155,0.063,84.1,0,True,Medium,delayed_delivery,3.5,Medium
+PO-MFG-00704,2024-11-10,V-MFG-008,Tata Metaliks,manufacturing,0.791,4.2,6,0.0389,0.0209,0.088,78.7,1,False,Medium,on_time_delivery,3.6,Medium
+PO-MFG-00705,2025-02-08,V-MFG-008,Tata Metaliks,manufacturing,0.605,11.8,10,0.1147,0.0575,0.2,47.1,3,False,Medium,delayed_delivery,2.4,High
+PO-MFG-00706,2024-05-02,V-MFG-008,Tata Metaliks,manufacturing,0.514,7.0,15,0.0692,0.0373,0.198,53.2,4,False,Medium,delayed_delivery,2.5,High
+PO-MFG-00707,2024-06-06,V-MFG-008,Tata Metaliks,manufacturing,0.69,6.6,20,0.0873,0.049,0.13,47.6,3,False,Medium,delayed_delivery,3.1,High
+PO-MFG-00708,2025-10-23,V-MFG-008,Tata Metaliks,manufacturing,0.617,8.9,15,0.0827,0.0622,0.186,63.7,4,False,Low,delayed_delivery,2.5,High
+PO-MFG-00709,2025-12-24,V-MFG-008,Tata Metaliks,manufacturing,0.565,8.4,20,0.1146,0.0444,0.167,54.6,2,False,Medium,delayed_delivery,2.6,High
+PO-MFG-00710,2023-11-12,V-MFG-008,Tata Metaliks,manufacturing,0.577,5.7,16,0.1118,0.0564,0.206,46.6,4,False,Low,delayed_delivery,2.1,High
+PO-MFG-00711,2025-11-14,V-MFG-008,Tata Metaliks,manufacturing,0.862,2.3,12,0.039,0.0118,0.04,85.6,1,False,Low,on_time_delivery,4.2,Medium
+PO-MFG-00712,2023-08-05,V-MFG-008,Tata Metaliks,manufacturing,0.82,1.5,11,0.0225,0.019,0.046,76.9,1,True,Low,delayed_delivery,3.5,Medium
+PO-MFG-00713,2023-09-05,V-MFG-008,Tata Metaliks,manufacturing,0.554,9.0,17,0.0762,0.042,0.145,64.0,4,True,Medium,delayed_delivery,2.1,High
+PO-MFG-00714,2025-09-09,V-MFG-008,Tata Metaliks,manufacturing,0.586,10.7,13,0.0792,0.0702,0.212,62.8,3,True,Low,defective_shipment,2.3,High
+PO-MFG-00715,2024-03-06,V-MFG-008,Tata Metaliks,manufacturing,0.974,0.6,3,0.0139,0.0001,0.026,92.6,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00716,2024-09-08,V-MFG-008,Tata Metaliks,manufacturing,0.506,11.5,10,0.1103,0.0361,0.159,56.8,4,False,Low,defective_shipment,2.2,High
+PO-MFG-00717,2023-09-25,V-MFG-008,Tata Metaliks,manufacturing,0.672,11.5,14,0.0737,0.06,0.224,50.5,4,False,Low,delayed_delivery,2.2,High
+PO-MFG-00718,2025-10-08,V-MFG-008,Tata Metaliks,manufacturing,0.504,6.9,15,0.0874,0.0761,0.204,63.4,4,False,Medium,delayed_delivery,2.8,High
+PO-MFG-00719,2025-10-24,V-MFG-008,Tata Metaliks,manufacturing,0.672,8.4,13,0.1084,0.0531,0.195,51.1,3,True,Medium,defective_shipment,3.1,High
+PO-MFG-00720,2025-10-10,V-MFG-008,Tata Metaliks,manufacturing,0.633,5.6,14,0.0671,0.0753,0.12,53.0,3,True,Low,defective_shipment,2.5,High
+PO-MFG-00721,2025-09-14,V-MFG-008,Tata Metaliks,manufacturing,0.503,5.9,10,0.0803,0.0539,0.151,53.6,3,False,Medium,delayed_delivery,2.2,High
+PO-MFG-00722,2024-07-03,V-MFG-008,Tata Metaliks,manufacturing,0.676,8.2,18,0.0595,0.0614,0.192,47.7,2,True,Low,defective_shipment,2.3,High
+PO-MFG-00723,2025-10-06,V-MFG-008,Tata Metaliks,manufacturing,0.622,11.0,14,0.0725,0.0557,0.229,61.3,2,False,Low,defective_shipment,2.8,High
+PO-MFG-00724,2023-05-06,V-MFG-008,Tata Metaliks,manufacturing,0.54,8.8,10,0.0728,0.0554,0.136,47.1,3,False,Low,defective_shipment,2.8,High
+PO-MFG-00725,2024-06-15,V-MFG-008,Tata Metaliks,manufacturing,0.554,11.7,10,0.08,0.0725,0.193,52.2,2,False,Low,defective_shipment,2.6,High
+PO-MFG-00726,2023-04-22,V-MFG-008,Tata Metaliks,manufacturing,0.527,10.7,20,0.094,0.0511,0.241,61.1,3,True,Low,defective_shipment,2.3,High
+PO-MFG-00727,2023-10-14,V-MFG-008,Tata Metaliks,manufacturing,0.575,11.4,19,0.094,0.0549,0.133,50.6,2,True,Low,delayed_delivery,2.1,High
+PO-MFG-00728,2024-09-25,V-MFG-008,Tata Metaliks,manufacturing,0.534,6.3,20,0.0706,0.0429,0.173,56.5,3,False,Medium,delayed_delivery,3.2,High
+PO-MFG-00729,2023-04-04,V-MFG-008,Tata Metaliks,manufacturing,0.859,3.3,5,0.0262,0.024,0.081,72.1,0,True,Medium,delayed_delivery,3.9,Medium
+PO-MFG-00730,2025-04-21,V-MFG-008,Tata Metaliks,manufacturing,0.546,7.9,13,0.0868,0.0569,0.198,45.0,4,False,Low,defective_shipment,2.6,High
+PO-MFG-00731,2023-06-13,V-MFG-008,Tata Metaliks,manufacturing,0.636,9.9,17,0.0592,0.0683,0.166,56.4,2,True,Medium,delayed_delivery,2.3,High
+PO-MFG-00732,2024-12-26,V-MFG-008,Tata Metaliks,manufacturing,0.686,6.4,13,0.0604,0.0523,0.202,53.8,4,False,Medium,defective_shipment,2.5,High
+PO-MFG-00733,2024-04-15,V-MFG-008,Tata Metaliks,manufacturing,0.502,10.3,19,0.0742,0.0691,0.145,56.7,2,False,Medium,defective_shipment,2.6,High
+PO-MFG-00734,2024-06-02,V-MFG-008,Tata Metaliks,manufacturing,0.565,9.8,20,0.1133,0.0538,0.136,59.9,2,True,Low,defective_shipment,2.6,High
+PO-MFG-00735,2025-02-26,V-MFG-008,Tata Metaliks,manufacturing,0.637,5.9,12,0.071,0.0654,0.171,56.9,4,False,Low,defective_shipment,2.8,High
+PO-MFG-00736,2024-04-11,V-MFG-008,Tata Metaliks,manufacturing,0.547,6.5,20,0.0866,0.0593,0.196,46.4,2,False,Medium,defective_shipment,2.6,High
+PO-MFG-00737,2023-02-10,V-MFG-008,Tata Metaliks,manufacturing,0.86,3.3,8,0.0186,0.0105,0.077,78.3,1,True,Low,delayed_delivery,4.0,Medium
+PO-MFG-00738,2023-05-14,V-MFG-008,Tata Metaliks,manufacturing,0.565,9.8,18,0.1103,0.0521,0.147,63.4,4,True,Medium,delayed_delivery,2.6,High
+PO-MFG-00739,2025-08-14,V-MFG-008,Tata Metaliks,manufacturing,0.565,6.0,15,0.1132,0.0764,0.138,46.8,3,True,Low,defective_shipment,3.0,High
+PO-MFG-00740,2024-07-10,V-MFG-008,Tata Metaliks,manufacturing,0.535,8.4,13,0.1116,0.0516,0.225,54.3,3,False,Medium,delayed_delivery,3.2,High
+PO-MFG-00741,2024-06-22,V-MFG-008,Tata Metaliks,manufacturing,0.801,4.3,11,0.0346,0.0276,0.053,78.2,1,False,Low,delayed_delivery,3.6,Medium
+PO-MFG-00742,2024-12-12,V-MFG-008,Tata Metaliks,manufacturing,0.858,1.6,11,0.0349,0.0157,0.088,80.1,1,False,Medium,on_time_delivery,3.8,Medium
+PO-MFG-00743,2023-03-27,V-MFG-008,Tata Metaliks,manufacturing,0.628,11.1,12,0.1038,0.0744,0.212,48.4,2,True,Medium,delayed_delivery,2.8,High
+PO-MFG-00744,2023-05-22,V-MFG-008,Tata Metaliks,manufacturing,0.667,11.1,11,0.0635,0.04,0.177,59.9,3,False,Low,delayed_delivery,3.0,High
+PO-MFG-00745,2024-08-18,V-MFG-008,Tata Metaliks,manufacturing,0.687,10.0,20,0.1024,0.0353,0.238,63.5,4,True,Medium,delayed_delivery,2.5,High
+PO-MFG-00746,2024-12-21,V-MFG-008,Tata Metaliks,manufacturing,0.757,1.6,8,0.0355,0.0195,0.045,78.3,1,True,Low,delayed_delivery,3.8,Medium
+PO-MFG-00747,2023-12-02,V-MFG-008,Tata Metaliks,manufacturing,0.676,10.0,14,0.0756,0.0673,0.171,52.6,4,False,Low,defective_shipment,2.3,High
+PO-MFG-00748,2025-03-28,V-MFG-008,Tata Metaliks,manufacturing,0.664,11.9,18,0.0827,0.0352,0.129,47.6,2,False,Low,defective_shipment,2.7,High
+PO-MFG-00749,2024-05-25,V-MFG-008,Tata Metaliks,manufacturing,0.683,9.0,13,0.1195,0.0446,0.23,57.8,3,False,Low,defective_shipment,2.6,High
+PO-MFG-00750,2023-12-07,V-MFG-008,Tata Metaliks,manufacturing,0.572,11.0,20,0.099,0.0623,0.157,53.3,4,False,Low,defective_shipment,3.1,High
+PO-MFG-00751,2025-01-04,V-MFG-008,Tata Metaliks,manufacturing,0.665,6.4,19,0.079,0.074,0.238,62.7,3,False,Low,delayed_delivery,2.2,High
+PO-MFG-00752,2024-02-16,V-MFG-008,Tata Metaliks,manufacturing,0.566,11.3,20,0.0589,0.0745,0.148,55.0,4,True,Low,defective_shipment,2.4,High
+PO-MFG-00753,2024-01-09,V-MFG-008,Tata Metaliks,manufacturing,0.546,7.8,16,0.1131,0.0503,0.209,60.8,2,True,Low,defective_shipment,2.7,High
+PO-MFG-00754,2024-08-11,V-MFG-008,Tata Metaliks,manufacturing,0.567,5.8,10,0.0956,0.0355,0.24,54.8,3,False,Medium,defective_shipment,2.2,High
+PO-MFG-00755,2024-09-09,V-MFG-008,Tata Metaliks,manufacturing,0.755,4.4,5,0.0222,0.0183,0.086,73.4,1,True,Medium,delayed_delivery,3.7,Medium
+PO-MFG-00756,2025-07-14,V-MFG-008,Tata Metaliks,manufacturing,0.686,8.9,16,0.0623,0.0606,0.181,60.8,3,False,Low,delayed_delivery,2.3,High
+PO-MFG-00757,2023-12-11,V-MFG-008,Tata Metaliks,manufacturing,0.664,7.7,18,0.0685,0.0435,0.166,55.2,4,False,Medium,defective_shipment,2.6,High
+PO-MFG-00758,2024-04-12,V-MFG-008,Tata Metaliks,manufacturing,0.681,11.9,19,0.0976,0.0697,0.186,50.4,3,False,Low,delayed_delivery,2.6,High
+PO-MFG-00759,2024-06-18,V-MFG-008,Tata Metaliks,manufacturing,0.508,9.9,18,0.1079,0.0768,0.176,54.2,2,False,Low,delayed_delivery,2.3,High
+PO-MFG-00760,2023-03-27,V-MFG-008,Tata Metaliks,manufacturing,0.588,8.6,16,0.0829,0.0602,0.204,49.8,2,True,Medium,delayed_delivery,2.3,High
+PO-MFG-00761,2025-06-10,V-MFG-008,Tata Metaliks,manufacturing,0.581,11.8,10,0.1072,0.056,0.145,62.4,4,True,Medium,delayed_delivery,3.1,High
+PO-MFG-00762,2025-08-25,V-MFG-008,Tata Metaliks,manufacturing,0.858,3.2,7,0.0437,0.0243,0.063,84.9,0,True,Medium,delayed_delivery,3.7,Medium
+PO-MFG-00763,2024-11-17,V-MFG-008,Tata Metaliks,manufacturing,0.675,6.8,19,0.059,0.0549,0.131,46.4,2,True,Medium,delayed_delivery,2.3,High
+PO-MFG-00764,2024-04-22,V-MFG-008,Tata Metaliks,manufacturing,0.683,7.8,20,0.0864,0.072,0.206,63.7,2,True,Medium,delayed_delivery,2.8,High
+PO-MFG-00765,2024-02-13,V-MFG-008,Tata Metaliks,manufacturing,0.569,9.5,15,0.1052,0.0531,0.179,50.6,4,True,Medium,delayed_delivery,2.3,High
+PO-MFG-00766,2023-01-20,V-MFG-008,Tata Metaliks,manufacturing,0.636,6.5,14,0.1164,0.0794,0.169,58.5,2,False,Low,delayed_delivery,2.2,High
+PO-MFG-00767,2023-05-08,V-MFG-008,Tata Metaliks,manufacturing,0.687,10.1,17,0.0564,0.0662,0.182,49.6,2,False,Medium,defective_shipment,3.0,High
+PO-MFG-00768,2023-06-02,V-MFG-008,Tata Metaliks,manufacturing,0.642,6.1,11,0.0808,0.0723,0.14,45.2,4,False,Low,defective_shipment,2.5,High
+PO-MFG-00769,2023-11-09,V-MFG-008,Tata Metaliks,manufacturing,0.66,11.4,19,0.0846,0.06,0.231,49.2,3,True,Low,defective_shipment,2.6,High
+PO-MFG-00770,2023-02-10,V-MFG-008,Tata Metaliks,manufacturing,0.608,8.6,11,0.1082,0.0523,0.246,58.5,3,True,Medium,defective_shipment,2.8,High
+PO-MFG-00771,2023-01-07,V-MFG-008,Tata Metaliks,manufacturing,0.517,12.0,17,0.1,0.0718,0.173,51.9,4,False,Medium,defective_shipment,2.7,High
+PO-MFG-00772,2025-03-24,V-MFG-008,Tata Metaliks,manufacturing,0.595,6.3,10,0.0576,0.0365,0.234,57.8,2,False,Medium,delayed_delivery,2.2,High
+PO-MFG-00773,2024-01-11,V-MFG-008,Tata Metaliks,manufacturing,0.516,5.7,15,0.0732,0.0721,0.184,47.2,4,False,Low,delayed_delivery,3.2,High
+PO-MFG-00774,2024-11-07,V-MFG-008,Tata Metaliks,manufacturing,0.572,10.1,13,0.1078,0.039,0.128,58.7,4,False,Low,delayed_delivery,2.7,High
+PO-MFG-00775,2025-01-26,V-MFG-008,Tata Metaliks,manufacturing,0.679,11.0,18,0.1179,0.0428,0.204,63.0,3,True,Medium,delayed_delivery,2.5,High
+PO-MFG-00776,2025-03-20,V-MFG-008,Tata Metaliks,manufacturing,0.839,3.4,8,0.0193,0.0147,0.051,78.2,1,True,Low,on_time_delivery,3.7,Medium
+PO-MFG-00777,2025-01-17,V-MFG-008,Tata Metaliks,manufacturing,0.65,6.0,12,0.0988,0.0543,0.129,61.2,4,False,Medium,defective_shipment,2.9,High
+PO-MFG-00778,2024-12-08,V-MFG-008,Tata Metaliks,manufacturing,0.76,4.0,6,0.019,0.0163,0.067,75.0,1,True,Low,on_time_delivery,3.8,Medium
+PO-MFG-00779,2024-10-17,V-MFG-008,Tata Metaliks,manufacturing,0.555,6.4,18,0.093,0.0406,0.16,57.7,4,False,Medium,defective_shipment,2.9,High
+PO-MFG-00780,2023-12-04,V-MFG-008,Tata Metaliks,manufacturing,0.577,8.7,17,0.0999,0.0394,0.184,52.6,2,True,Low,defective_shipment,3.1,High
+PO-MFG-00781,2025-11-22,V-MFG-008,Tata Metaliks,manufacturing,0.568,6.1,20,0.0808,0.0699,0.203,53.7,3,False,Low,delayed_delivery,2.6,High
+PO-MFG-00782,2025-12-17,V-MFG-008,Tata Metaliks,manufacturing,0.502,10.0,13,0.0841,0.0529,0.243,63.8,3,False,Low,delayed_delivery,2.6,High
+PO-MFG-00783,2023-06-19,V-MFG-008,Tata Metaliks,manufacturing,0.602,6.4,15,0.0955,0.0566,0.14,51.1,4,False,Medium,defective_shipment,2.1,High
+PO-MFG-00784,2025-06-24,V-MFG-008,Tata Metaliks,manufacturing,0.819,2.5,6,0.0428,0.0269,0.055,82.8,0,False,Medium,on_time_delivery,3.8,Medium
+PO-MFG-00785,2023-03-19,V-MFG-008,Tata Metaliks,manufacturing,0.682,11.1,16,0.0778,0.0392,0.189,46.5,2,False,Medium,delayed_delivery,2.2,High
+PO-MFG-00786,2023-01-23,V-MFG-008,Tata Metaliks,manufacturing,0.615,7.2,19,0.1008,0.0431,0.243,55.7,3,False,Medium,delayed_delivery,2.8,High
+PO-MFG-00787,2023-10-07,V-MFG-008,Tata Metaliks,manufacturing,0.503,6.2,12,0.0771,0.0356,0.204,52.4,4,False,Medium,defective_shipment,2.3,High
+PO-MFG-00788,2023-07-22,V-MFG-008,Tata Metaliks,manufacturing,0.622,7.7,12,0.0655,0.0733,0.173,49.0,2,True,Low,defective_shipment,2.3,High
+PO-MFG-00789,2024-11-07,V-MFG-008,Tata Metaliks,manufacturing,0.504,6.4,14,0.1061,0.0757,0.205,53.0,3,True,Medium,defective_shipment,2.4,High
+PO-MFG-00790,2025-11-10,V-MFG-008,Tata Metaliks,manufacturing,0.879,3.6,10,0.0314,0.0241,0.045,81.0,1,False,Medium,on_time_delivery,4.1,Medium
+PO-MFG-00791,2024-05-02,V-MFG-008,Tata Metaliks,manufacturing,0.637,9.0,17,0.1063,0.0513,0.16,62.9,2,False,Medium,delayed_delivery,2.4,High
+PO-MFG-00792,2025-09-22,V-MFG-008,Tata Metaliks,manufacturing,0.656,7.8,18,0.0679,0.0686,0.155,48.8,3,True,Low,defective_shipment,2.8,High
+PO-MFG-00793,2025-03-28,V-MFG-008,Tata Metaliks,manufacturing,0.804,3.0,11,0.0444,0.0249,0.066,75.4,0,False,Medium,on_time_delivery,3.8,Medium
+PO-MFG-00794,2025-10-10,V-MFG-008,Tata Metaliks,manufacturing,0.546,10.5,20,0.0816,0.0712,0.193,57.5,4,False,Medium,delayed_delivery,3.1,High
+PO-MFG-00795,2025-12-11,V-MFG-008,Tata Metaliks,manufacturing,0.665,5.7,10,0.1046,0.0706,0.161,46.1,4,False,Low,defective_shipment,2.5,High
+PO-MFG-00796,2023-01-15,V-MFG-008,Tata Metaliks,manufacturing,0.537,6.6,19,0.1043,0.0605,0.211,53.5,4,False,Low,defective_shipment,2.4,High
+PO-MFG-00797,2024-11-21,V-MFG-008,Tata Metaliks,manufacturing,0.684,5.5,18,0.1151,0.0379,0.138,55.6,3,False,Medium,delayed_delivery,2.8,High
+PO-MFG-00798,2025-01-10,V-MFG-008,Tata Metaliks,manufacturing,0.689,5.7,12,0.1174,0.0392,0.147,49.3,2,False,Medium,defective_shipment,2.9,High
+PO-MFG-00799,2025-04-27,V-MFG-008,Tata Metaliks,manufacturing,0.543,8.7,15,0.0672,0.0709,0.214,46.9,2,False,Medium,delayed_delivery,2.4,High
+PO-MFG-00800,2024-06-06,V-MFG-008,Tata Metaliks,manufacturing,0.865,4.0,7,0.0329,0.0251,0.059,74.6,1,False,Low,delayed_delivery,3.8,Medium
+PO-MFG-00801,2025-04-18,V-MFG-009,NBC Bearings,manufacturing,0.843,2.6,9,0.0272,0.0114,0.072,78.0,0,True,Low,on_time_delivery,3.5,Medium
+PO-MFG-00802,2024-06-27,V-MFG-009,NBC Bearings,manufacturing,0.796,3.8,8,0.0366,0.0226,0.086,77.9,1,True,Low,on_time_delivery,3.8,Medium
+PO-MFG-00803,2024-07-04,V-MFG-009,NBC Bearings,manufacturing,0.88,1.9,6,0.036,0.0249,0.059,77.9,1,True,Medium,on_time_delivery,4.1,Medium
+PO-MFG-00804,2024-01-17,V-MFG-009,NBC Bearings,manufacturing,0.783,1.9,12,0.0286,0.0103,0.071,72.8,1,True,Low,on_time_delivery,3.6,Medium
+PO-MFG-00805,2023-10-20,V-MFG-009,NBC Bearings,manufacturing,0.944,0.1,7,0.0079,0.0005,-0.003,96.4,0,True,Medium,on_time_delivery,4.9,Low
+PO-MFG-00806,2024-08-08,V-MFG-009,NBC Bearings,manufacturing,0.967,0.1,3,0.0143,0.0017,0.019,97.5,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00807,2023-11-10,V-MFG-009,NBC Bearings,manufacturing,0.624,5.9,15,0.0945,0.0459,0.159,45.9,4,False,Low,delayed_delivery,2.2,High
+PO-MFG-00808,2024-06-25,V-MFG-009,NBC Bearings,manufacturing,0.798,2.6,7,0.0344,0.0112,0.076,76.1,0,False,Medium,delayed_delivery,4.1,Medium
+PO-MFG-00809,2025-04-21,V-MFG-009,NBC Bearings,manufacturing,0.789,2.8,10,0.0241,0.0243,0.084,81.6,0,False,Medium,delayed_delivery,3.9,Medium
+PO-MFG-00810,2023-07-05,V-MFG-009,NBC Bearings,manufacturing,0.839,1.8,12,0.0343,0.017,0.079,76.8,0,False,Low,delayed_delivery,3.8,Medium
+PO-MFG-00811,2023-11-20,V-MFG-009,NBC Bearings,manufacturing,0.926,0.1,6,0.0078,0.0066,-0.012,90.9,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00812,2024-08-07,V-MFG-009,NBC Bearings,manufacturing,0.838,2.8,12,0.0211,0.0105,0.047,79.2,1,False,Low,on_time_delivery,3.9,Medium
+PO-MFG-00813,2025-12-20,V-MFG-009,NBC Bearings,manufacturing,0.859,1.7,8,0.0195,0.0149,0.043,83.3,0,True,Low,on_time_delivery,4.0,Medium
+PO-MFG-00814,2025-08-18,V-MFG-009,NBC Bearings,manufacturing,0.83,4.2,9,0.0352,0.0258,0.049,76.4,1,False,Medium,delayed_delivery,3.6,Medium
+PO-MFG-00815,2024-01-20,V-MFG-009,NBC Bearings,manufacturing,0.975,0.9,4,0.0067,0.0055,0.014,92.7,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00816,2024-09-17,V-MFG-009,NBC Bearings,manufacturing,0.763,1.7,8,0.0404,0.022,0.062,73.0,1,True,Low,delayed_delivery,3.6,Medium
+PO-MFG-00817,2025-05-06,V-MFG-009,NBC Bearings,manufacturing,0.769,1.8,7,0.0278,0.0142,0.042,79.7,0,True,Medium,delayed_delivery,4.0,Medium
+PO-MFG-00818,2023-07-27,V-MFG-009,NBC Bearings,manufacturing,0.751,3.1,6,0.0355,0.0226,0.09,82.3,1,True,Medium,on_time_delivery,3.9,Medium
+PO-MFG-00819,2023-01-02,V-MFG-009,NBC Bearings,manufacturing,0.753,1.9,9,0.0369,0.0118,0.043,78.6,0,False,Low,on_time_delivery,3.6,Medium
+PO-MFG-00820,2023-11-22,V-MFG-009,NBC Bearings,manufacturing,0.819,3.3,6,0.0229,0.0183,0.066,73.1,0,True,Medium,on_time_delivery,3.7,Medium
+PO-MFG-00821,2024-10-16,V-MFG-009,NBC Bearings,manufacturing,1.35,8.1,15,0.0803,0.0402,0.144,115.0,2,False,Medium,defective_shipment,2.9,High
+PO-MFG-00822,2025-11-17,V-MFG-009,NBC Bearings,manufacturing,0.955,0.9,5,0.0044,0.0028,-0.015,96.7,0,False,High,on_time_delivery,4.7,Low
+PO-MFG-00823,2024-06-16,V-MFG-009,NBC Bearings,manufacturing,0.539,6.1,18,0.11,0.0586,0.217,60.6,2,False,Low,delayed_delivery,2.9,High
+PO-MFG-00824,2024-11-13,V-MFG-009,NBC Bearings,manufacturing,0.683,7.5,16,0.1126,0.0429,0.175,58.8,2,False,Low,delayed_delivery,3.0,High
+PO-MFG-00825,2023-11-10,V-MFG-009,NBC Bearings,manufacturing,0.773,3.5,10,0.023,0.0192,0.046,77.6,1,False,Low,on_time_delivery,3.6,Medium
+PO-MFG-00826,2024-07-11,V-MFG-009,NBC Bearings,manufacturing,0.799,4.4,11,0.034,0.0262,0.086,75.0,1,True,Low,delayed_delivery,3.6,Medium
+PO-MFG-00827,2025-10-21,V-MFG-009,NBC Bearings,manufacturing,0.78,3.7,6,0.0387,0.0204,0.049,85.3,1,True,Low,on_time_delivery,4.1,Medium
+PO-MFG-00828,2025-04-09,V-MFG-009,NBC Bearings,manufacturing,0.758,4.2,5,0.0282,0.0269,0.047,73.3,1,False,Low,delayed_delivery,3.8,Medium
+PO-MFG-00829,2023-09-07,V-MFG-009,NBC Bearings,manufacturing,0.753,3.1,12,0.0368,0.0239,0.087,81.1,1,False,Medium,on_time_delivery,4.1,Medium
+PO-MFG-00830,2024-10-20,V-MFG-009,NBC Bearings,manufacturing,0.808,3.3,10,0.0224,0.0256,0.045,73.7,1,False,Medium,on_time_delivery,3.7,Medium
+PO-MFG-00831,2025-10-18,V-MFG-009,NBC Bearings,manufacturing,0.966,1.2,2,0.0071,0.0039,0.012,96.2,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00832,2024-04-27,V-MFG-009,NBC Bearings,manufacturing,0.762,3.3,10,0.0405,0.0181,0.049,84.1,1,True,Medium,on_time_delivery,3.9,Medium
+PO-MFG-00833,2025-09-03,V-MFG-009,NBC Bearings,manufacturing,0.762,4.0,8,0.0322,0.0224,0.069,80.1,1,True,Medium,delayed_delivery,4.0,Medium
+PO-MFG-00834,2023-11-27,V-MFG-009,NBC Bearings,manufacturing,0.752,1.7,12,0.0274,0.0243,0.075,73.6,0,True,Medium,delayed_delivery,4.0,Medium
+PO-MFG-00835,2024-10-28,V-MFG-009,NBC Bearings,manufacturing,0.818,2.3,5,0.0384,0.0108,0.074,83.7,0,False,Low,on_time_delivery,4.0,Medium
+PO-MFG-00836,2024-09-08,V-MFG-009,NBC Bearings,manufacturing,0.794,2.8,8,0.0364,0.0265,0.067,83.6,0,False,Medium,delayed_delivery,3.9,Medium
+PO-MFG-00837,2024-06-04,V-MFG-009,NBC Bearings,manufacturing,0.807,2.3,7,0.0267,0.0259,0.043,82.3,1,False,Medium,delayed_delivery,4.1,Medium
+PO-MFG-00838,2025-03-23,V-MFG-009,NBC Bearings,manufacturing,0.774,3.9,6,0.0368,0.0171,0.069,75.7,1,True,Low,on_time_delivery,3.7,Medium
+PO-MFG-00839,2024-04-25,V-MFG-009,NBC Bearings,manufacturing,0.757,2.2,12,0.0341,0.0194,0.077,82.9,1,True,Medium,on_time_delivery,3.7,Medium
+PO-MFG-00840,2025-08-05,V-MFG-009,NBC Bearings,manufacturing,0.964,1.1,2,0.0089,0.006,0.01,91.6,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00841,2023-06-21,V-MFG-009,NBC Bearings,manufacturing,0.986,1.1,5,0.0066,0.0005,0.024,91.9,0,False,Medium,on_time_delivery,4.9,Low
+PO-MFG-00842,2024-12-05,V-MFG-009,NBC Bearings,manufacturing,0.766,3.5,9,0.0443,0.0227,0.049,73.9,0,True,Medium,delayed_delivery,4.0,Medium
+PO-MFG-00843,2025-04-26,V-MFG-009,NBC Bearings,manufacturing,0.855,2.7,8,0.023,0.0142,0.056,84.6,0,True,Medium,on_time_delivery,3.6,Medium
+PO-MFG-00844,2025-05-05,V-MFG-009,NBC Bearings,manufacturing,0.837,3.5,7,0.0367,0.0144,0.082,77.1,1,False,Medium,on_time_delivery,3.7,Medium
+PO-MFG-00845,2023-02-22,V-MFG-009,NBC Bearings,manufacturing,0.64,8.3,11,0.1187,0.0537,0.156,56.6,4,False,Low,defective_shipment,2.6,High
+PO-MFG-00846,2025-10-23,V-MFG-009,NBC Bearings,manufacturing,0.758,2.1,5,0.0266,0.025,0.047,83.7,0,True,Low,on_time_delivery,4.1,Medium
+PO-MFG-00847,2023-01-21,V-MFG-009,NBC Bearings,manufacturing,0.776,2.6,9,0.0229,0.0204,0.09,72.5,0,True,Medium,on_time_delivery,4.0,Medium
+PO-MFG-00848,2025-07-20,V-MFG-009,NBC Bearings,manufacturing,0.773,2.0,10,0.0243,0.0197,0.045,75.5,0,True,Low,delayed_delivery,4.0,Medium
+PO-MFG-00849,2024-11-21,V-MFG-009,NBC Bearings,manufacturing,0.862,2.4,11,0.0295,0.0132,0.077,75.8,0,True,Medium,delayed_delivery,4.2,Medium
+PO-MFG-00850,2024-06-04,V-MFG-009,NBC Bearings,manufacturing,0.872,3.7,11,0.0298,0.021,0.077,79.1,1,False,Low,on_time_delivery,3.6,Medium
+PO-MFG-00851,2024-10-05,V-MFG-009,NBC Bearings,manufacturing,0.822,2.5,12,0.0253,0.0161,0.082,80.1,1,True,Medium,on_time_delivery,4.1,Medium
+PO-MFG-00852,2025-01-08,V-MFG-009,NBC Bearings,manufacturing,0.608,10.7,19,0.1118,0.054,0.162,51.1,2,False,Medium,defective_shipment,2.1,High
+PO-MFG-00853,2025-09-07,V-MFG-009,NBC Bearings,manufacturing,0.751,3.8,10,0.0254,0.0199,0.087,75.0,1,False,Medium,on_time_delivery,3.8,Medium
+PO-MFG-00854,2024-10-18,V-MFG-009,NBC Bearings,manufacturing,0.829,2.3,5,0.029,0.0119,0.075,84.0,0,False,Low,delayed_delivery,4.1,Medium
+PO-MFG-00855,2023-02-01,V-MFG-009,NBC Bearings,manufacturing,0.875,2.1,9,0.0395,0.0271,0.087,78.3,1,False,Medium,on_time_delivery,3.7,Medium
+PO-MFG-00856,2023-11-11,V-MFG-009,NBC Bearings,manufacturing,0.925,0.9,5,0.0142,0.0055,-0.001,96.0,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00857,2023-05-23,V-MFG-009,NBC Bearings,manufacturing,0.777,4.4,11,0.0335,0.0159,0.084,85.9,1,False,Low,on_time_delivery,4.0,Medium
+PO-MFG-00858,2025-10-26,V-MFG-009,NBC Bearings,manufacturing,0.873,3.0,9,0.0192,0.0248,0.077,75.7,0,False,Low,on_time_delivery,4.1,Medium
+PO-MFG-00859,2023-06-26,V-MFG-009,NBC Bearings,manufacturing,0.808,2.4,5,0.0408,0.0159,0.089,81.6,0,False,Medium,on_time_delivery,4.0,Medium
+PO-MFG-00860,2024-09-26,V-MFG-009,NBC Bearings,manufacturing,0.925,0.5,3,0.0082,0.0023,-0.008,96.7,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00861,2024-04-01,V-MFG-009,NBC Bearings,manufacturing,0.844,1.8,6,0.041,0.0125,0.067,77.3,1,True,Low,delayed_delivery,4.0,Medium
+PO-MFG-00862,2025-06-05,V-MFG-009,NBC Bearings,manufacturing,0.868,4.2,12,0.0304,0.0194,0.078,72.7,0,False,Medium,on_time_delivery,3.5,Medium
+PO-MFG-00863,2025-07-07,V-MFG-009,NBC Bearings,manufacturing,0.548,9.9,13,0.0959,0.0466,0.186,56.4,4,True,Low,delayed_delivery,2.2,High
+PO-MFG-00864,2023-04-08,V-MFG-009,NBC Bearings,manufacturing,0.798,3.5,6,0.0309,0.0252,0.085,78.3,0,True,Medium,on_time_delivery,3.6,Medium
+PO-MFG-00865,2024-07-06,V-MFG-009,NBC Bearings,manufacturing,0.838,4.2,11,0.0246,0.0171,0.067,81.8,1,False,Medium,on_time_delivery,4.0,Medium
+PO-MFG-00866,2024-10-09,V-MFG-009,NBC Bearings,manufacturing,0.63,9.7,14,0.1096,0.0671,0.138,51.7,2,False,Medium,defective_shipment,3.1,High
+PO-MFG-00867,2023-08-13,V-MFG-009,NBC Bearings,manufacturing,0.588,9.1,14,0.0566,0.0742,0.123,61.5,3,False,Medium,delayed_delivery,2.4,High
+PO-MFG-00868,2023-05-03,V-MFG-009,NBC Bearings,manufacturing,0.76,3.8,8,0.0356,0.0137,0.071,72.8,0,True,Medium,delayed_delivery,4.0,Medium
+PO-MFG-00869,2024-12-17,V-MFG-009,NBC Bearings,manufacturing,0.77,3.7,9,0.0273,0.0195,0.088,76.7,1,False,Medium,delayed_delivery,3.7,Medium
+PO-MFG-00870,2023-11-05,V-MFG-009,NBC Bearings,manufacturing,0.872,2.8,5,0.035,0.0265,0.074,72.2,0,False,Medium,delayed_delivery,4.1,Medium
+PO-MFG-00871,2023-02-02,V-MFG-009,NBC Bearings,manufacturing,0.846,3.9,10,0.0403,0.0114,0.07,82.7,1,False,Medium,delayed_delivery,3.5,Medium
+PO-MFG-00872,2024-09-07,V-MFG-009,NBC Bearings,manufacturing,0.847,2.8,9,0.0288,0.0114,0.077,78.6,1,True,Medium,on_time_delivery,3.9,Medium
+PO-MFG-00873,2024-12-19,V-MFG-009,NBC Bearings,manufacturing,0.804,3.5,11,0.0328,0.0127,0.071,82.4,1,True,Medium,on_time_delivery,3.7,Medium
+PO-MFG-00874,2024-01-17,V-MFG-009,NBC Bearings,manufacturing,0.833,1.7,7,0.0369,0.0224,0.04,74.5,1,True,Medium,on_time_delivery,4.1,Medium
+PO-MFG-00875,2024-05-27,V-MFG-009,NBC Bearings,manufacturing,0.591,7.1,18,0.0825,0.0762,0.129,46.0,2,False,Low,defective_shipment,2.5,High
+PO-MFG-00876,2024-08-28,V-MFG-009,NBC Bearings,manufacturing,0.782,3.2,6,0.0248,0.0232,0.065,74.3,1,False,Medium,delayed_delivery,3.4,Medium
+PO-MFG-00877,2024-05-04,V-MFG-009,NBC Bearings,manufacturing,0.752,4.2,7,0.0427,0.0141,0.065,81.0,1,True,Medium,on_time_delivery,3.6,Medium
+PO-MFG-00878,2024-08-10,V-MFG-009,NBC Bearings,manufacturing,0.518,6.1,13,0.1147,0.0384,0.208,45.2,3,True,Medium,delayed_delivery,2.4,High
+PO-MFG-00879,2024-06-18,V-MFG-009,NBC Bearings,manufacturing,0.655,7.8,19,0.1158,0.0699,0.167,48.2,2,False,Medium,defective_shipment,3.1,High
+PO-MFG-00880,2023-10-17,V-MFG-009,NBC Bearings,manufacturing,0.941,1.1,2,0.0138,0.0078,0.008,93.4,0,True,High,on_time_delivery,4.8,Low
+PO-MFG-00881,2023-07-15,V-MFG-009,NBC Bearings,manufacturing,0.566,9.5,13,0.09,0.0774,0.133,49.2,4,True,Low,delayed_delivery,2.9,High
+PO-MFG-00882,2025-02-27,V-MFG-009,NBC Bearings,manufacturing,0.549,8.0,14,0.0633,0.0623,0.226,50.9,2,False,Medium,defective_shipment,2.9,High
+PO-MFG-00883,2023-10-24,V-MFG-009,NBC Bearings,manufacturing,0.87,2.0,10,0.0222,0.0263,0.055,85.9,1,False,Low,delayed_delivery,3.6,Medium
+PO-MFG-00884,2025-06-12,V-MFG-009,NBC Bearings,manufacturing,0.775,1.7,6,0.0267,0.0107,0.043,76.3,0,False,Medium,delayed_delivery,3.9,Medium
+PO-MFG-00885,2023-10-24,V-MFG-009,NBC Bearings,manufacturing,0.803,3.3,9,0.0359,0.0156,0.063,82.4,1,False,Low,on_time_delivery,3.7,Medium
+PO-MFG-00886,2023-09-24,V-MFG-009,NBC Bearings,manufacturing,0.685,9.4,11,0.0642,0.0772,0.231,56.4,3,False,Low,defective_shipment,2.4,High
+PO-MFG-00887,2025-12-26,V-MFG-009,NBC Bearings,manufacturing,0.763,2.8,6,0.0428,0.0235,0.089,77.3,1,True,Low,delayed_delivery,4.1,Medium
+PO-MFG-00888,2025-12-17,V-MFG-009,NBC Bearings,manufacturing,0.621,6.5,14,0.0637,0.0683,0.173,47.7,4,False,Low,delayed_delivery,2.8,High
+PO-MFG-00889,2025-07-06,V-MFG-009,NBC Bearings,manufacturing,0.835,2.6,11,0.0438,0.0105,0.05,75.8,1,True,Low,delayed_delivery,3.7,Medium
+PO-MFG-00890,2025-11-21,V-MFG-009,NBC Bearings,manufacturing,0.87,4.3,10,0.0313,0.0237,0.068,78.4,1,True,Low,delayed_delivery,3.4,Medium
+PO-MFG-00891,2025-08-28,V-MFG-009,NBC Bearings,manufacturing,0.551,7.7,17,0.1028,0.0464,0.145,53.8,2,False,Medium,delayed_delivery,2.4,High
+PO-MFG-00892,2025-01-11,V-MFG-009,NBC Bearings,manufacturing,0.838,3.0,5,0.0371,0.0127,0.072,79.2,0,False,Low,on_time_delivery,3.8,Medium
+PO-MFG-00893,2023-05-01,V-MFG-009,NBC Bearings,manufacturing,0.804,2.6,9,0.0419,0.0147,0.088,77.6,1,False,Low,delayed_delivery,3.6,Medium
+PO-MFG-00894,2025-12-19,V-MFG-009,NBC Bearings,manufacturing,0.816,2.8,9,0.0235,0.0117,0.059,80.8,1,False,Low,delayed_delivery,3.8,Medium
+PO-MFG-00895,2025-09-15,V-MFG-009,NBC Bearings,manufacturing,0.845,2.6,11,0.0368,0.0264,0.071,83.6,0,True,Medium,delayed_delivery,3.7,Medium
+PO-MFG-00896,2023-10-01,V-MFG-009,NBC Bearings,manufacturing,0.865,4.5,8,0.033,0.0102,0.054,83.6,1,False,Low,delayed_delivery,3.6,Medium
+PO-MFG-00897,2024-02-25,V-MFG-009,NBC Bearings,manufacturing,0.844,2.3,10,0.0377,0.0201,0.088,80.0,1,True,Low,on_time_delivery,3.8,Medium
+PO-MFG-00898,2023-06-08,V-MFG-009,NBC Bearings,manufacturing,0.79,1.9,8,0.0339,0.0259,0.088,77.7,0,True,Medium,delayed_delivery,3.5,Medium
+PO-MFG-00899,2024-01-26,V-MFG-009,NBC Bearings,manufacturing,0.959,1.0,6,0.0067,0.005,0.017,93.7,0,True,High,on_time_delivery,4.7,Low
+PO-MFG-00900,2023-06-25,V-MFG-009,NBC Bearings,manufacturing,0.836,3.5,7,0.0416,0.0129,0.085,82.0,0,True,Low,delayed_delivery,3.6,Medium
+PO-MFG-00901,2024-09-17,V-MFG-010,Kirloskar Electric,manufacturing,0.565,9.0,14,0.0993,0.0724,0.183,52.8,3,True,Low,defective_shipment,2.4,High
+PO-MFG-00902,2023-08-09,V-MFG-010,Kirloskar Electric,manufacturing,0.845,3.2,12,0.027,0.0114,0.058,74.8,1,False,Medium,on_time_delivery,3.9,Medium
+PO-MFG-00903,2025-12-20,V-MFG-010,Kirloskar Electric,manufacturing,0.593,9.0,17,0.1177,0.0389,0.209,58.4,3,True,Medium,delayed_delivery,2.6,High
+PO-MFG-00904,2023-12-21,V-MFG-010,Kirloskar Electric,manufacturing,0.522,9.5,17,0.0826,0.0501,0.155,52.7,3,False,Medium,defective_shipment,2.4,High
+PO-MFG-00905,2024-08-17,V-MFG-010,Kirloskar Electric,manufacturing,0.614,7.0,10,0.1144,0.0372,0.244,51.7,4,False,Low,delayed_delivery,2.5,High
+PO-MFG-00906,2023-02-25,V-MFG-010,Kirloskar Electric,manufacturing,0.64,9.2,20,0.0966,0.0428,0.157,47.4,3,True,Low,defective_shipment,2.9,High
+PO-MFG-00907,2024-07-14,V-MFG-010,Kirloskar Electric,manufacturing,0.605,9.2,18,0.1048,0.0546,0.21,63.1,4,True,Low,defective_shipment,2.1,High
+PO-MFG-00908,2024-09-01,V-MFG-010,Kirloskar Electric,manufacturing,0.514,11.1,13,0.0835,0.0459,0.223,55.0,3,True,Medium,delayed_delivery,3.1,High
+PO-MFG-00909,2024-07-01,V-MFG-010,Kirloskar Electric,manufacturing,0.566,9.3,16,0.0577,0.0751,0.183,50.1,4,False,Low,defective_shipment,2.2,High
+PO-MFG-00910,2025-04-13,V-MFG-010,Kirloskar Electric,manufacturing,0.676,11.0,14,0.0956,0.0378,0.198,47.9,4,False,Medium,defective_shipment,2.9,High
+PO-MFG-00911,2023-09-12,V-MFG-010,Kirloskar Electric,manufacturing,0.846,2.0,6,0.0417,0.0271,0.088,82.1,1,True,Low,delayed_delivery,3.9,Medium
+PO-MFG-00912,2024-09-05,V-MFG-010,Kirloskar Electric,manufacturing,0.517,6.5,12,0.0821,0.0448,0.199,52.6,4,True,Medium,defective_shipment,2.9,High
+PO-MFG-00913,2025-10-25,V-MFG-010,Kirloskar Electric,manufacturing,0.658,10.9,15,0.0603,0.0702,0.193,55.8,2,True,Low,defective_shipment,2.6,High
+PO-MFG-00914,2023-10-22,V-MFG-010,Kirloskar Electric,manufacturing,0.631,7.4,14,0.0943,0.0424,0.147,46.9,3,True,Low,delayed_delivery,2.7,High
+PO-MFG-00915,2025-10-16,V-MFG-010,Kirloskar Electric,manufacturing,0.552,8.4,15,0.0797,0.0494,0.237,54.1,3,False,Medium,defective_shipment,2.8,High
+PO-MFG-00916,2025-05-08,V-MFG-010,Kirloskar Electric,manufacturing,0.687,8.3,17,0.0977,0.0396,0.232,60.2,2,False,Low,defective_shipment,2.9,High
+PO-MFG-00917,2023-08-13,V-MFG-010,Kirloskar Electric,manufacturing,0.873,3.6,9,0.0414,0.0162,0.058,78.5,0,True,Low,delayed_delivery,3.5,Medium
+PO-MFG-00918,2024-08-15,V-MFG-010,Kirloskar Electric,manufacturing,0.663,10.5,19,0.1175,0.0458,0.129,62.0,3,True,Medium,delayed_delivery,2.3,High
+PO-MFG-00919,2024-09-11,V-MFG-010,Kirloskar Electric,manufacturing,0.802,1.8,10,0.0253,0.0274,0.072,76.3,1,False,Medium,on_time_delivery,3.6,Medium
+PO-MFG-00920,2023-04-28,V-MFG-010,Kirloskar Electric,manufacturing,0.527,7.9,15,0.0777,0.0358,0.221,59.2,3,False,Medium,defective_shipment,2.5,High
+PO-MFG-00921,2025-07-13,V-MFG-010,Kirloskar Electric,manufacturing,0.508,10.6,18,0.1053,0.0468,0.203,59.8,3,False,Low,delayed_delivery,2.9,High
+PO-MFG-00922,2025-05-15,V-MFG-010,Kirloskar Electric,manufacturing,0.5,5.6,11,0.0714,0.0713,0.25,53.4,4,False,Medium,defective_shipment,2.8,High
+PO-MFG-00923,2025-04-10,V-MFG-010,Kirloskar Electric,manufacturing,0.524,7.8,15,0.0922,0.0798,0.187,49.1,3,False,Medium,delayed_delivery,2.2,High
+PO-MFG-00924,2025-07-04,V-MFG-010,Kirloskar Electric,manufacturing,0.504,8.5,19,0.0991,0.0647,0.125,47.0,4,False,Medium,defective_shipment,2.7,High
+PO-MFG-00925,2025-01-16,V-MFG-010,Kirloskar Electric,manufacturing,0.603,10.1,12,0.1164,0.0491,0.208,52.6,4,False,Low,defective_shipment,2.7,High
+PO-MFG-00926,2025-09-25,V-MFG-010,Kirloskar Electric,manufacturing,0.65,9.3,17,0.0811,0.0462,0.25,60.0,3,False,Medium,defective_shipment,2.9,High
+PO-MFG-00927,2023-08-02,V-MFG-010,Kirloskar Electric,manufacturing,0.586,6.4,18,0.0689,0.0701,0.246,49.4,3,False,Low,delayed_delivery,2.2,High
+PO-MFG-00928,2025-08-28,V-MFG-010,Kirloskar Electric,manufacturing,0.559,8.7,14,0.1184,0.0452,0.173,57.8,2,False,Medium,defective_shipment,2.6,High
+PO-MFG-00929,2023-12-09,V-MFG-010,Kirloskar Electric,manufacturing,0.818,1.6,5,0.0359,0.0265,0.074,75.2,1,False,Medium,delayed_delivery,3.7,Medium
+PO-MFG-00930,2023-06-06,V-MFG-010,Kirloskar Electric,manufacturing,0.68,9.9,13,0.1133,0.0562,0.197,50.0,2,False,Medium,defective_shipment,3.1,High
+PO-MFG-00931,2023-11-05,V-MFG-010,Kirloskar Electric,manufacturing,0.682,10.7,12,0.0599,0.0632,0.142,61.5,3,False,Low,defective_shipment,3.0,High
+PO-MFG-00932,2023-06-26,V-MFG-010,Kirloskar Electric,manufacturing,0.618,7.5,15,0.0843,0.0469,0.202,52.2,3,True,Low,delayed_delivery,2.5,High
+PO-MFG-00933,2024-05-03,V-MFG-010,Kirloskar Electric,manufacturing,0.764,1.8,10,0.0203,0.0169,0.063,79.2,0,False,Low,delayed_delivery,3.6,Medium
+PO-MFG-00934,2025-09-04,V-MFG-010,Kirloskar Electric,manufacturing,0.84,2.1,11,0.0319,0.024,0.067,84.6,1,True,Medium,on_time_delivery,3.9,Medium
+PO-MFG-00935,2023-05-22,V-MFG-010,Kirloskar Electric,manufacturing,0.599,6.8,15,0.0724,0.0377,0.133,48.5,2,True,Low,defective_shipment,2.1,High
+PO-MFG-00936,2024-07-10,V-MFG-010,Kirloskar Electric,manufacturing,0.589,8.6,19,0.0557,0.054,0.206,53.3,4,False,Medium,defective_shipment,2.3,High
+PO-MFG-00937,2023-08-14,V-MFG-010,Kirloskar Electric,manufacturing,0.624,10.0,11,0.0964,0.0433,0.132,47.8,3,True,Medium,delayed_delivery,2.8,High
+PO-MFG-00938,2024-10-08,V-MFG-010,Kirloskar Electric,manufacturing,0.508,11.3,20,0.0655,0.073,0.205,60.1,3,True,Medium,defective_shipment,2.4,High
+PO-MFG-00939,2023-07-02,V-MFG-010,Kirloskar Electric,manufacturing,0.561,11.4,13,0.0946,0.0359,0.222,49.8,4,False,Medium,delayed_delivery,2.4,High
+PO-MFG-00940,2025-02-23,V-MFG-010,Kirloskar Electric,manufacturing,0.683,8.4,10,0.063,0.0381,0.232,55.6,2,False,Medium,delayed_delivery,2.7,High
+PO-MFG-00941,2023-08-09,V-MFG-010,Kirloskar Electric,manufacturing,0.533,11.7,13,0.0594,0.0462,0.237,58.8,3,False,Medium,delayed_delivery,2.3,High
+PO-MFG-00942,2025-12-25,V-MFG-010,Kirloskar Electric,manufacturing,0.505,10.1,17,0.0788,0.0474,0.121,61.4,4,False,Low,defective_shipment,2.7,High
+PO-MFG-00943,2024-04-22,V-MFG-010,Kirloskar Electric,manufacturing,0.659,9.7,10,0.0815,0.0552,0.235,51.2,2,False,Medium,defective_shipment,3.1,High
+PO-MFG-00944,2023-12-23,V-MFG-010,Kirloskar Electric,manufacturing,0.566,5.7,12,0.1027,0.0487,0.238,59.5,2,True,Low,delayed_delivery,2.2,High
+PO-MFG-00945,2025-11-19,V-MFG-010,Kirloskar Electric,manufacturing,0.634,9.2,10,0.1156,0.0502,0.219,56.5,2,False,Medium,delayed_delivery,3.0,High
+PO-MFG-00946,2023-01-12,V-MFG-010,Kirloskar Electric,manufacturing,0.578,8.4,10,0.1131,0.0487,0.137,62.3,4,False,Low,defective_shipment,2.2,High
+PO-MFG-00947,2025-04-25,V-MFG-010,Kirloskar Electric,manufacturing,0.621,9.1,15,0.0686,0.0552,0.193,47.2,4,False,Medium,defective_shipment,2.6,High
+PO-MFG-00948,2023-01-13,V-MFG-010,Kirloskar Electric,manufacturing,0.553,7.5,20,0.1098,0.0769,0.224,53.6,4,True,Low,delayed_delivery,2.8,High
+PO-MFG-00949,2023-01-08,V-MFG-010,Kirloskar Electric,manufacturing,0.543,7.2,16,0.1036,0.0675,0.179,62.3,3,False,Medium,delayed_delivery,3.0,High
+PO-MFG-00950,2024-09-28,V-MFG-010,Kirloskar Electric,manufacturing,0.508,7.5,17,0.1021,0.0448,0.135,46.8,3,False,Low,defective_shipment,3.0,High
+PO-MFG-00951,2023-08-20,V-MFG-010,Kirloskar Electric,manufacturing,0.648,9.3,15,0.1081,0.0673,0.159,54.1,2,False,Low,delayed_delivery,2.6,High
+PO-MFG-00952,2024-07-10,V-MFG-010,Kirloskar Electric,manufacturing,0.982,0.4,7,0.0114,0.0033,0.003,94.6,0,False,Medium,on_time_delivery,4.5,Low
+PO-MFG-00953,2023-05-17,V-MFG-010,Kirloskar Electric,manufacturing,0.564,11.6,20,0.0566,0.0441,0.121,54.6,4,False,Medium,defective_shipment,2.1,High
+PO-MFG-00954,2025-10-24,V-MFG-010,Kirloskar Electric,manufacturing,0.614,11.5,20,0.1017,0.0533,0.148,47.5,3,True,Medium,delayed_delivery,2.8,High
+PO-MFG-00955,2024-08-15,V-MFG-010,Kirloskar Electric,manufacturing,0.827,2.9,8,0.0334,0.0261,0.06,77.3,1,False,Low,on_time_delivery,3.5,Medium
+PO-MFG-00956,2023-08-25,V-MFG-010,Kirloskar Electric,manufacturing,0.545,7.8,12,0.091,0.0539,0.144,60.1,3,True,Low,defective_shipment,2.3,High
+PO-MFG-00957,2025-04-02,V-MFG-010,Kirloskar Electric,manufacturing,0.65,6.9,19,0.1154,0.0464,0.169,60.0,4,False,Medium,defective_shipment,2.9,High
+PO-MFG-00958,2023-07-20,V-MFG-010,Kirloskar Electric,manufacturing,0.565,6.3,15,0.0834,0.0746,0.162,47.7,3,False,Low,defective_shipment,2.4,High
+PO-MFG-00959,2023-01-26,V-MFG-010,Kirloskar Electric,manufacturing,0.573,11.6,14,0.0895,0.0723,0.164,55.1,3,False,Low,delayed_delivery,3.2,High
+PO-MFG-00960,2025-01-09,V-MFG-010,Kirloskar Electric,manufacturing,0.532,7.8,14,0.1138,0.0588,0.121,49.7,3,False,Medium,delayed_delivery,2.5,High
+PO-MFG-00961,2024-09-28,V-MFG-010,Kirloskar Electric,manufacturing,0.876,2.8,12,0.0327,0.0105,0.049,75.2,1,True,Low,delayed_delivery,3.6,Medium
+PO-MFG-00962,2024-01-03,V-MFG-010,Kirloskar Electric,manufacturing,0.618,10.2,15,0.0914,0.0784,0.24,63.1,4,True,Low,defective_shipment,2.7,High
+PO-MFG-00963,2023-09-16,V-MFG-010,Kirloskar Electric,manufacturing,0.539,10.7,11,0.0714,0.0421,0.16,51.9,3,False,Low,defective_shipment,3.1,High
+PO-MFG-00964,2024-05-04,V-MFG-010,Kirloskar Electric,manufacturing,0.581,7.0,12,0.0902,0.0578,0.181,45.4,2,True,Low,delayed_delivery,2.7,High
+PO-MFG-00965,2025-02-05,V-MFG-010,Kirloskar Electric,manufacturing,0.678,6.5,12,0.1025,0.0645,0.12,58.7,3,False,Medium,defective_shipment,3.1,High
+PO-MFG-00966,2024-09-16,V-MFG-010,Kirloskar Electric,manufacturing,0.618,9.8,11,0.0586,0.075,0.173,47.5,3,False,Low,delayed_delivery,2.5,High
+PO-MFG-00967,2025-10-15,V-MFG-010,Kirloskar Electric,manufacturing,0.548,6.6,10,0.0699,0.0675,0.127,55.2,3,False,Low,delayed_delivery,2.1,High
+PO-MFG-00968,2025-08-05,V-MFG-010,Kirloskar Electric,manufacturing,0.983,0.8,3,0.0066,0.0057,-0.019,90.4,0,True,High,on_time_delivery,4.6,Low
+PO-MFG-00969,2023-04-05,V-MFG-010,Kirloskar Electric,manufacturing,0.948,0.1,7,0.0103,0.0027,0.015,95.6,0,False,Medium,on_time_delivery,4.4,Low
+PO-MFG-00970,2023-10-14,V-MFG-010,Kirloskar Electric,manufacturing,0.594,11.9,17,0.0985,0.0362,0.137,46.4,2,False,Low,delayed_delivery,2.7,High
+PO-MFG-00971,2023-04-08,V-MFG-010,Kirloskar Electric,manufacturing,0.634,11.8,17,0.1097,0.0724,0.195,61.2,3,True,Medium,delayed_delivery,2.8,High
+PO-MFG-00972,2025-11-12,V-MFG-010,Kirloskar Electric,manufacturing,0.674,10.8,11,0.0829,0.0445,0.199,53.4,3,True,Low,delayed_delivery,3.1,High
+PO-MFG-00973,2024-05-23,V-MFG-010,Kirloskar Electric,manufacturing,0.663,12.0,14,0.1145,0.0485,0.225,60.7,4,False,Low,defective_shipment,2.2,High
+PO-MFG-00974,2025-09-08,V-MFG-010,Kirloskar Electric,manufacturing,0.632,6.7,20,0.0924,0.079,0.223,53.9,3,False,Medium,defective_shipment,2.6,High
+PO-MFG-00975,2024-05-07,V-MFG-010,Kirloskar Electric,manufacturing,0.833,2.1,10,0.0412,0.0212,0.063,78.9,1,False,Medium,on_time_delivery,3.5,Medium
+PO-MFG-00976,2025-05-08,V-MFG-010,Kirloskar Electric,manufacturing,0.866,4.1,5,0.0405,0.021,0.069,82.7,0,False,Low,on_time_delivery,3.5,Medium
+PO-MFG-00977,2024-01-21,V-MFG-010,Kirloskar Electric,manufacturing,0.506,5.8,14,0.0556,0.038,0.211,54.2,3,False,Low,defective_shipment,3.1,High
+PO-MFG-00978,2025-12-27,V-MFG-010,Kirloskar Electric,manufacturing,0.526,7.9,19,0.065,0.0365,0.174,56.4,2,True,Low,defective_shipment,3.1,High
+PO-MFG-00979,2023-02-22,V-MFG-010,Kirloskar Electric,manufacturing,0.563,8.5,11,0.1164,0.0401,0.18,60.6,3,False,Low,defective_shipment,2.6,High
+PO-MFG-00980,2024-10-26,V-MFG-010,Kirloskar Electric,manufacturing,0.752,1.5,6,0.0321,0.0123,0.071,75.1,1,False,Medium,on_time_delivery,3.5,Medium
+PO-MFG-00981,2025-04-27,V-MFG-010,Kirloskar Electric,manufacturing,0.651,10.5,15,0.0951,0.0658,0.239,54.1,3,False,Medium,delayed_delivery,3.0,High
+PO-MFG-00982,2023-03-14,V-MFG-010,Kirloskar Electric,manufacturing,0.646,6.6,14,0.0852,0.0701,0.172,45.2,4,False,Low,delayed_delivery,2.7,High
+PO-MFG-00983,2025-01-14,V-MFG-010,Kirloskar Electric,manufacturing,0.557,8.4,11,0.1112,0.064,0.159,53.6,3,False,Medium,defective_shipment,2.4,High
+PO-MFG-00984,2025-05-06,V-MFG-010,Kirloskar Electric,manufacturing,0.833,1.9,12,0.0342,0.023,0.077,82.3,1,False,Medium,delayed_delivery,3.9,Medium
+PO-MFG-00985,2023-11-19,V-MFG-010,Kirloskar Electric,manufacturing,0.576,5.6,15,0.1105,0.0683,0.207,61.4,4,False,Low,defective_shipment,2.7,High
+PO-MFG-00986,2024-04-08,V-MFG-010,Kirloskar Electric,manufacturing,0.657,10.9,11,0.113,0.0461,0.241,49.4,3,False,Low,delayed_delivery,2.3,High
+PO-MFG-00987,2024-02-28,V-MFG-010,Kirloskar Electric,manufacturing,0.534,7.4,17,0.1157,0.036,0.194,52.1,4,False,Low,delayed_delivery,2.4,High
+PO-MFG-00988,2024-02-13,V-MFG-010,Kirloskar Electric,manufacturing,0.509,7.1,12,0.0762,0.0718,0.183,46.7,3,False,Medium,delayed_delivery,3.0,High
+PO-MFG-00989,2024-11-23,V-MFG-010,Kirloskar Electric,manufacturing,0.924,0.2,7,0.0124,0.0054,0.027,93.5,0,True,Medium,on_time_delivery,4.7,Low
+PO-MFG-00990,2024-02-05,V-MFG-010,Kirloskar Electric,manufacturing,0.561,8.8,10,0.1162,0.0697,0.13,46.7,2,True,Medium,delayed_delivery,2.5,High
+PO-MFG-00991,2025-12-10,V-MFG-010,Kirloskar Electric,manufacturing,0.616,7.2,11,0.0951,0.0744,0.134,58.1,3,False,Medium,delayed_delivery,3.1,High
+PO-MFG-00992,2023-03-17,V-MFG-010,Kirloskar Electric,manufacturing,0.62,6.4,14,0.0816,0.0358,0.222,47.3,3,False,Low,defective_shipment,3.1,High
+PO-MFG-00993,2023-06-05,V-MFG-010,Kirloskar Electric,manufacturing,0.502,10.6,17,0.0833,0.0383,0.125,47.9,3,True,Medium,defective_shipment,2.8,High
+PO-MFG-00994,2024-08-03,V-MFG-010,Kirloskar Electric,manufacturing,0.558,10.0,16,0.0566,0.077,0.125,59.5,2,False,Low,delayed_delivery,3.1,High
+PO-MFG-00995,2024-12-04,V-MFG-010,Kirloskar Electric,manufacturing,0.661,10.3,19,0.0647,0.0724,0.188,55.6,4,True,Low,delayed_delivery,2.4,High
+PO-MFG-00996,2024-11-04,V-MFG-010,Kirloskar Electric,manufacturing,0.947,0.3,6,0.0026,0.0077,0.004,94.8,0,True,Medium,on_time_delivery,4.7,Low
+PO-MFG-00997,2024-10-02,V-MFG-010,Kirloskar Electric,manufacturing,0.689,9.6,20,0.0934,0.05,0.172,55.6,2,False,Medium,delayed_delivery,2.7,High
+PO-MFG-00998,2023-12-16,V-MFG-010,Kirloskar Electric,manufacturing,0.53,5.5,20,0.1189,0.0401,0.207,61.4,3,False,Low,defective_shipment,2.3,High
+PO-MFG-00999,2023-08-17,V-MFG-010,Kirloskar Electric,manufacturing,0.542,10.2,10,0.1174,0.045,0.22,56.5,4,True,Medium,delayed_delivery,2.8,High
+PO-MFG-01000,2024-10-18,V-MFG-010,Kirloskar Electric,manufacturing,0.539,8.5,11,0.0719,0.0566,0.193,62.9,3,True,Medium,defective_shipment,2.5,High

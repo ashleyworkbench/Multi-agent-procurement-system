@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ocrApi, procurementApi } from "@/lib/api";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, formatDateTime } from "@/lib/utils";
+import { AgentRationaleCard } from "@/components/common/AgentRationaleCard";
 import {
   FileText,
   Package,
@@ -125,13 +126,7 @@ function WorkflowRow({ request }: { request: any }) {
     "—";
 
   const uploaded = request.created_at
-    ? new Date(request.created_at).toLocaleString("en-IN", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      })
+    ? formatDateTime(request.created_at)
     : "—";
 
   const inventoryDone = !!inventoryEvent;
@@ -592,16 +587,18 @@ function WorkflowRow({ request }: { request: any }) {
 
                         </div>
 
-                        <div className="mt-3 rounded-lg bg-violet-50 p-3">
-                          <div className="text-[11px] font-medium text-violet-700">
-                            Selection Reason
-                          </div>
-
-                          <div className="text-xs text-slate-600 mt-1">
-                            {Array.isArray(reasons) && reasons.length > 0
-                              ? reasons.join(" ")
-                              : "No detailed selection reason available."}
-                          </div>
+                        <div className="mt-3">
+                          <AgentRationaleCard
+                            notes={po.notes}
+                            reasons={reasons}
+                            riskScore={riskScore}
+                            riskLevel={bestVendor?.risk_level || recommendation?.risk_level}
+                            suitabilityScore={score}
+                            routing={po.approval_tier}
+                            assignedTo={po.assigned_approver_name}
+                            title={`Selection Rationale · ${po.item_name}`}
+                            subtitle={`Procurement evaluation for ${po.vendor_name || "selected vendor"}`}
+                          />
                         </div>
                       </div>
                     );
@@ -658,7 +655,7 @@ export function WorkflowView() {
   const requests = data?.requests ?? [];
 
   const completed = requests.filter(
-    (r: any) => r.status === "completed"
+    (r: any) => !r.status || r.status.toLowerCase() === "completed" || r.status.toLowerCase() === "done"
   ).length;
 
   return (

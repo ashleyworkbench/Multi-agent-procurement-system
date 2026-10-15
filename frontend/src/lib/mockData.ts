@@ -39,4 +39,16 @@ export const mockDataSources = [
     type: "API Connection",
     status: "Connected",
   },
+  {
+    id: "ds-6",
+    name: "MinIO Document Object Store",
+    type: "Storage Connection",
+    status: "Connected",
+  },
+  {
+    id: "ds-7",
+    name: "DocuSign eSignature Engine",
+    type: "API Connection",
+    status: "Connected",
+  },
 ];

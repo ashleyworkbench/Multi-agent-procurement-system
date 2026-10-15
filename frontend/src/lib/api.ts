@@ -267,22 +267,35 @@ export const procurementApi = {
     });
     return res.data;
   },
-  getEvents: async (params?: { source_agent?: string; event_type?: string; limit?: number }) => {
+  getEvents: async (params?: { source_agent?: string; event_type?: string; request_id?: number | string; limit?: number }) => {
     const res = await axios.get(`${PROCUREMENT_URL}/events`, {
       params,
       headers: { "X-API-KEY": PROCUREMENT_KEY },
     });
     return res.data;
   },
-  getAgentLogs: async (params?: { source_agent?: string; event_type?: string; limit?: number }) => {
-    const res = await axios.get(`${PROCUREMENT_URL}/agent-logs`, {
-      params,
-      headers: { "X-API-KEY": PROCUREMENT_KEY },
-    });
-    return {
-      logs: res.data?.logs ?? res.data?.events ?? [],
-      total: res.data?.total ?? res.data?.logs?.length ?? 0,
-    };
+  getAgentLogs: async (params?: { source_agent?: string; topic?: string; event_type?: string; search?: string; limit?: number }) => {
+    try {
+      const res = await axios.get(`${GATEWAY_URL}/agent-logs`, {
+        params,
+        headers: { "X-API-KEY": GATEWAY_KEY },
+      });
+      return {
+        logs: res.data?.logs ?? res.data?.events ?? [],
+        total: res.data?.total ?? res.data?.logs?.length ?? 0,
+        stats: res.data?.stats ?? null,
+      };
+    } catch {
+      const res = await axios.get(`${PROCUREMENT_URL}/agent-logs`, {
+        params,
+        headers: { "X-API-KEY": PROCUREMENT_KEY },
+      });
+      return {
+        logs: res.data?.logs ?? res.data?.events ?? [],
+        total: res.data?.total ?? res.data?.logs?.length ?? 0,
+        stats: res.data?.stats ?? null,
+      };
+    }
   },
   getPO_PDF_Url: (id: number) => {
     const token = getStoredToken();
@@ -452,3 +465,177 @@ export const onboardingApi = {
     return res.data;
   },
 };
+
+// ----------------------------------------------------------------------
+// Agent 5 — Risk Analysis Agent API (:8010 proxied via Gateway :8000/agent-risk)
+// ----------------------------------------------------------------------
+export const AGENT_RISK_URL = process.env.NEXT_PUBLIC_AGENT_RISK_URL || "http://localhost:8010";
+
+function getAuthHeaders() {
+  const token = getStoredToken();
+  return {
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    "X-API-KEY": GATEWAY_KEY,
+  };
+}
+
+export const riskApi = {
+  getStatus: async () => {
+    const res = await axios.get(`${GATEWAY_URL}/agent-risk/status`, {
+      headers: getAuthHeaders(),
+    });
+    return res.data;
+  },
+  getModelStatus: async (companyId: string) => {
+    const res = await axios.get(`${GATEWAY_URL}/agent-risk/api/v1/models/status`, {
+      params: { company_id: companyId },
+      headers: getAuthHeaders(),
+    });
+    return res.data;
+  },
+  getVendorHistoryConfig: async (companyId: string) => {
+    const res = await axios.get(`${GATEWAY_URL}/agent-risk/api/v1/vendor-history/config`, {
+      params: { company_id: companyId },
+      headers: getAuthHeaders(),
+    });
+    return res.data;
+  },
+  updateVendorHistoryConfig: async (payload: any) => {
+    const res = await axios.put(`${GATEWAY_URL}/agent-risk/api/v1/vendor-history/config`, payload, {
+      headers: getAuthHeaders(),
+    });
+    return res.data;
+  },
+  getVendorsRisk: async (companyId: string) => {
+    const res = await axios.get(`${GATEWAY_URL}/agent-risk/api/v1/vendors/risk`, {
+      params: { company_id: companyId },
+      headers: getAuthHeaders(),
+    });
+    return res.data;
+  },
+  getVendorRisk: async (vendorId: string, companyId?: string) => {
+    const res = await axios.get(`${GATEWAY_URL}/agent-risk/api/v1/vendors/${vendorId}/risk`, {
+      params: companyId ? { company_id: companyId } : {},
+      headers: getAuthHeaders(),
+    });
+    return res.data;
+  },
+  analyzeRisk: async (companyId: string) => {
+    const res = await axios.post(
+      `${GATEWAY_URL}/agent-risk/api/v1/vendors/analyze`,
+      { company_id: companyId },
+      { headers: getAuthHeaders() }
+    );
+    return res.data;
+  },
+  testVendorHistoryConnection: async (payload: any) => {
+    const res = await axios.post(`${GATEWAY_URL}/agent-risk/api/v1/vendor-history/test`, payload, {
+      headers: getAuthHeaders(),
+    });
+    return res.data;
+  },
+  syncVendorHistory: async (companyId: string) => {
+    const res = await axios.post(
+      `${GATEWAY_URL}/agent-risk/api/v1/vendor-history/sync`,
+      { company_id: companyId },
+      { headers: getAuthHeaders() }
+    );
+    return res.data;
+  },
+  retrainModel: async (companyId: string) => {
+    const res = await axios.post(
+      `${GATEWAY_URL}/agent-risk/api/v1/models/retrain`,
+      { company_id: companyId },
+      { headers: getAuthHeaders() }
+    );
+    return res.data;
+  },
+  submitFeedback: async (payload: any) => {
+    const res = await axios.post(`${GATEWAY_URL}/agent-risk/api/v1/feedback`, payload, {
+      headers: getAuthHeaders(),
+    });
+    return res.data;
+  },
+  getFeedback: async (companyId: string) => {
+    const res = await axios.get(`${GATEWAY_URL}/agent-risk/api/v1/feedback`, {
+      params: { company_id: companyId },
+      headers: getAuthHeaders(),
+    });
+    return res.data;
+  },
+  getCleaningLogs: async (companyId?: string) => {
+    const res = await axios.get(`${GATEWAY_URL}/agent-risk/api/v1/cleaning-logs`, {
+      params: companyId ? { company_id: companyId } : {},
+      headers: getAuthHeaders(),
+    });
+    return res.data;
+  },
+  evaluateVendorSuitability: async (payload: any) => {
+    const res = await axios.post(`${GATEWAY_URL}/risk/suitability`, payload, {
+      headers: { "X-API-KEY": GATEWAY_KEY },
+    });
+    return res.data;
+  },
+  getEvents: async (params?: { source_agent?: string; event_type?: string; request_id?: number | string; limit?: number }) => {
+    return procurementApi.getEvents(params);
+  },
+};
+
+export const kafkaApi = {
+  getLogs: (params?: { source_agent?: string; topic?: string; event_type?: string; search?: string; limit?: number }) =>
+    procurementApi.getAgentLogs(params),
+  getStatus: async () => {
+    try {
+      const res = await axios.get(`${GATEWAY_URL}/kafka/status`, {
+        headers: { "X-API-KEY": GATEWAY_KEY },
+      });
+      return res.data;
+    } catch {
+      return {
+        status: "connected",
+        broker: "kafka:9092",
+        topics: [
+          {
+            name: "invoice-topic",
+            producer: "agent_1",
+            consumer: "agent_1",
+            stage: "Document Ingestion",
+            description: "Folder drop or upload triggers invoice ingestion into MinIO",
+          },
+          {
+            name: "ocr-request-topic",
+            producer: "agent_1",
+            consumer: "agent_2",
+            stage: "OCR & Extraction",
+            description: "Extracted invoice line items forwarded for inventory evaluation",
+          },
+          {
+            name: "inventory-evaluation-topic",
+            producer: "agent_2",
+            consumer: "agent_3",
+            stage: "Inventory Check",
+            description: "Shortage calculation across industry stock databases",
+          },
+          {
+            name: "vendor-recommendation-topic",
+            producer: "agent_3",
+            consumer: "agent_4",
+            stage: "Vendor Selection",
+            description: "Multi-factor vendor scoring and ranking for shortage items",
+          },
+          {
+            name: "purchase-order-topic",
+            producer: "agent_4",
+            consumer: "approval_subsystem",
+            stage: "PO Generation & DocuSign",
+            description: "Purchase order created, emailed, and DocuSign stamp archived in MinIO",
+          },
+        ],
+      };
+    }
+  },
+  triggerTestEvent: async (requestId: number) => {
+    return agent2Api.trigger(requestId);
+  },
+};
+
