@@ -115,4 +115,3 @@ export function formatRelativeTime(dateStr: string | Date | undefined | null): s
     return String(dateStr);
   }
 }
-

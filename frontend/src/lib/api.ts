@@ -14,7 +14,8 @@ export const GATEWAY_KEY = "GATEWAY-master-key-2024";
 export const OCR_SERVICE_KEY = "OCR-e4b9f8e7-0756-4938-45ab-8abc67890123";
 export const PROCUREMENT_KEY = "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012";
 
-const GATEWAY_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+export const GATEWAY_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+export const API_BASE = GATEWAY_URL;
 const OCR_URL = process.env.NEXT_PUBLIC_OCR_URL || "http://localhost:8001";
 const PROCUREMENT_URL = process.env.NEXT_PUBLIC_PROCUREMENT_URL || "http://localhost:8004";
 const AGENT2_URL = process.env.NEXT_PUBLIC_AGENT2_URL || "http://localhost:8005";
@@ -42,8 +43,10 @@ export interface AuthUser {
 
 export function getStoredToken(): string | null {
   if (typeof window === "undefined") return null;
-  return localStorage.getItem("procureflow_token");
+  return localStorage.getItem("procureflow_token") || localStorage.getItem("procureflow_access_token");
 }
+
+export const getAuthToken = getStoredToken;
 
 export function getStoredUser(): AuthUser | null {
   if (typeof window === "undefined") return null;
@@ -639,3 +642,102 @@ export const kafkaApi = {
   },
 };
 
+export async function apiFetch<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+  const token = getStoredToken();
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    "X-API-KEY": GATEWAY_KEY,
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...((options.headers as Record<string, string>) || {}),
+  };
+  const url = endpoint.startsWith("http") ? endpoint : `${API_BASE}${endpoint}`;
+  const res = await fetch(url, { ...options, headers });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || `Request failed with status ${res.status}`);
+  }
+  return res.json() as Promise<T>;
+}
+
+export type DefectiveStatus =
+  | "REPORTED"
+  | "UNDER_REVIEW"
+  | "AWAITING_VENDOR"
+  | "RESOLUTION_IN_PROGRESS"
+  | "RESOLVED"
+  | "REJECTED";
+
+export interface DefectiveItem {
+  id: number;
+  po_id: number;
+  po_number: string;
+  vendor_id?: number;
+  vendor_name: string;
+  item_name: string;
+  ordered_quantity: number;
+  defective_quantity: number;
+  defect_type: string;
+  description?: string;
+  inspection_date: string;
+  evidence_photo_url?: string;
+  status: string;
+  resolution_notes?: string;
+  reported_by?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DefectiveStats {
+  total_reports: number;
+  total_defective_units: number;
+  quarantine_units: number;
+  pending_resolution: number;
+  resolved: number;
+  rejected: number;
+}
+
+export interface CreateDefectivePayload {
+  po_id: number;
+  po_number?: string;
+  vendor_id?: number;
+  vendor_name?: string;
+  item_name?: string;
+  ordered_quantity?: number;
+  defective_quantity: number;
+  defect_type: string;
+  description?: string;
+  inspection_date?: string;
+  evidence_photo_url?: string;
+  reported_by?: string;
+}
+
+export interface UpdateDefectiveStatusPayload {
+  status: string;
+  resolution_notes?: string;
+  performed_by?: string;
+}
+
+export const defectiveApi = {
+  getItems: async (params: Record<string, any> = {}) => {
+    const qs = new URLSearchParams(params as Record<string, string>);
+    return apiFetch<{ defective_items: DefectiveItem[]; total: number; stats: DefectiveStats }>(`/defective-items?${qs.toString()}`);
+  },
+  getSummary: async () => apiFetch<{ stats: DefectiveStats }>("/defective-items/summary"),
+  getItem: async (id: number) => apiFetch<DefectiveItem>(`/defective-items/${id}`),
+  create: async (payload: CreateDefectivePayload) =>
+    apiFetch<DefectiveItem>("/defective-items", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+  updateStatus: async (id: number, payload: UpdateDefectiveStatusPayload) =>
+    apiFetch<DefectiveItem>(`/defective-items/${id}/status`, {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+    }),
+  delete: async (id: number) =>
+    apiFetch<{ message: string }>(`/defective-items/${id}`, {
+      method: "DELETE",
+    }),
+};
+
+export default API_BASE;
