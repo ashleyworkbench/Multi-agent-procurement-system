@@ -1,0 +1,85 @@
+site_name: ProcureFlow | Multi-Agent Procurement System
+site_description: "Centralized Documentation for Agentic AI for Smart Procurement in Manufacturing Industries"
+site_author: "Kaustubh Waje, Ishwari Shinde, Dikshant Phulpagar, Ashley Fernandes"
+repo_url: "https://github.com/ashleyworkbench/Multi-agent-procurement-system"
+repo_name: "ashleyworkbench/Multi-agent-procurement-system"
+edit_uri: ""
+
+theme:
+  name: material
+  language: en
+  palette:
+    - scheme: default
+      primary: slate
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: slate
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.tracking
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+
+extra_css:
+  - assets/stylesheets/extra.css
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - pymdownx.keys
+  - pymdownx.mark
+
+plugins:
+  - search
+
+nav:
+  - Home: index.md
+  - Architecture:
+      - System Overview: architecture/overview.md
+      - Data Flow Diagrams (DFD): architecture/dfd.md
+      - Database & ER Diagram: architecture/er-diagram.md
+  - Workflows:
+      - Procurement Lifecycle: workflows/procurement-lifecycle.md
+      - Document Intelligence & OCR: workflows/document-processing.md
+      - Approvals & Digital Signatures: workflows/approval-and-signatures.md
+  - AI Agents:
+      - Multi-Agent Orchestration: agents/overview.md
+      - Agent Specifications: agents/agent-specs.md
+  - APIs:
+      - REST API Endpoints: apis/endpoints.md
+  - Configuration:
+      - Environment Variables: configuration/environment.md
+  - Deployment:
+      - Docker Compose Deployment: deployment/docker-compose.md
+  - Testing:
+      - Test Cases & Validation: testing/test-cases.md
+  - Troubleshooting:
+      - Diagnostics & FAQs: troubleshooting/faqs.md

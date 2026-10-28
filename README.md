@@ -9,9 +9,13 @@
 
 **A production-grade intelligent procurement system powered by autonomous AI agents**
 
-[Features](#-features) • [Architecture](#-architecture) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [Demo](#-demo)
+[Features](#-features) • [Architecture](#-architecture) • [Quick Start](#-quick-start) • [Interactive Docs (MkDocs)](#-interactive-documentation-website-mkdocs) • [Demo](#-demo)
 
 </div>
+
+---
+
+> 📖 **GitHub-Style Documentation Website:** ProcureFlow features a centralized documentation website built with **MkDocs Material**. Run `./docs-serve.sh` or visit the published GitHub Pages site for full architectural diagrams, agent specifications, and workflows!
 
 ---
 
@@ -361,6 +365,35 @@ curl -X POST http://localhost:8006/recommend \
 curl -X POST http://localhost:8008/process \
   -H "Content-Type: application/json" \
   -d @agent3_response.json
+```
+
+---
+
+## 📖 Interactive Documentation Website (MkDocs)
+
+The project includes an enterprise-grade GitHub-style documentation website configured via **MkDocs Material**. It features dark/light mode, live search, full architectural diagrams, agent specifications, and workflows.
+
+### Local Documentation Preview
+To preview the documentation locally with hot-reloading:
+
+=== "Linux / macOS"
+    ```bash
+    chmod +x docs-serve.sh
+    ./docs-serve.sh
+    ```
+=== "Windows"
+    ```cmd
+    docs-serve.bat
+    ```
+
+Once running, navigate to: **`http://127.0.0.1:8008`**
+
+### Building & Deploying to GitHub Pages
+The documentation is automatically built and deployed via the included GitHub Actions workflow (`.github/workflows/deploy-docs.yml`).
+
+To manually deploy from the terminal:
+```bash
+.venv-docs/bin/mkdocs gh-deploy --force --clean
 ```
 
 ---
