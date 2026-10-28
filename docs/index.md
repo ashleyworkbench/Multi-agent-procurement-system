@@ -36,7 +36,7 @@ This project is submitted in partial fulfilment of the requirements of the **Uni
 
 ### 🎓 Project Supervisors & Mentors
 
-- **Internal Supervisor:** Mrs. Nupur Gaikward (*Department of Computer Engineering, FCRIT Vashi*)
+- **Internal Supervisor:** Mrs. Nupur Gaikwad (*Department of Computer Engineering, FCRIT Vashi*), Mrs. Poonam Bari (*Department of Information Technology, FCRIT Vashi*)
 - **External Supervisor:** Mr. Alok Chilka (*Industry Specialist*)
 
 ---
