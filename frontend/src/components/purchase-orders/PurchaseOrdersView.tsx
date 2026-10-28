@@ -1,17 +1,24 @@
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
 import { procurementApi, getStoredUser, type AuthUser } from "@/lib/api";
 import { formatCurrency, cn } from "@/lib/utils";
 import {
   ShoppingCart, CheckCircle2, XCircle, Truck, Clock, Package,
   ChevronLeft, ChevronRight, Eye, Loader2, RefreshCw, Download,
-  ShieldCheck, FileText, Trash2, X, MessageSquarePlus,
+  ShieldCheck, FileText, Trash2, X, MessageSquarePlus, Bot, AlertCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useState, useMemo, useEffect } from "react";
 import AdminFeedbackModal from "@/components/risk/AdminFeedbackModal";
+
+const APPROVER_ROLES = [
+  "Procurement Officer",
+  "Operations Manager",
+  "Finance Director",
+];
 
 const statusConfig: Record<string, { label: string; cls: string; icon: React.ElementType }> = {
   PENDING_APPROVAL: { label: "Pending Approval", cls: "badge-yellow", icon: Clock },
@@ -19,6 +26,7 @@ const statusConfig: Record<string, { label: string; cls: string; icon: React.Ele
   ORDERED:          { label: "Ordered",           cls: "badge-purple", icon: Package },
   DELIVERED:        { label: "Delivered",         cls: "badge-blue",   icon: Truck },
   REJECTED:         { label: "Rejected",          cls: "badge-red",    icon: XCircle },
+  SUPERSEDED:       { label: "Superseded",        cls: "bg-slate-100 text-slate-600 border border-slate-300", icon: AlertCircle },
 };
 
 const tierConfig: Record<string, { label: string; cls: string }> = {
@@ -27,10 +35,11 @@ const tierConfig: Record<string, { label: string; cls: string }> = {
   TIER_3_DIRECTOR: { label: "Tier 3 (> ₹200k)", cls: "bg-purple-50 text-purple-700 border-purple-200" },
 };
 
-const STATUSES = ["ALL", "PENDING_APPROVAL", "APPROVED", "ORDERED", "DELIVERED", "REJECTED"];
+const STATUSES = ["ALL", "PENDING_APPROVAL", "APPROVED", "ORDERED", "DELIVERED", "REJECTED", "SUPERSEDED"];
 const PAGE_SIZE = 10;
 
 export function PurchaseOrdersView() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const searchParam = searchParams?.get("search") || "";
 
@@ -48,7 +57,7 @@ export function PurchaseOrdersView() {
     queryKey: ["purchase-orders", filter, currentUser?.id, currentUser?.role],
     queryFn: () => procurementApi.getPOs({
       ...(filter !== "ALL" ? { status: filter } : {}),
-      ...(currentUser?.role !== "Admin" ? { assigned_to_me: true } : {}),
+      ...(APPROVER_ROLES.includes(currentUser?.role || "") ? { assigned_to_me: true } : {}),
     }),
     refetchInterval: 10000,
   });
@@ -67,7 +76,10 @@ export function PurchaseOrdersView() {
       qc.invalidateQueries({ queryKey: ["po-summary"] });
       toast.success("Status updated");
     },
-    onError: () => toast.error("Failed to update status"),
+    onError: (err: any) => {
+      const msg = err?.response?.data?.detail || err?.message || "Failed to update status";
+      toast.error(msg);
+    },
   });
 
   const deletePOMut = useMutation({
@@ -249,6 +261,16 @@ export function PurchaseOrdersView() {
                               )}
                             </a>
 
+                            {/* Procura Chat / Negotiate Button */}
+                            <button
+                              onClick={() => router.push(`/procura?po=${encodeURIComponent(po.po_number)}`)}
+                              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-lg shadow-2xs transition-colors"
+                              title="Chat with Procura & Negotiate Terms"
+                            >
+                              <Bot size={12} className="text-indigo-600" />
+                              <span>Procura</span>
+                            </button>
+
                             {/* Preview in browser */}
                             <button
                               onClick={() => window.open(procurementApi.getPO_PDF_Url(po.id), "_blank")}
@@ -285,12 +307,12 @@ export function PurchaseOrdersView() {
                             {po.status === "PENDING_APPROVAL" && (
                               <div className="flex gap-1 ml-1">
                                 <button
-                                  onClick={() => updateStatus.mutate({ id: po.id, status: "APPROVED", by: "manager" })}
+                                  onClick={() => updateStatus.mutate({ id: po.id, status: "APPROVED", by: currentUser?.name || currentUser?.role || "Approver" })}
                                   className="px-2 py-1 text-[11px] font-semibold bg-emerald-600 text-white rounded-md hover:bg-emerald-700">
                                   Approve
                                 </button>
                                 <button
-                                  onClick={() => updateStatus.mutate({ id: po.id, status: "REJECTED", by: "manager" })}
+                                  onClick={() => updateStatus.mutate({ id: po.id, status: "REJECTED", by: currentUser?.name || currentUser?.role || "Approver" })}
                                   className="px-2 py-1 text-[11px] font-semibold bg-white text-red-600 border border-red-200 rounded-md hover:bg-red-50">
                                   Reject
                                 </button>

@@ -9,8 +9,9 @@ Handles PDF generation, MinIO document archiving, and DocuSign digital signature
 import os
 import json
 import logging
-from datetime import datetime
-from typing import Optional
+import uuid
+from datetime import datetime, timedelta
+from typing import Optional, List, Dict, Any, Tuple
 
 import psycopg2
 from psycopg2.extras import RealDictCursor
@@ -23,8 +24,22 @@ from passlib.context import CryptContext
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from pdf_generator import generate_po_pdf
+from report_agent import report_agent
 from minio_storage import upload_pdf_bytes, download_pdf_bytes, get_download_url
 from mailer import send_po_approval_email
+from procura_rag import build_grounded_context, retriever
+from procura_gemini import process_chat_with_gemini
+from procura_service import (
+    ensure_procura_tables,
+    verify_po_access,
+    verify_vendor_token,
+    get_or_create_conversation,
+    get_conversation_messages,
+    record_chat_message,
+    register_negotiation_proposal,
+    get_proposals_for_po,
+    review_proposal_by_buyer,
+)
 
 load_dotenv()
 logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"))
@@ -126,6 +141,9 @@ def extract_token_from_request(
     auth_header = request.headers.get("Authorization")
     if auth_header and auth_header.startswith("Bearer "):
         return auth_header.split(" ", 1)[1].strip()
+    vendor_token = request.headers.get("X-Vendor-Token")
+    if vendor_token:
+        return vendor_token.strip()
     token = request.query_params.get("token")
     if token:
         return token.strip()
@@ -143,7 +161,31 @@ def resolve_user_from_token(token: str) -> dict:
         email = payload.get("email")
         role = payload.get("role")
 
-        if not user_id or not email or not role:
+        if not user_id or not role:
+            raise HTTPException(status_code=401, detail="Invalid authentication token")
+
+        # Support Vendor accounts
+        if role == "Vendor":
+            vendor_id = payload.get("vendor_id")
+            if not vendor_id:
+                try:
+                    vendor_id = int(str(user_id).replace("vendor_", ""))
+                except Exception:
+                    vendor_id = 0
+            vendor_name = payload.get("vendor_name") or payload.get("name") or "Authorized Vendor"
+            return {
+                "id": vendor_id,
+                "name": vendor_name,
+                "email": email or f"vendor_{vendor_id}@procureflow.local",
+                "role": "Vendor",
+                "vendor_id": vendor_id,
+                "vendor_name": vendor_name,
+                "rating": payload.get("rating", 4.5),
+                "city": payload.get("city", ""),
+                "is_active": True,
+            }
+
+        if not email:
             raise HTTPException(status_code=401, detail="Invalid authentication token")
 
         conn = get_conn()
@@ -190,6 +232,150 @@ def get_optional_current_user(
         return resolve_user_from_token(token)
     except Exception:
         return None
+
+def get_vendors_registry() -> List[Dict[str, Any]]:
+    """
+    Fetches the vendor directory from construction_vendor_db and counts awarded POs.
+    """
+    vendors = []
+    # 1. Fetch vendors from construction_vendor_db
+    try:
+        v_conn = psycopg2.connect(
+            host=PG_HOST,
+            port=PG_PORT,
+            user=PG_USER,
+            password=PG_PASS,
+            dbname="construction_vendor_db",
+            cursor_factory=RealDictCursor,
+        )
+        with v_conn.cursor() as cur:
+            cur.execute("""
+                SELECT id, vendor_name, contact_person, email, phone, city, state, rating, is_active
+                FROM vendors
+                WHERE is_active = true
+                ORDER BY rating DESC, vendor_name ASC
+            """)
+            vendors = [dict(r) for r in cur.fetchall()]
+        v_conn.close()
+    except Exception as e:
+        log.warning(f"Could not read from construction_vendor_db: {e}")
+
+    # Fallback to distinct vendors in purchase_orders if construction_vendor_db is unavailable
+    if not vendors:
+        try:
+            conn = get_conn()
+            with conn.cursor() as cur:
+                cur.execute("SELECT DISTINCT vendor_id as id, vendor_name FROM purchase_orders")
+                vendors = [{"id": r["id"], "vendor_name": r["vendor_name"], "email": f"{r['vendor_name'].lower().replace(' ', '')}@vendor.com", "rating": 4.5, "city": "India"} for r in cur.fetchall()]
+            conn.close()
+        except Exception:
+            pass
+
+    # 2. Enrich with PO count from procurement_db
+    try:
+        conn = get_conn()
+        with conn.cursor() as cur:
+            cur.execute("SELECT vendor_id, COUNT(*) as po_count FROM purchase_orders GROUP BY vendor_id")
+            po_counts = {r["vendor_id"]: r["po_count"] for r in cur.fetchall()}
+            for v in vendors:
+                v["po_count"] = po_counts.get(v["id"], 0)
+                v["rating"] = float(v.get("rating") or 4.5)
+        conn.close()
+    except Exception as e:
+        log.warning(f"Error enriching vendor PO counts: {e}")
+
+    return vendors
+
+
+class VendorLoginRequest(BaseModel):
+    vendor_id: Optional[int] = None
+    vendor_name: Optional[str] = None
+    email: Optional[str] = None
+    password: Optional[str] = None
+
+
+@app.get("/auth/vendors")
+def list_vendors_for_auth():
+    """
+    Returns available vendors for the vendor portal login interface.
+    """
+    return {"vendors": get_vendors_registry()}
+
+
+@app.post("/auth/vendor-login")
+def vendor_login(req: VendorLoginRequest):
+    """
+    Logs in a vendor partner and issues an industrial JWT with Vendor privileges.
+    """
+    vendors = get_vendors_registry()
+    matched = None
+
+    if req.vendor_id:
+        matched = next((v for v in vendors if v["id"] == req.vendor_id), None)
+    elif req.email:
+        matched = next((v for v in vendors if (v.get("email") or "").strip().lower() == req.email.strip().lower()), None)
+    elif req.vendor_name:
+        clean = req.vendor_name.strip().lower()
+        matched = next((v for v in vendors if clean in v["vendor_name"].strip().lower() or v["vendor_name"].strip().lower() in clean), None)
+
+    if not matched:
+        # Check purchase_orders directly as fallback
+        conn = get_conn()
+        try:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    SELECT DISTINCT vendor_id, vendor_name
+                    FROM purchase_orders
+                    WHERE (%s IS NOT NULL AND vendor_id = %s)
+                       OR (%s IS NOT NULL AND LOWER(vendor_name) LIKE LOWER(%s))
+                    LIMIT 1
+                """, (req.vendor_id, req.vendor_id, req.vendor_name, f"%{req.vendor_name}%" if req.vendor_name else None))
+                po_v = cur.fetchone()
+                if po_v:
+                    matched = {
+                        "id": po_v["vendor_id"],
+                        "vendor_name": po_v["vendor_name"],
+                        "email": f"{po_v['vendor_name'].lower().replace(' ', '')}@vendor.com",
+                        "rating": 4.5,
+                        "city": "India"
+                    }
+        finally:
+            conn.close()
+
+    if not matched:
+        raise HTTPException(status_code=401, detail="Vendor credentials not recognized in registry")
+
+    # Issue JWT
+    expire = datetime.utcnow() + timedelta(days=7)
+    payload = {
+        "sub": f"vendor_{matched['id']}",
+        "vendor_id": matched["id"],
+        "vendor_name": matched["vendor_name"],
+        "email": matched.get("email") or f"vendor_{matched['id']}@procureflow.local",
+        "name": matched["vendor_name"],
+        "role": "Vendor",
+        "rating": float(matched.get("rating") or 4.5),
+        "city": matched.get("city", ""),
+        "exp": expire,
+    }
+    token = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
+
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "user": {
+            "id": matched["id"],
+            "name": matched["vendor_name"],
+            "email": matched.get("email") or f"vendor_{matched['id']}@procureflow.local",
+            "role": "Vendor",
+            "vendor_id": matched["id"],
+            "vendor_name": matched["vendor_name"],
+            "rating": float(matched.get("rating") or 4.5),
+            "city": matched.get("city", ""),
+        },
+    }
+
+
 @app.post("/auth/login")
 def login(request: LoginRequest):
     conn = get_conn()
@@ -238,6 +424,10 @@ def get_me(current_user: dict = Depends(get_current_user)):
         "name": current_user["name"],
         "email": current_user["email"],
         "role": current_user["role"],
+        "vendor_id": current_user.get("vendor_id"),
+        "vendor_name": current_user.get("vendor_name"),
+        "rating": current_user.get("rating"),
+        "city": current_user.get("city"),
     }
 
 def ensure_schema():
@@ -288,6 +478,60 @@ def ensure_schema():
             CREATE INDEX IF NOT EXISTS idx_defective_po_id ON defective_items(po_id);
             CREATE INDEX IF NOT EXISTS idx_defective_status ON defective_items(status);
             CREATE INDEX IF NOT EXISTS idx_defective_vendor ON defective_items(vendor_name);
+
+            ALTER TABLE defective_items ADD COLUMN IF NOT EXISTS rma_number VARCHAR(100) UNIQUE;
+            ALTER TABLE defective_items ADD COLUMN IF NOT EXISTS batch_number VARCHAR(100) DEFAULT 'LOT-2026-001';
+            ALTER TABLE defective_items ADD COLUMN IF NOT EXISTS severity VARCHAR(20) DEFAULT 'MAJOR';
+            ALTER TABLE defective_items ADD COLUMN IF NOT EXISTS root_cause VARCHAR(100) DEFAULT 'MANUFACTURING_FLAW';
+            ALTER TABLE defective_items ADD COLUMN IF NOT EXISTS unit_price NUMERIC(15, 2) DEFAULT 0.00;
+            ALTER TABLE defective_items ADD COLUMN IF NOT EXISTS total_claim_amount NUMERIC(15, 2) DEFAULT 0.00;
+            ALTER TABLE defective_items ADD COLUMN IF NOT EXISTS quarantine_location VARCHAR(100) DEFAULT 'Quarantine Bay Q-1';
+            ALTER TABLE defective_items ADD COLUMN IF NOT EXISTS disposition_type VARCHAR(50);
+            ALTER TABLE defective_items ADD COLUMN IF NOT EXISTS tracking_reference VARCHAR(150);
+            ALTER TABLE defective_items ADD COLUMN IF NOT EXISTS vendor_action_status VARCHAR(50) DEFAULT 'PENDING_VENDOR_REVIEW';
+            ALTER TABLE defective_items ADD COLUMN IF NOT EXISTS vendor_comments TEXT;
+            ALTER TABLE defective_items ADD COLUMN IF NOT EXISTS disposition_approved_by VARCHAR(255);
+            ALTER TABLE defective_items ADD COLUMN IF NOT EXISTS resolution_date TIMESTAMP;
+
+            CREATE TABLE IF NOT EXISTS order_reports (
+                id SERIAL PRIMARY KEY,
+                report_id VARCHAR(64) UNIQUE NOT NULL,
+                po_id INTEGER NOT NULL REFERENCES purchase_orders(id) ON DELETE CASCADE,
+                po_number VARCHAR(100) NOT NULL,
+                vendor_id INTEGER,
+                vendor_name VARCHAR(255) NOT NULL,
+                version INTEGER NOT NULL DEFAULT 1,
+                status VARCHAR(50) NOT NULL DEFAULT 'ACTIVE',
+                is_latest BOOLEAN NOT NULL DEFAULT TRUE,
+                
+                defect_count INTEGER NOT NULL DEFAULT 0,
+                has_defects BOOLEAN NOT NULL DEFAULT FALSE,
+                defect_summary JSONB DEFAULT '{}'::jsonb,
+                regeneration_reason TEXT,
+                supersedes_report_id VARCHAR(64),
+                
+                executive_summary TEXT,
+                order_data JSONB NOT NULL,
+                financial_breakdown JSONB NOT NULL,
+                vendor_risk_analysis JSONB DEFAULT '{}'::jsonb,
+                approval_audit_trail JSONB DEFAULT '[]'::jsonb,
+                defective_items_log JSONB DEFAULT '[]'::jsonb,
+                compliance_statement JSONB DEFAULT '{}'::jsonb,
+                integrity_hash VARCHAR(64),
+                
+                pdf_filename VARCHAR(255),
+                pdf_path TEXT,
+                pdf_size_bytes INTEGER DEFAULT 0,
+                
+                generated_by VARCHAR(100) DEFAULT 'Agent 6 (Report Generation Agent)',
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+            );
+
+            CREATE INDEX IF NOT EXISTS idx_order_reports_po_id ON order_reports(po_id);
+            CREATE INDEX IF NOT EXISTS idx_order_reports_po_number ON order_reports(po_number);
+            CREATE INDEX IF NOT EXISTS idx_order_reports_status ON order_reports(status);
+            CREATE INDEX IF NOT EXISTS idx_order_reports_is_latest ON order_reports(is_latest);
         """)
 
         default_pwd_hash = pwd_context.hash("Password@123")
@@ -309,6 +553,7 @@ def ensure_schema():
                 ON CONFLICT (email) DO NOTHING;
             """, (name, email, p_hash, role))
 
+        ensure_procura_tables(conn)
         conn.commit()
         cur.close()
         conn.close()
@@ -350,8 +595,8 @@ class UpdateStatus(BaseModel):
     notes:        Optional[str] = None
 
 class SignPORequest(BaseModel):
-    signer_name:    str
-    signer_email:   str
+    signer_name:    Optional[str] = None
+    signer_email:   Optional[str] = None
     signature_data: Optional[str] = None
     notes:          Optional[str] = None
 
@@ -375,10 +620,27 @@ class CreateDefectiveItem(BaseModel):
     inspection_date: Optional[str] = None
     evidence_photo_url: Optional[str] = None
     reported_by: Optional[str] = None
+    rma_number: Optional[str] = None
+    batch_number: Optional[str] = "LOT-2026-001"
+    severity: Optional[str] = "MAJOR"
+    root_cause: Optional[str] = "MANUFACTURING_FLAW"
+    quarantine_location: Optional[str] = "Quarantine Bay Q-1"
+    unit_price: Optional[float] = None
 
 class UpdateDefectiveItemStatus(BaseModel):
     status: str
     resolution_notes: Optional[str] = None
+    performed_by: Optional[str] = None
+    disposition_type: Optional[str] = None
+    tracking_reference: Optional[str] = None
+    vendor_action_status: Optional[str] = None
+    vendor_comments: Optional[str] = None
+    disposition_approved_by: Optional[str] = None
+
+class VendorDefectiveResponse(BaseModel):
+    action: str  # 'ACCEPT_REPLACEMENT', 'ACCEPT_CREDIT', 'CONTEST'
+    tracking_reference: Optional[str] = None
+    vendor_comments: Optional[str] = None
     performed_by: Optional[str] = None
 
 
@@ -517,6 +779,8 @@ async def create_po(po: CreatePO):
 async def list_pos(
     status: Optional[str] = None,
     request_id: Optional[int] = None,
+    vendor_id: Optional[int] = None,
+    vendor_name: Optional[str] = None,
     limit: int = 100,
     offset: int = 0,
     assigned_to_me: bool = False,
@@ -540,6 +804,26 @@ async def list_pos(
         user_role = current_user.get("role") if current_user else None
         user_email = current_user.get("email", "").strip().lower() if current_user else ""
 
+        if user_role == "Vendor":
+            v_id = current_user.get("vendor_id")
+            v_name = current_user.get("vendor_name")
+            if v_id and v_name:
+                filters.append("(vendor_id = %s OR LOWER(vendor_name) = LOWER(%s))")
+                filter_params.extend([int(v_id), v_name.strip()])
+            elif v_id:
+                filters.append("vendor_id = %s")
+                filter_params.append(int(v_id))
+            elif v_name:
+                filters.append("LOWER(vendor_name) = LOWER(%s)")
+                filter_params.append(v_name.strip())
+        else:
+            if vendor_id is not None:
+                filters.append("vendor_id = %s")
+                filter_params.append(int(vendor_id))
+            if vendor_name:
+                filters.append("LOWER(vendor_name) = LOWER(%s)")
+                filter_params.append(vendor_name.strip())
+
         if assigned_to_me:
             if not current_user:
                 raise HTTPException(
@@ -548,6 +832,8 @@ async def list_pos(
                 )
 
             if user_role == "Admin":
+                pass
+            elif user_role == "Vendor":
                 pass
             elif user_role in ROLE_TO_TIER:
                 expected_tier = ROLE_TO_TIER[user_role]
@@ -626,7 +912,7 @@ async def update_po_status(
     current_user: Optional[dict] = Depends(get_optional_current_user),
 ):
     """Update PO status and write immutable audit record."""
-    valid_statuses = {"PENDING_APPROVAL", "APPROVED", "REJECTED", "ORDERED", "DELIVERED"}
+    valid_statuses = {"PENDING_APPROVAL", "APPROVED", "REJECTED", "ORDERED", "DELIVERED", "SUPERSEDED"}
     if body.status not in valid_statuses:
         raise HTTPException(400, f"Invalid status. Must be one of: {valid_statuses}")
 
@@ -635,7 +921,7 @@ async def update_po_status(
     try:
         cur.execute(
             """
-            SELECT id, po_number, status,
+            SELECT id, po_number, status, approval_tier,
                    assigned_approver_name, assigned_approver_email
             FROM purchase_orders
             WHERE id = %s
@@ -647,7 +933,7 @@ async def update_po_status(
             raise HTTPException(404, f"PO {po_id} not found")
 
         # Approval decisions may only be made by the approver
-        # assigned to this purchase order.
+        # assigned to this purchase order or an authorized managerial tier.
         if body.status in {"APPROVED", "REJECTED"}:
             if not current_user:
                 raise HTTPException(
@@ -656,6 +942,7 @@ async def update_po_status(
                 )
 
             allowed_roles = {
+                "Admin",
                 "Procurement Officer",
                 "Operations Manager",
                 "Finance Director",
@@ -663,20 +950,28 @@ async def update_po_status(
 
             user_role = current_user.get("role")
             user_email = current_user.get("email", "").strip().lower()
-            expected_tier = ROLE_TO_TIER.get(user_role)
-            po_tier = po.get("approval_tier")
+            po_tier = po.get("approval_tier") or "TIER_1_OFFICER"
             assigned_email = (po.get("assigned_approver_email") or "").strip().lower()
 
+            if user_role not in allowed_roles:
+                raise HTTPException(
+                    status_code=403,
+                    detail="This account is not authorized to approve or reject purchase orders",
+                )
+
+            allowed_tiers = {
+                "Admin": {"TIER_1_OFFICER", "TIER_2_MANAGER", "TIER_3_DIRECTOR"},
+                "Finance Director": {"TIER_1_OFFICER", "TIER_2_MANAGER", "TIER_3_DIRECTOR"},
+                "Operations Manager": {"TIER_1_OFFICER", "TIER_2_MANAGER"},
+                "Procurement Officer": {"TIER_1_OFFICER"},
+            }
+            user_tiers = allowed_tiers.get(user_role, set())
+
             if user_role != "Admin":
-                if user_role not in allowed_roles:
+                if po_tier not in user_tiers and assigned_email != user_email:
                     raise HTTPException(
                         status_code=403,
-                        detail="This account is not authorized to approve or reject purchase orders",
-                    )
-                if po_tier != expected_tier and assigned_email != user_email:
-                    raise HTTPException(
-                        status_code=403,
-                        detail="This purchase order is not assigned to your tier or account",
+                        detail=f"This purchase order ({po_tier}) is not assigned to your tier ({user_role}) or account",
                     )
 
         old_status = po["status"]
@@ -691,7 +986,32 @@ async def update_po_status(
         """, (po_id, po["po_number"], old_status, body.status,
               body.performed_by, body.notes))
         conn.commit()
-        log.info(f"PO {po['po_number']}: {old_status} â†’ {body.status}")
+        log.info(f"PO {po['po_number']}: {old_status} -> {body.status}")
+
+        # Refresh MinIO PDF cache with the updated status
+        try:
+            cur.execute("SELECT * FROM purchase_orders WHERE id = %s", (po_id,))
+            updated_po = cur.fetchone()
+            if updated_po:
+                updated_po_dict = dict(updated_po)
+                refreshed_pdf = generate_po_pdf(updated_po_dict)
+                upload_pdf_bytes(refreshed_pdf, f"pos/{po['po_number']}.pdf")
+        except Exception as e:
+            log.warning(f"Could not refresh MinIO PDF on status change: {e}")
+
+        # Autonomous Agent 6 Trigger: Generate full Order Closeout Dossier when order is DELIVERED
+        if body.status == "DELIVERED":
+            try:
+                report_agent.generate_order_report(
+                    po_id=po_id,
+                    trigger_reason="ORDER_DELIVERED",
+                    force_regenerate=False,
+                    actor=body.performed_by or "Autonomous Agent 6",
+                )
+                log.info(f"Agent 6 generated official order dossier for DELIVERED PO #{po_id}")
+            except Exception as e:
+                log.warning(f"Agent 6 auto-generation on order delivery failed: {e}")
+
         return {"po_id": po_id, "po_number": po["po_number"],
                 "old_status": old_status, "new_status": body.status}
     finally:
@@ -915,31 +1235,47 @@ async def view_po_pdf(
                     status_code=403,
                     detail="You are not authorized to view this purchase order",
                 )
+        elif user_role == "Vendor":
+            user_vid = current_user.get("vendor_id")
+            user_vname = (current_user.get("vendor_name") or current_user.get("name") or "").strip().lower()
+            po_vid = po_dict.get("vendor_id")
+            po_vname = (po_dict.get("vendor_name") or "").strip().lower()
+            if not ((user_vid and po_vid and int(user_vid) == int(po_vid)) or (user_vname and po_vname and (user_vname in po_vname or po_vname in user_vname))):
+                raise HTTPException(
+                    status_code=403,
+                    detail="You are not authorized to view purchase orders belonging to another vendor",
+                )
     finally:
         cur.close()
         conn.close()
 
-    pdf_bytes = None
+    is_signed = (po_dict.get("status") == "APPROVED") or bool(po_dict.get("signed_document_url"))
 
-    if po_dict.get("signed_document_url"):
-        pdf_bytes = download_pdf_bytes(po_dict["signed_document_url"])
+    # Always generate fresh, accurate PDF reflecting latest live DB values (delivery date, price, qty, approved revisions)
+    pdf_bytes = generate_po_pdf(
+        po_dict,
+        is_signed=is_signed,
+        signer_name=po_dict.get("assigned_approver_name"),
+        signer_email=po_dict.get("assigned_approver_email"),
+        signature_id=po_dict.get("docusign_envelope_id"),
+    )
 
-    if not pdf_bytes:
-        is_signed = po_dict.get("status") == "APPROVED"
-
-        pdf_bytes = generate_po_pdf(
-            po_dict,
-            is_signed=is_signed,
-            signer_name=po_dict.get("assigned_approver_name"),
-            signer_email=po_dict.get("assigned_approver_email"),
-            signature_id=po_dict.get("docusign_envelope_id"),
-        )
+    # Sync to MinIO so bucket archive stays fresh
+    try:
+        upload_pdf_bytes(pdf_bytes, f"pos/{po_dict['po_number']}.pdf")
+        if is_signed or po_dict.get("signed_document_url"):
+            upload_pdf_bytes(pdf_bytes, f"signed-pos/{po_dict['po_number']}_signed.pdf")
+    except Exception as e:
+        log.warning(f"Could not sync regenerated PDF to MinIO: {e}")
 
     return Response(
         content=pdf_bytes,
         media_type="application/pdf",
         headers={
-            "Content-Disposition": f"inline; filename={po_dict['po_number']}.pdf"
+            "Content-Disposition": f"inline; filename={po_dict['po_number']}.pdf",
+            "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0",
+            "Pragma": "no-cache",
+            "Expires": "0",
         },
     )
 
@@ -962,12 +1298,6 @@ async def download_po(
 
         po_dict = dict(po)
 
-        approver_roles = {
-            "Procurement Officer",
-            "Operations Manager",
-            "Finance Director",
-        }
-
         user_role = current_user.get("role") if current_user else None
         user_email = current_user.get("email", "").strip().lower() if current_user else ""
         expected_tier = ROLE_TO_TIER.get(user_role)
@@ -980,33 +1310,48 @@ async def download_po(
                     status_code=403,
                     detail="You are not authorized to download this purchase order",
                 )
+        elif user_role == "Vendor":
+            user_vid = current_user.get("vendor_id")
+            user_vname = (current_user.get("vendor_name") or current_user.get("name") or "").strip().lower()
+            po_vid = po_dict.get("vendor_id")
+            po_vname = (po_dict.get("vendor_name") or "").strip().lower()
+            if not ((user_vid and po_vid and int(user_vid) == int(po_vid)) or (user_vname and po_vname and (user_vname in po_vname or po_vname in user_vname))):
+                raise HTTPException(
+                    status_code=403,
+                    detail="You are not authorized to download purchase orders belonging to another vendor",
+                )
     finally:
         cur.close()
         conn.close()
 
-    pdf_bytes = None
-    filename = f"{po_dict['po_number']}.pdf"
+    is_signed = (po_dict.get("status") == "APPROVED") or bool(po_dict.get("signed_document_url"))
+    filename = f"{po_dict['po_number']}_signed.pdf" if is_signed else f"{po_dict['po_number']}.pdf"
 
-    if po_dict.get("signed_document_url"):
-        pdf_bytes = download_pdf_bytes(po_dict["signed_document_url"])
-        filename = f"{po_dict['po_number']}_signed.pdf"
+    # Always generate fresh, accurate PDF reflecting latest live DB values (delivery date, price, qty, approved revisions)
+    pdf_bytes = generate_po_pdf(
+        po_dict,
+        is_signed=is_signed,
+        signer_name=po_dict.get("assigned_approver_name"),
+        signer_email=po_dict.get("assigned_approver_email"),
+        signature_id=po_dict.get("docusign_envelope_id"),
+    )
 
-    if not pdf_bytes:
-        is_signed = po_dict.get("status") == "APPROVED"
-
-        pdf_bytes = generate_po_pdf(
-            po_dict,
-            is_signed=is_signed,
-            signer_name=po_dict.get("assigned_approver_name"),
-            signer_email=po_dict.get("assigned_approver_email"),
-            signature_id=po_dict.get("docusign_envelope_id"),
-        )
+    # Sync to MinIO so bucket archive stays fresh
+    try:
+        upload_pdf_bytes(pdf_bytes, f"pos/{po_dict['po_number']}.pdf")
+        if is_signed or po_dict.get("signed_document_url"):
+            upload_pdf_bytes(pdf_bytes, f"signed-pos/{po_dict['po_number']}_signed.pdf")
+    except Exception as e:
+        log.warning(f"Could not sync regenerated PDF to MinIO: {e}")
 
     return Response(
         content=pdf_bytes,
         media_type="application/pdf",
         headers={
-            "Content-Disposition": f"attachment; filename={filename}"
+            "Content-Disposition": f"attachment; filename={filename}",
+            "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0",
+            "Pragma": "no-cache",
+            "Expires": "0",
         },
     )
 
@@ -1035,6 +1380,7 @@ async def sign_po(
 
         # Only the approver assigned to this PO can complete the signature.
         allowed_roles = {
+            "Admin",
             "Procurement Officer",
             "Operations Manager",
             "Finance Director",
@@ -1048,23 +1394,30 @@ async def sign_po(
                 detail="Authentication required for DocuSign approval",
             )
 
-        if current_user["role"] not in allowed_roles:
+        user_role = current_user.get("role")
+        if user_role not in allowed_roles:
             raise HTTPException(
                 status_code=403,
                 detail="This account is not authorized to sign purchase orders",
             )
 
-        user_role = current_user.get("role")
         user_email = current_user.get("email", "").strip().lower()
-        expected_tier = ROLE_TO_TIER.get(user_role)
-        po_tier = po_dict.get("approval_tier")
+        po_tier = po_dict.get("approval_tier") or "TIER_1_OFFICER"
         assigned_email = (po_dict.get("assigned_approver_email") or "").strip().lower()
 
+        allowed_tiers = {
+            "Admin": {"TIER_1_OFFICER", "TIER_2_MANAGER", "TIER_3_DIRECTOR"},
+            "Finance Director": {"TIER_1_OFFICER", "TIER_2_MANAGER", "TIER_3_DIRECTOR"},
+            "Operations Manager": {"TIER_1_OFFICER", "TIER_2_MANAGER"},
+            "Procurement Officer": {"TIER_1_OFFICER"},
+        }
+        user_tiers = allowed_tiers.get(user_role, set())
+
         if user_role != "Admin":
-            if po_tier != expected_tier and assigned_email != user_email:
+            if po_tier not in user_tiers and assigned_email != user_email:
                 raise HTTPException(
                     status_code=403,
-                    detail=f"This purchase order is not assigned to your tier ({user_role}). It requires {po_dict.get('assigned_approver_name', 'an approver')} approval.",
+                    detail=f"This purchase order ({po_tier}) is not assigned to your tier ({user_role}) or account",
                 )
 
         old_status = po_dict["status"]
@@ -1262,7 +1615,7 @@ async def dashboard_summary():
                    total_price, status, created_at::text,
                    approval_tier, assigned_approver_name, signed_document_url
             FROM purchase_orders
-            ORDER BY created_at DESC LIMIT 10
+            ORDER BY id DESC LIMIT 10
         """)
         recent = [dict(r) for r in cur.fetchall()]
 
@@ -1354,21 +1707,37 @@ async def get_agent_logs(
 # Defective Items & Quality Inspection Endpoints                     #
 # ------------------------------------------------------------------ #
 
-def get_defective_stats_helper(cur):
-    cur.execute("""
+def get_defective_stats_helper(cur, vendor_id: Optional[int] = None, vendor_name: Optional[str] = None):
+    conds = []
+    params = []
+    if vendor_id and vendor_name:
+        conds.append("(vendor_id = %s OR LOWER(vendor_name) = LOWER(%s))")
+        params.extend([int(vendor_id), vendor_name.strip()])
+    elif vendor_id:
+        conds.append("vendor_id = %s")
+        params.append(int(vendor_id))
+    elif vendor_name:
+        conds.append("LOWER(vendor_name) = LOWER(%s)")
+        params.append(vendor_name.strip())
+
+    where_clause = f"WHERE {' AND '.join(conds)}" if conds else ""
+    cur.execute(f"""
         SELECT
             COUNT(*)                                                          AS total_reports,
             COALESCE(SUM(defective_quantity), 0)                              AS total_defective_units,
             COALESCE(SUM(defective_quantity) FILTER (
-                WHERE status IN ('REPORTED', 'UNDER_REVIEW', 'AWAITING_VENDOR')
+                WHERE status IN ('REPORTED', 'UNDER_REVIEW', 'AWAITING_VENDOR', 'RESOLUTION_IN_PROGRESS')
             ), 0)                                                             AS quarantine_units,
             COUNT(*) FILTER (
                 WHERE status IN ('REPORTED', 'UNDER_REVIEW', 'AWAITING_VENDOR', 'RESOLUTION_IN_PROGRESS')
             )                                                                 AS pending_resolution,
             COUNT(*) FILTER (WHERE status = 'RESOLVED')                       AS resolved,
-            COUNT(*) FILTER (WHERE status = 'REJECTED')                       AS rejected
-        FROM defective_items;
-    """)
+            COUNT(*) FILTER (WHERE status = 'REJECTED')                       AS rejected,
+            COALESCE(SUM(total_claim_amount), 0)                              AS total_claim_value,
+            COUNT(*) FILTER (WHERE severity = 'CRITICAL')                     AS critical_defects
+        FROM defective_items
+        {where_clause};
+    """, tuple(params))
     row = cur.fetchone()
     return {
         "total_reports": int(row["total_reports"] or 0),
@@ -1377,15 +1746,26 @@ def get_defective_stats_helper(cur):
         "pending_resolution": int(row["pending_resolution"] or 0),
         "resolved": int(row["resolved"] or 0),
         "rejected": int(row["rejected"] or 0),
+        "total_claim_value": float(row["total_claim_value"] or 0.0),
+        "critical_defects": int(row["critical_defects"] or 0),
     }
 
 
 @app.get("/defective-items/summary", dependencies=[Depends(verify_key_flexible)])
-async def get_defective_items_summary():
+async def get_defective_items_summary(
+    vendor_id: Optional[int] = None,
+    vendor_name: Optional[str] = None,
+    current_user: Optional[dict] = Depends(get_optional_current_user),
+):
     conn = get_conn()
     cur = conn.cursor()
     try:
-        stats = get_defective_stats_helper(cur)
+        eff_vendor_id = vendor_id
+        eff_vendor_name = vendor_name
+        if current_user and current_user.get("role") == "Vendor":
+            eff_vendor_id = current_user.get("vendor_id")
+            eff_vendor_name = current_user.get("vendor_name")
+        stats = get_defective_stats_helper(cur, eff_vendor_id, eff_vendor_name)
         return {"stats": stats}
     finally:
         cur.close()
@@ -1396,9 +1776,14 @@ async def get_defective_items_summary():
 async def get_defective_items(
     status: Optional[str] = None,
     defect_type: Optional[str] = None,
+    severity: Optional[str] = None,
+    disposition_type: Optional[str] = None,
+    vendor_id: Optional[int] = None,
+    vendor_name: Optional[str] = None,
     search: Optional[str] = None,
     limit: int = 50,
     offset: int = 0,
+    current_user: Optional[dict] = Depends(get_optional_current_user),
 ):
     conn = get_conn()
     cur = conn.cursor()
@@ -1414,10 +1799,40 @@ async def get_defective_items(
             conditions.append("defect_type = %s")
             params.append(defect_type)
 
+        if severity and severity != "ALL":
+            conditions.append("severity = %s")
+            params.append(severity)
+
+        if disposition_type and disposition_type != "ALL":
+            conditions.append("disposition_type = %s")
+            params.append(disposition_type)
+
+        eff_vendor_id = vendor_id
+        eff_vendor_name = vendor_name
+        if current_user and current_user.get("role") == "Vendor":
+            eff_vendor_id = current_user.get("vendor_id")
+            eff_vendor_name = current_user.get("vendor_name")
+            if eff_vendor_id and eff_vendor_name:
+                conditions.append("(vendor_id = %s OR LOWER(vendor_name) = LOWER(%s))")
+                params.extend([int(eff_vendor_id), eff_vendor_name.strip()])
+            elif eff_vendor_id:
+                conditions.append("vendor_id = %s")
+                params.append(int(eff_vendor_id))
+            elif eff_vendor_name:
+                conditions.append("LOWER(vendor_name) = LOWER(%s)")
+                params.append(eff_vendor_name.strip())
+        else:
+            if vendor_id is not None:
+                conditions.append("vendor_id = %s")
+                params.append(int(vendor_id))
+            if vendor_name:
+                conditions.append("LOWER(vendor_name) = LOWER(%s)")
+                params.append(vendor_name.strip())
+
         if search:
-            conditions.append("(po_number ILIKE %s OR vendor_name ILIKE %s OR item_name ILIKE %s OR defect_type ILIKE %s)")
+            conditions.append("(rma_number ILIKE %s OR po_number ILIKE %s OR vendor_name ILIKE %s OR item_name ILIKE %s OR defect_type ILIKE %s OR batch_number ILIKE %s)")
             s_val = f"%{search}%"
-            params.extend([s_val, s_val, s_val, s_val])
+            params.extend([s_val, s_val, s_val, s_val, s_val, s_val])
 
         where_clause = f"WHERE {' AND '.join(conditions)}" if conditions else ""
 
@@ -1429,7 +1844,12 @@ async def get_defective_items(
             SELECT id, po_id, po_number, vendor_id, vendor_name, item_name,
                    ordered_quantity, defective_quantity, defect_type, description,
                    inspection_date::text, evidence_photo_url, status, resolution_notes,
-                   reported_by, created_at::text, updated_at::text
+                   reported_by, created_at::text, updated_at::text,
+                   rma_number, batch_number, severity, root_cause,
+                   unit_price::float, total_claim_amount::float,
+                   quarantine_location, disposition_type, tracking_reference,
+                   vendor_action_status, vendor_comments, disposition_approved_by,
+                   resolution_date::text
             FROM defective_items
             {where_clause}
             ORDER BY created_at DESC
@@ -1439,7 +1859,7 @@ async def get_defective_items(
         cur.execute(query, tuple(params_with_paging))
         items = [dict(r) for r in cur.fetchall()]
 
-        stats = get_defective_stats_helper(cur)
+        stats = get_defective_stats_helper(cur, eff_vendor_id, eff_vendor_name)
 
         return {
             "defective_items": items,
@@ -1452,7 +1872,10 @@ async def get_defective_items(
 
 
 @app.get("/defective-items/{item_id}", dependencies=[Depends(verify_key_flexible)])
-async def get_defective_item(item_id: int):
+async def get_defective_item(
+    item_id: int,
+    current_user: Optional[dict] = Depends(get_optional_current_user),
+):
     conn = get_conn()
     cur = conn.cursor()
     try:
@@ -1460,21 +1883,48 @@ async def get_defective_item(item_id: int):
             SELECT id, po_id, po_number, vendor_id, vendor_name, item_name,
                    ordered_quantity, defective_quantity, defect_type, description,
                    inspection_date::text, evidence_photo_url, status, resolution_notes,
-                   reported_by, created_at::text, updated_at::text
+                   reported_by, created_at::text, updated_at::text,
+                   rma_number, batch_number, severity, root_cause,
+                   unit_price::float, total_claim_amount::float,
+                   quarantine_location, disposition_type, tracking_reference,
+                   vendor_action_status, vendor_comments, disposition_approved_by,
+                   resolution_date::text
             FROM defective_items
             WHERE id = %s
         """, (item_id,))
         row = cur.fetchone()
         if not row:
             raise HTTPException(status_code=404, detail="Defective item record not found")
-        return dict(row)
+        item = dict(row)
+
+        if current_user and current_user.get("role") == "Vendor":
+            u_vid = current_user.get("vendor_id")
+            u_vname = current_user.get("vendor_name")
+            matched = False
+            if u_vid and item.get("vendor_id") and int(u_vid) == int(item["vendor_id"]):
+                matched = True
+            elif u_vname and item.get("vendor_name") and u_vname.strip().lower() == item["vendor_name"].strip().lower():
+                matched = True
+            if not matched:
+                raise HTTPException(status_code=403, detail="You do not have permission to view RMA records belonging to another supplier.")
+
+        return item
     finally:
         cur.close()
         conn.close()
 
 
 @app.post("/defective-items", dependencies=[Depends(verify_key_flexible)])
-async def create_defective_item(payload: CreateDefectiveItem):
+async def create_defective_item(
+    payload: CreateDefectiveItem,
+    current_user: Optional[dict] = Depends(get_optional_current_user),
+):
+    if current_user and current_user.get("role") == "Vendor":
+        raise HTTPException(
+            status_code=403,
+            detail="Vendors are not permitted to submit internal defect quarantine dockets. Incoming quality inspection reports must be issued by internal Quality, Receiving, or Operations personnel."
+        )
+
     conn = get_conn()
     cur = conn.cursor()
     try:
@@ -1483,37 +1933,57 @@ async def create_defective_item(payload: CreateDefectiveItem):
         item_name = payload.item_name
         vendor_id = payload.vendor_id
         ordered_quantity = payload.ordered_quantity or 0
+        unit_price = payload.unit_price
 
-        # Backfill from purchase_orders if missing
-        if not po_number or not vendor_name or not item_name:
-            cur.execute("""
-                SELECT po_number, vendor_name, item_name, vendor_id, quantity
-                FROM purchase_orders WHERE id = %s
-            """, (payload.po_id,))
-            po_row = cur.fetchone()
-            if po_row:
-                po_number = po_number or po_row["po_number"]
-                vendor_name = vendor_name or po_row["vendor_name"]
-                item_name = item_name or po_row["item_name"]
-                vendor_id = vendor_id or po_row["vendor_id"]
-                if not ordered_quantity:
-                    ordered_quantity = po_row["quantity"]
+        # Backfill PO fields if missing
+        cur.execute("""
+            SELECT po_number, vendor_name, item_name, vendor_id, quantity, unit_price
+            FROM purchase_orders WHERE id = %s
+        """, (payload.po_id,))
+        po_row = cur.fetchone()
+        if po_row:
+            po_number = po_number or po_row["po_number"]
+            vendor_name = vendor_name or po_row["vendor_name"]
+            item_name = item_name or po_row["item_name"]
+            vendor_id = vendor_id or po_row["vendor_id"]
+            if not ordered_quantity:
+                ordered_quantity = po_row["quantity"]
+            if unit_price is None or unit_price == 0:
+                unit_price = float(po_row["unit_price"] or 0.0)
+
+        unit_price_val = float(unit_price or 0.0)
+        total_claim_val = round(unit_price_val * float(payload.defective_quantity), 2)
+
+        rma_number = payload.rma_number
+        if not rma_number:
+            rma_number = f"RMA-{datetime.now().year}-{uuid.uuid4().hex[:6].upper()}"
 
         cur.execute("""
             INSERT INTO defective_items (
                 po_id, po_number, vendor_id, vendor_name, item_name,
                 ordered_quantity, defective_quantity, defect_type,
                 description, inspection_date, evidence_photo_url,
-                reported_by, status
+                reported_by, status, rma_number, batch_number, severity,
+                root_cause, unit_price, total_claim_amount, quarantine_location,
+                vendor_action_status
             ) VALUES (
-                %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                COALESCE(%s::date, CURRENT_DATE), %s,
-                COALESCE(%s, 'Quality Inspector'), 'REPORTED'
+                %s, %s, %s, %s, %s,
+                %s, %s, %s,
+                %s, COALESCE(%s::date, CURRENT_DATE), %s,
+                COALESCE(%s, 'Quality Inspector'), 'REPORTED',
+                %s, COALESCE(%s, 'LOT-2026-001'), COALESCE(%s, 'MAJOR'),
+                COALESCE(%s, 'MANUFACTURING_FLAW'), %s, %s,
+                COALESCE(%s, 'Quarantine Bay Q-1'), 'PENDING_VENDOR_REVIEW'
             )
             RETURNING id, po_id, po_number, vendor_id, vendor_name, item_name,
                       ordered_quantity, defective_quantity, defect_type, description,
                       inspection_date::text, evidence_photo_url, status, resolution_notes,
-                      reported_by, created_at::text, updated_at::text
+                      reported_by, created_at::text, updated_at::text,
+                      rma_number, batch_number, severity, root_cause,
+                      unit_price::float, total_claim_amount::float,
+                      quarantine_location, disposition_type, tracking_reference,
+                      vendor_action_status, vendor_comments, disposition_approved_by,
+                      resolution_date::text
         """, (
             payload.po_id,
             po_number or f"PO-{payload.po_id}",
@@ -1527,9 +1997,47 @@ async def create_defective_item(payload: CreateDefectiveItem):
             payload.inspection_date,
             payload.evidence_photo_url,
             payload.reported_by,
+            rma_number,
+            payload.batch_number,
+            payload.severity,
+            payload.root_cause,
+            unit_price_val,
+            total_claim_val,
+            payload.quarantine_location,
         ))
         row = dict(cur.fetchone())
+
+        # Log to procurement audit trail
+        cur.execute("""
+            INSERT INTO procurement_audit (
+                po_id, po_number, action, old_status, new_status, performed_by, notes
+            ) VALUES (
+                %s, %s, 'RMA_QUARANTINE_FILED', NULL, 'QUARANTINED', %s, %s
+            )
+        """, (
+            payload.po_id,
+            po_number or f"PO-{payload.po_id}",
+            payload.reported_by or "Quality Inspector",
+            f"Official RMA Claim {rma_number} filed. {payload.defective_quantity} units quarantined. Severity: {payload.severity or 'MAJOR'}. Claim Value: INR {total_claim_val:,.2f}"
+        ))
+
         conn.commit()
+
+        # Autonomous Agent 6 Dynamic Invalidation & Regeneration:
+        # If an order report exists for this PO, delete previous report and regenerate a fresh updated one!
+        try:
+            cur.execute("SELECT id FROM order_reports WHERE po_id = %s LIMIT 1", (payload.po_id,))
+            if cur.fetchone():
+                report_agent.generate_order_report(
+                    po_id=payload.po_id,
+                    trigger_reason="DEFECT_ITEM_LOGGED",
+                    force_regenerate=True,
+                    actor=payload.reported_by or "Quality Inspector",
+                )
+                log.info(f"Agent 6 deleted previous report and regenerated updated dossier for PO #{payload.po_id} after defect logged")
+        except Exception as e:
+            log.warning(f"Agent 6 auto-regeneration of report after defect failed: {e}")
+
         return row
     except Exception as e:
         conn.rollback()
@@ -1540,25 +2048,91 @@ async def create_defective_item(payload: CreateDefectiveItem):
 
 
 @app.patch("/defective-items/{item_id}/status", dependencies=[Depends(verify_key_flexible)])
-async def update_defective_item_status(item_id: int, payload: UpdateDefectiveItemStatus):
+async def update_defective_item_status(
+    item_id: int,
+    payload: UpdateDefectiveItemStatus,
+    current_user: Optional[dict] = Depends(get_optional_current_user),
+):
+    if current_user and current_user.get("role") == "Vendor":
+        raise HTTPException(
+            status_code=403,
+            detail="Vendors cannot update internal disposition or close RMA dockets directly. Please submit a vendor response instead."
+        )
+
     conn = get_conn()
     cur = conn.cursor()
     try:
+        # Determine if closing/resolving
+        is_resolved = payload.status == "RESOLVED"
+
         cur.execute("""
             UPDATE defective_items
             SET status = %s,
                 resolution_notes = COALESCE(%s, resolution_notes),
+                disposition_type = COALESCE(%s, disposition_type),
+                tracking_reference = COALESCE(%s, tracking_reference),
+                vendor_action_status = COALESCE(%s, vendor_action_status),
+                vendor_comments = COALESCE(%s, vendor_comments),
+                disposition_approved_by = COALESCE(%s, disposition_approved_by),
+                resolution_date = CASE WHEN %s THEN NOW() ELSE resolution_date END,
                 updated_at = NOW()
             WHERE id = %s
             RETURNING id, po_id, po_number, vendor_id, vendor_name, item_name,
                       ordered_quantity, defective_quantity, defect_type, description,
                       inspection_date::text, evidence_photo_url, status, resolution_notes,
-                      reported_by, created_at::text, updated_at::text
-        """, (payload.status, payload.resolution_notes, item_id))
+                      reported_by, created_at::text, updated_at::text,
+                      rma_number, batch_number, severity, root_cause,
+                      unit_price::float, total_claim_amount::float,
+                      quarantine_location, disposition_type, tracking_reference,
+                      vendor_action_status, vendor_comments, disposition_approved_by,
+                      resolution_date::text
+        """, (
+            payload.status,
+            payload.resolution_notes,
+            payload.disposition_type,
+            payload.tracking_reference,
+            payload.vendor_action_status,
+            payload.vendor_comments,
+            payload.disposition_approved_by,
+            is_resolved,
+            item_id,
+        ))
         row = cur.fetchone()
         if not row:
             raise HTTPException(status_code=404, detail="Defective item record not found")
+
+        # Log status update in audit trail
+        cur.execute("""
+            INSERT INTO procurement_audit (
+                po_id, po_number, action, old_status, new_status, performed_by, notes
+            ) VALUES (
+                %s, %s, 'RMA_STATUS_UPDATED', NULL, %s, %s, %s
+            )
+        """, (
+            row["po_id"],
+            row["po_number"],
+            payload.status,
+            payload.performed_by or payload.disposition_approved_by or (current_user.get("name") if current_user else "Quality Assurance Lead"),
+            f"RMA {row.get('rma_number') or row['id']} status updated to {payload.status}. Disposition: {row.get('disposition_type') or 'Pending'}. Notes: {payload.resolution_notes or 'N/A'}"
+        ))
+
         conn.commit()
+
+        # Autonomous Agent 6 Dynamic Invalidation & Regeneration:
+        # If an order report exists for this PO, delete previous report and regenerate a fresh updated one!
+        try:
+            cur.execute("SELECT id FROM order_reports WHERE po_id = %s LIMIT 1", (row["po_id"],))
+            if cur.fetchone():
+                report_agent.generate_order_report(
+                    po_id=row["po_id"],
+                    trigger_reason="RMA_STATUS_UPDATED",
+                    force_regenerate=True,
+                    actor=payload.performed_by or (current_user.get("name") if current_user else "Quality Assurance Lead"),
+                )
+                log.info(f"Agent 6 regenerated updated dossier for PO #{row['po_id']} after RMA status updated to {payload.status}")
+        except Exception as e:
+            log.warning(f"Agent 6 auto-regeneration of report after RMA update failed: {e}")
+
         return dict(row)
     except HTTPException:
         raise
@@ -1570,8 +2144,136 @@ async def update_defective_item_status(item_id: int, payload: UpdateDefectiveIte
         conn.close()
 
 
+@app.post("/defective-items/{item_id}/vendor-response", dependencies=[Depends(verify_key_flexible)])
+async def submit_vendor_defective_response(
+    item_id: int,
+    payload: VendorDefectiveResponse,
+    current_user: Optional[dict] = Depends(get_optional_current_user),
+):
+    conn = get_conn()
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT id, po_id, po_number, rma_number, status, vendor_id, vendor_name FROM defective_items WHERE id = %s", (item_id,))
+        item = cur.fetchone()
+        if not item:
+            raise HTTPException(status_code=404, detail="Defective item record not found")
+
+        # Verify supplier authorization
+        if current_user and current_user.get("role") == "Vendor":
+            u_vid = current_user.get("vendor_id")
+            u_vname = current_user.get("vendor_name")
+            matched = False
+            if u_vid and item.get("vendor_id") and int(u_vid) == int(item["vendor_id"]):
+                matched = True
+            elif u_vname and item.get("vendor_name") and u_vname.strip().lower() == item["vendor_name"].strip().lower():
+                matched = True
+            if not matched:
+                raise HTTPException(status_code=403, detail="You are not authorized to respond to RMA dockets issued to another supplier.")
+
+        action = payload.action.upper()
+        new_status = "RESOLUTION_IN_PROGRESS"
+        vendor_action_status = "ACCEPTED"
+        disposition_type = "REPLACEMENT"
+
+        if action == "ACCEPT_REPLACEMENT":
+            new_status = "RESOLUTION_IN_PROGRESS"
+            vendor_action_status = "DISPATCHED_REPLACEMENT"
+            disposition_type = "REPLACEMENT"
+        elif action == "ACCEPT_CREDIT":
+            new_status = "RESOLUTION_IN_PROGRESS"
+            vendor_action_status = "CREDIT_MEMO_OFFERED"
+            disposition_type = "CREDIT_NOTE"
+        elif action == "REQUEST_REWORK":
+            new_status = "RESOLUTION_IN_PROGRESS"
+            vendor_action_status = "REWORK_REQUESTED"
+            disposition_type = "REWORK"
+        elif action == "CONTEST":
+            new_status = "UNDER_REVIEW"
+            vendor_action_status = "CONTESTED"
+            disposition_type = None
+
+        cur.execute("""
+            UPDATE defective_items
+            SET status = %s,
+                vendor_action_status = %s,
+                tracking_reference = COALESCE(%s, tracking_reference),
+                vendor_comments = COALESCE(%s, vendor_comments),
+                disposition_type = COALESCE(%s, disposition_type),
+                updated_at = NOW()
+            WHERE id = %s
+            RETURNING id, po_id, po_number, vendor_id, vendor_name, item_name,
+                      ordered_quantity, defective_quantity, defect_type, description,
+                      inspection_date::text, evidence_photo_url, status, resolution_notes,
+                      reported_by, created_at::text, updated_at::text,
+                      rma_number, batch_number, severity, root_cause,
+                      unit_price::float, total_claim_amount::float,
+                      quarantine_location, disposition_type, tracking_reference,
+                      vendor_action_status, vendor_comments, disposition_approved_by,
+                      resolution_date::text
+        """, (
+            new_status,
+            vendor_action_status,
+            payload.tracking_reference,
+            payload.vendor_comments,
+            disposition_type,
+            item_id,
+        ))
+        row = dict(cur.fetchone())
+
+        cur.execute("""
+            INSERT INTO procurement_audit (
+                po_id, po_number, action, old_status, new_status, performed_by, notes
+            ) VALUES (
+                %s, %s, 'RMA_VENDOR_RESPONSE', %s, %s, %s, %s
+            )
+        """, (
+            item["po_id"],
+            item["po_number"],
+            item["status"],
+            new_status,
+            payload.performed_by or (current_user.get("name") if current_user else "Supplier Representative"),
+            f"Vendor responded to RMA {item.get('rma_number') or item_id}: Action={action}. Tracking: {payload.tracking_reference or 'N/A'}. Comment: {payload.vendor_comments or 'N/A'}"
+        ))
+
+        conn.commit()
+
+        # Autonomous Agent 6 Dynamic Invalidation & Regeneration:
+        # If an order report exists for this PO, delete previous report and regenerate a fresh updated one!
+        try:
+            cur.execute("SELECT id FROM order_reports WHERE po_id = %s LIMIT 1", (item["po_id"],))
+            if cur.fetchone():
+                report_agent.generate_order_report(
+                    po_id=item["po_id"],
+                    trigger_reason="VENDOR_RESTITUTION_SUBMITTED",
+                    force_regenerate=True,
+                    actor=payload.performed_by or (current_user.get("name") if current_user else "Supplier Representative"),
+                )
+                log.info(f"Agent 6 regenerated updated dossier for PO #{item['po_id']} after vendor restitution response")
+        except Exception as e:
+            log.warning(f"Agent 6 auto-regeneration of report after vendor response failed: {e}")
+
+        return row
+    except HTTPException:
+        raise
+    except Exception as e:
+        conn.rollback()
+        raise HTTPException(status_code=500, detail=f"Failed to submit vendor response: {str(e)}")
+    finally:
+        cur.close()
+        conn.close()
+
+
 @app.delete("/defective-items/{item_id}", dependencies=[Depends(verify_key_flexible)])
-async def delete_defective_item(item_id: int):
+async def delete_defective_item(
+    item_id: int,
+    current_user: Optional[dict] = Depends(get_optional_current_user),
+):
+    if current_user and current_user.get("role") == "Vendor":
+        raise HTTPException(
+            status_code=403,
+            detail="Vendors are not permitted to delete defect audit records."
+        )
+
     conn = get_conn()
     cur = conn.cursor()
     try:
@@ -1584,6 +2286,590 @@ async def delete_defective_item(item_id: int):
     finally:
         cur.close()
         conn.close()
+
+
+# ------------------------------------------------------------------ #
+# Procura (Vendor RAG Negotiation Chatbot) Endpoints                 #
+# ------------------------------------------------------------------ #
+
+def get_vendor_auth(
+    x_vendor_token: Optional[str] = Header(None, alias="X-Vendor-Token"),
+    authorization: Optional[str] = Header(None),
+    token: Optional[str] = Query(None),
+) -> Optional[str]:
+    raw_token = x_vendor_token or token
+    if not raw_token and authorization:
+        if authorization.lower().startswith("bearer "):
+            raw_token = authorization[7:].strip()
+        else:
+            raw_token = authorization.strip()
+def check_procura_access(po_data: dict, current_user: Optional[dict], raw_token: Optional[str]):
+    """
+    Validates that the requester has access to this PO:
+    - Internal roles (Admin, Procurement Officer, Operations Manager, Finance Director): Full access
+    - Logged-in Vendor: Allowed if the PO belongs to this vendor
+    - Guest Vendor: Validates cryptographically signed PO vendor token
+    """
+    if current_user:
+        role = current_user.get("role")
+        if role in {"Admin", "Procurement Officer", "Operations Manager", "Finance Director"}:
+            return True
+        if role == "Vendor":
+            user_vid = current_user.get("vendor_id")
+            user_vname = (current_user.get("vendor_name") or current_user.get("name") or "").strip().lower()
+            po_vid = po_data.get("vendor_id")
+            po_vname = (po_data.get("vendor_name") or "").strip().lower()
+            if (user_vid and po_vid and int(user_vid) == int(po_vid)) or (user_vname and po_vname and (user_vname in po_vname or po_vname in user_vname)):
+                return True
+            raise HTTPException(status_code=403, detail="You are not authorized to access purchase orders belonging to another vendor")
+        return True
+
+    if not raw_token:
+        raise HTTPException(status_code=401, detail="Authentication or vendor authorization token required")
+    try:
+        verify_vendor_token(raw_token, expected_po_number=po_data.get("po_number"))
+        return True
+    except ValueError as e:
+        raise HTTPException(status_code=403, detail=str(e))
+
+
+class ProcuraVerifyRequest(BaseModel):
+    po_number: str
+    vendor_identifier: str
+
+
+@app.post("/procura/verify-po")
+async def procura_verify_po(payload: ProcuraVerifyRequest):
+    """
+    Step 1: PO Verification & Vendor Authorization.
+    Verifies that the PO exists in procurement_db and that vendor_identifier matches.
+    Returns the live PO summary, active proposals, and a cryptographically signed vendor JWT.
+    """
+    conn = get_conn()
+    try:
+        po_data, vendor_token = verify_po_access(conn, payload.po_number, payload.vendor_identifier)
+        conv = get_or_create_conversation(conn, po_data)
+        messages = get_conversation_messages(conn, conv["id"])
+        proposals = get_proposals_for_po(conn, po_data["po_number"])
+        return {
+            "success": True,
+            "token": vendor_token,
+            "po": po_data,
+            "conversation_id": conv["id"],
+            "messages": messages,
+            "proposals": proposals,
+        }
+    except LookupError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except PermissionError as e:
+        raise HTTPException(status_code=403, detail=str(e))
+    finally:
+        conn.close()
+
+
+@app.get("/procura/po/{po_number}")
+async def procura_get_po(
+    po_number: str,
+    raw_token: Optional[str] = Depends(get_vendor_auth),
+    current_user: Optional[dict] = Depends(get_optional_current_user),
+):
+    """
+    Returns live PO summary and proposals.
+    Requires vendor authorization token or authenticated internal user.
+    """
+    conn = get_conn()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM purchase_orders WHERE LOWER(po_number) = LOWER(%s)", (po_number.strip(),))
+            row = cur.fetchone()
+            if not row:
+                raise HTTPException(status_code=404, detail=f"PO '{po_number}' not found")
+            po_data = dict(row)
+            check_procura_access(po_data, current_user, raw_token)
+            proposals = get_proposals_for_po(conn, po_number)
+            return {"po": po_data, "proposals": proposals}
+    finally:
+        conn.close()
+
+
+@app.get("/procura/chat/{po_number}/history")
+async def procura_chat_history(
+    po_number: str,
+    raw_token: Optional[str] = Depends(get_vendor_auth),
+    current_user: Optional[dict] = Depends(get_optional_current_user),
+):
+    """
+    Returns persistent chat messages and negotiation proposal history for this PO.
+    """
+    conn = get_conn()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM purchase_orders WHERE LOWER(po_number) = LOWER(%s)", (po_number.strip(),))
+            po_row = cur.fetchone()
+            if not po_row:
+                raise HTTPException(status_code=404, detail=f"PO '{po_number}' not found")
+            po_data = dict(po_row)
+            check_procura_access(po_data, current_user, raw_token)
+            conv = get_or_create_conversation(conn, po_data)
+            messages = get_conversation_messages(conn, conv["id"])
+            proposals = get_proposals_for_po(conn, po_number)
+            return {
+                "po": po_data,
+                "conversation_id": conv["id"],
+                "messages": messages,
+                "proposals": proposals,
+            }
+    finally:
+        conn.close()
+
+
+class ProcuraChatRequest(BaseModel):
+    po_number: str
+    message: str
+
+
+@app.post("/procura/chat")
+async def procura_send_chat(
+    payload: ProcuraChatRequest,
+    raw_token: Optional[str] = Depends(get_vendor_auth),
+    current_user: Optional[dict] = Depends(get_optional_current_user),
+):
+    """
+    RAG-driven conversational endpoint for vendors.
+    Grounds answers in live PO records, retrieved procurement policies, and negotiation history.
+    Extracts structured proposals and stores them as PENDING (no direct PO mutation).
+    """
+    conn = get_conn()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM purchase_orders WHERE LOWER(po_number) = LOWER(%s)", (payload.po_number.strip(),))
+            po_row = cur.fetchone()
+            if not po_row:
+                raise HTTPException(status_code=404, detail=f"PO '{payload.po_number}' not found")
+            po_data = dict(po_row)
+            check_procura_access(po_data, current_user, raw_token)
+            if not po_row:
+                raise HTTPException(status_code=404, detail=f"PO '{payload.po_number}' not found")
+            po_data = dict(po_row)
+
+        conv = get_or_create_conversation(conn, po_data)
+        prior_proposals = get_proposals_for_po(conn, po_data["po_number"])
+        recent_messages = get_conversation_messages(conn, conv["id"])
+
+        # 1. Record incoming vendor message
+        record_chat_message(conn, conv["id"], po_data["po_number"], sender="vendor", message=payload.message)
+
+        # 2. Build grounded context via RAG retriever
+        grounded_context = build_grounded_context(
+            po_data=po_data,
+            vendor_query=payload.message,
+            prior_proposals=prior_proposals,
+            recent_messages=recent_messages,
+        )
+
+        # 3. Process with Gemini
+        analysis = process_chat_with_gemini(grounded_context, payload.message, po_data)
+
+        # 4. If structured proposal detected, register as PENDING proposal
+        registered_proposal = None
+        if analysis.get("is_proposal"):
+            changes = analysis.get("proposed_changes", {})
+            p_price = changes.get("unit_price")
+            p_qty = changes.get("quantity")
+            p_date = changes.get("delivery_date")
+            p_reason = changes.get("reason") or payload.message
+
+            if p_price is not None or p_qty is not None or p_date is not None:
+                registered_proposal = register_negotiation_proposal(
+                    conn=conn,
+                    po_data=po_data,
+                    conversation_id=conv["id"],
+                    proposed_unit_price=float(p_price) if p_price else None,
+                    proposed_quantity=int(p_qty) if p_qty else None,
+                    proposed_delivery_date=str(p_date) if p_date else None,
+                    reason=p_reason,
+                )
+
+        # 5. Record assistant reply
+        record_chat_message(
+            conn,
+            conv["id"],
+            po_data["po_number"],
+            sender="assistant",
+            message=analysis["response_message"],
+            intent=analysis.get("intent", "general"),
+            structured_data={
+                "is_proposal": analysis.get("is_proposal", False),
+                "proposed_changes": analysis.get("proposed_changes"),
+                "registered_proposal_id": registered_proposal["id"] if registered_proposal else None,
+                "policy_summary": analysis.get("retrieved_policy_summary"),
+            }
+        )
+
+        all_messages = get_conversation_messages(conn, conv["id"])
+        updated_proposals = get_proposals_for_po(conn, po_data["po_number"])
+
+        return {
+            "success": True,
+            "response": analysis["response_message"],
+            "intent": analysis.get("intent", "general"),
+            "is_proposal": analysis.get("is_proposal", False),
+            "proposal": registered_proposal,
+            "messages": all_messages,
+            "proposals": updated_proposals,
+        }
+    finally:
+        conn.close()
+
+
+class ProcuraNegotiateRequest(BaseModel):
+    po_number: str
+    proposed_unit_price: Optional[float] = None
+    proposed_quantity: Optional[int] = None
+    proposed_delivery_date: Optional[str] = None
+    reason: Optional[str] = None
+
+
+@app.post("/procura/negotiate")
+async def procura_submit_negotiation(
+    payload: ProcuraNegotiateRequest,
+    raw_token: Optional[str] = Depends(get_vendor_auth),
+    current_user: Optional[dict] = Depends(get_optional_current_user),
+):
+    """
+    Direct endpoint for submitting a validated counter-proposal.
+    Saves proposal as PENDING and posts notification to conversation.
+    """
+    conn = get_conn()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM purchase_orders WHERE LOWER(po_number) = LOWER(%s)", (payload.po_number.strip(),))
+            po_row = cur.fetchone()
+            if not po_row:
+                raise HTTPException(status_code=404, detail=f"PO '{payload.po_number}' not found")
+            po_data = dict(po_row)
+            check_procura_access(po_data, current_user, raw_token)
+
+        conv = get_or_create_conversation(conn, po_data)
+
+        proposal = register_negotiation_proposal(
+            conn=conn,
+            po_data=po_data,
+            conversation_id=conv["id"],
+            proposed_unit_price=payload.proposed_unit_price,
+            proposed_quantity=payload.proposed_quantity,
+            proposed_delivery_date=payload.proposed_delivery_date,
+            reason=payload.reason,
+        )
+
+        v_msg = (
+            f"Submitted formal counter-offer: "
+            + (f"Unit Price ₹{proposal['proposed_unit_price']:.2f} " if proposal['proposed_unit_price'] else "")
+            + (f"Quantity {proposal['proposed_quantity']} " if proposal['proposed_quantity'] else "")
+            + (f"Delivery {proposal['proposed_delivery_date']} " if proposal['proposed_delivery_date'] else "")
+            + f"| Reason: {payload.reason or 'Vendor counter-proposal'}"
+        )
+        record_chat_message(conn, conv["id"], po_data["po_number"], sender="vendor", message=v_msg)
+
+        sys_reply = (
+            f"Your counter-proposal #{proposal['id']} has been recorded as PENDING. "
+            f"Revised total: ₹{proposal['proposed_total_price']:,.2f}. "
+            f"The proposal has been routed to the assigned buyer ({po_data.get('assigned_approver_name')}) for formal review."
+        )
+        record_chat_message(conn, conv["id"], po_data["po_number"], sender="assistant", message=sys_reply)
+
+        all_messages = get_conversation_messages(conn, conv["id"])
+        updated_proposals = get_proposals_for_po(conn, po_data["po_number"])
+
+        return {
+            "success": True,
+            "proposal": proposal,
+            "messages": all_messages,
+            "proposals": updated_proposals,
+        }
+    finally:
+        conn.close()
+
+
+@app.get("/procura/proposals")
+async def procura_list_proposals(
+    po_number: Optional[str] = None,
+    status: Optional[str] = None,
+    vendor_id: Optional[int] = None,
+    vendor_name: Optional[str] = None,
+    current_user: Optional[dict] = Depends(get_optional_current_user),
+    raw_token: Optional[str] = Depends(get_vendor_auth),
+):
+    """
+    Lists negotiation proposals. Buyers see all proposals; vendors only see their authorized proposals.
+    """
+    if raw_token and not current_user:
+        try:
+            claims = verify_vendor_token(raw_token)
+            po_number = claims.get("po_number")
+            if not vendor_id:
+                vendor_id = claims.get("vendor_id")
+            if not vendor_name:
+                vendor_name = claims.get("vendor_name")
+        except ValueError as e:
+            raise HTTPException(status_code=403, detail=str(e))
+
+    conn = get_conn()
+    try:
+        with conn.cursor() as cur:
+            where_clauses = ["1=1"]
+            params = []
+            if po_number:
+                where_clauses.append("LOWER(po_number) = LOWER(%s)")
+                params.append(po_number.strip())
+            if status and status != "ALL":
+                where_clauses.append("status = %s")
+                params.append(status.strip())
+
+            # Role-based or query-based vendor isolation
+            if current_user and current_user.get("role") == "Vendor":
+                v_id = current_user.get("vendor_id")
+                v_name = current_user.get("vendor_name")
+                if v_id and v_name:
+                    where_clauses.append("(vendor_id = %s OR LOWER(vendor_name) = LOWER(%s))")
+                    params.extend([int(v_id), v_name.strip()])
+                elif v_id:
+                    where_clauses.append("vendor_id = %s")
+                    params.append(int(v_id))
+                elif v_name:
+                    where_clauses.append("LOWER(vendor_name) = LOWER(%s)")
+                    params.append(v_name.strip())
+            else:
+                if vendor_id is not None:
+                    where_clauses.append("vendor_id = %s")
+                    params.append(int(vendor_id))
+                if vendor_name:
+                    where_clauses.append("LOWER(vendor_name) = LOWER(%s)")
+                    params.append(vendor_name.strip())
+
+            where_sql = " AND ".join(where_clauses)
+            cur.execute(f"SELECT * FROM po_negotiation_proposals WHERE {where_sql} ORDER BY created_at DESC", params)
+            rows = [dict(r) for r in cur.fetchall()]
+            return {"proposals": rows, "total": len(rows)}
+    finally:
+        conn.close()
+
+
+class ProcuraReviewRequest(BaseModel):
+    action: str  # 'APPROVE' or 'REJECT'
+    review_notes: Optional[str] = None
+
+
+@app.post("/procura/proposals/{proposal_id}/review")
+async def procura_review_proposal(
+    proposal_id: int,
+    payload: ProcuraReviewRequest,
+    current_user: dict = Depends(get_current_user),
+):
+    """
+    Human Buyer Approval Workflow (PO Safety Enforcement).
+    Only authorized internal buyers (Admin, Procurement Officer, Operations Manager, Finance Director)
+    can approve or reject a proposal. Updates the PO and generates an audit log upon approval.
+    """
+    allowed_roles = {"Admin", "Procurement Officer", "Operations Manager", "Finance Director"}
+    if current_user.get("role") not in allowed_roles:
+        raise HTTPException(status_code=403, detail="Only authorized buyers and administrators can review proposals.")
+
+    conn = get_conn()
+    try:
+        result = review_proposal_by_buyer(
+            conn=conn,
+            proposal_id=proposal_id,
+            action=payload.action,
+            buyer_user=current_user,
+            review_notes=payload.review_notes,
+        )
+        return result
+    except (LookupError, ValueError) as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    finally:
+        conn.close()
+
+
+# ------------------------------------------------------------------ #
+# AGENT 6: ORDER REPORT GENERATION & AUDIT DOSSIER ENDPOINTS
+# ------------------------------------------------------------------ #
+
+@app.get("/reports", dependencies=[Depends(verify_key_flexible)])
+async def list_order_reports(
+    po_id: Optional[int] = Query(None),
+    search: Optional[str] = Query(None),
+    status: Optional[str] = Query(None),
+    limit: int = Query(50, ge=1, le=200),
+    offset: int = Query(0, ge=0),
+):
+    """
+    Lists order documentation dossiers for all purchase orders.
+    Supports filtering by PO ID, status, search keyword, and pagination.
+    """
+    reports, total = report_agent.get_reports(
+        po_id=po_id,
+        search=search,
+        status=status,
+        limit=limit,
+        offset=offset,
+    )
+    return {
+        "reports": reports,
+        "total": total,
+        "limit": limit,
+        "offset": offset,
+    }
+
+
+@app.get("/reports/summary-metrics", dependencies=[Depends(verify_key_flexible)])
+async def get_report_summary_metrics():
+    """
+    Returns executive KPI summary for order reports.
+    """
+    return report_agent.get_summary_metrics()
+
+
+@app.get("/reports/{report_id}", dependencies=[Depends(verify_key_flexible)])
+async def get_order_report(report_id: str):
+    """
+    Retrieves full order report dossier including itemized specs, vendor risk profile,
+    approvals, defective items/RMAs, and financial reconciliation.
+    """
+    report = report_agent.get_report_by_id(report_id)
+    if not report:
+        raise HTTPException(status_code=404, detail=f"Order report '{report_id}' not found")
+    return report
+
+
+@app.get("/reports/by-po/{po_id}", dependencies=[Depends(verify_key_flexible)])
+async def get_order_report_by_po(po_id: int):
+    """
+    Retrieves the active report for a specific Purchase Order ID.
+    """
+    report = report_agent.get_report_by_po(po_id)
+    if not report:
+        raise HTTPException(status_code=404, detail=f"No active report found for PO #{po_id}")
+    return report
+
+
+@app.post("/reports/generate/{po_id}", dependencies=[Depends(verify_key_flexible)])
+async def generate_order_report_endpoint(
+    po_id: int,
+    trigger_reason: Optional[str] = Query("MANUAL_TRIGGER"),
+    force: bool = Query(False),
+    current_user: Optional[dict] = Depends(get_optional_current_user),
+):
+    """
+    Generates or updates the official order dossier for a PO.
+    If a report already exists and defect information or order status has changed,
+    it automatically deletes the previous report and creates an updated version.
+    """
+    actor = current_user.get("name", "Procurement Officer") if current_user else "Autonomous Agent 6"
+    try:
+        report = report_agent.generate_order_report(
+            po_id=po_id,
+            trigger_reason=trigger_reason,
+            force_regenerate=force,
+            actor=actor,
+        )
+        return report
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        log.error(f"Failed to generate report for PO {po_id}: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Report generation failed: {str(e)}")
+
+
+@app.post("/reports/regenerate/{po_id}", dependencies=[Depends(verify_key_flexible)])
+async def regenerate_order_report_endpoint(
+    po_id: int,
+    reason: Optional[str] = Query("DEFECT_UPDATE_SYNC"),
+    current_user: Optional[dict] = Depends(get_optional_current_user),
+):
+    """
+    Forces immediate regeneration of the order report:
+    Deletes the previous report and creates a new, updated version reflecting all current
+    RMA defect claims, vendor restitutions, and financial adjustments.
+    """
+    actor = current_user.get("name", "Procurement Officer") if current_user else "Quality Assurance Lead"
+    try:
+        report = report_agent.generate_order_report(
+            po_id=po_id,
+            trigger_reason=reason,
+            force_regenerate=True,
+            actor=actor,
+        )
+        return {
+            "message": "Report successfully regenerated with latest defect and order data",
+            "report": report,
+        }
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        log.error(f"Failed to regenerate report for PO {po_id}: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Report regeneration failed: {str(e)}")
+
+
+@app.get("/reports/{report_id}/pdf", dependencies=[Depends(verify_key_flexible)])
+async def stream_order_report_pdf(report_id: str):
+    """
+    Streams the official corporate Order Report PDF.
+    """
+    report = report_agent.get_report_by_id(report_id)
+    if not report:
+        raise HTTPException(status_code=404, detail=f"Order report '{report_id}' not found")
+
+    pdf_path = report.get("pdf_path")
+    pdf_bytes = download_pdf_bytes(pdf_path) if pdf_path else None
+
+    # If not in MinIO or download returned None, dynamically re-synthesize PDF on the fly
+    if not pdf_bytes:
+        from order_report_pdf import generate_order_report_pdf
+        log.info(f"Re-synthesizing PDF for report {report_id} on the fly...")
+        pdf_bytes = generate_order_report_pdf(report)
+
+    filename = report.get("pdf_filename") or f"{report.get('report_id', 'report')}.pdf"
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f"inline; filename={filename}"},
+    )
+
+
+@app.get("/reports/{report_id}/download", dependencies=[Depends(verify_key_flexible)])
+async def download_order_report_pdf_file(report_id: str):
+    """
+    Downloads the official corporate Order Report PDF as an attachment.
+    """
+    report = report_agent.get_report_by_id(report_id)
+    if not report:
+        raise HTTPException(status_code=404, detail=f"Order report '{report_id}' not found")
+
+    pdf_path = report.get("pdf_path")
+    pdf_bytes = download_pdf_bytes(pdf_path) if pdf_path else None
+    if not pdf_bytes:
+        from order_report_pdf import generate_order_report_pdf
+        pdf_bytes = generate_order_report_pdf(report)
+
+    filename = report.get("pdf_filename") or f"{report.get('report_id', 'report')}.pdf"
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f"attachment; filename={filename}"},
+    )
+
+
+@app.delete("/reports/{report_id}", dependencies=[Depends(verify_key_flexible)])
+async def delete_order_report(report_id: str):
+    """
+    Deletes an order report and purges its stored PDF.
+    """
+    deleted = report_agent.delete_report(report_id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail=f"Order report '{report_id}' not found")
+    return {"message": f"Order report '{report_id}' successfully deleted"}
+
 
 
 

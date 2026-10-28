@@ -191,3 +191,73 @@ VALUES
     (1, 'PO-2024-0001', 1, 'ACC Cement Ltd', 'Cement (50kg bags)', 200, 15, 'Packaging Damaged', 'Moisture exposure damaged bags during freight transit.', CURRENT_DATE - 1, 'REPORTED', 'Quality Inspector')
 ON CONFLICT DO NOTHING;
 
+-- -------------------------------------------------------
+-- Table: procura_conversations
+-- Conversation sessions for Procura Vendor Chatbot
+-- -------------------------------------------------------
+CREATE TABLE IF NOT EXISTS procura_conversations (
+    id          SERIAL       PRIMARY KEY,
+    po_id       INTEGER      NOT NULL REFERENCES purchase_orders(id) ON DELETE CASCADE,
+    po_number   VARCHAR(50)  NOT NULL,
+    vendor_id   INTEGER      NOT NULL,
+    vendor_name VARCHAR(255) NOT NULL,
+    session_id  VARCHAR(100) NOT NULL UNIQUE,
+    created_at  TIMESTAMP    NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP    NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_procura_conv_po ON procura_conversations(po_number);
+CREATE INDEX IF NOT EXISTS idx_procura_conv_session ON procura_conversations(session_id);
+
+-- -------------------------------------------------------
+-- Table: procura_chat_messages
+-- Persistent multi-turn dialogue with RAG metadata
+-- -------------------------------------------------------
+CREATE TABLE IF NOT EXISTS procura_chat_messages (
+    id              SERIAL       PRIMARY KEY,
+    conversation_id INTEGER      NOT NULL REFERENCES procura_conversations(id) ON DELETE CASCADE,
+    po_number       VARCHAR(50)  NOT NULL,
+    sender          VARCHAR(50)  NOT NULL, -- 'vendor' | 'assistant' | 'system'
+    message         TEXT         NOT NULL,
+    intent          VARCHAR(50)  DEFAULT 'general',
+    structured_data JSONB        DEFAULT '{}'::jsonb,
+    created_at      TIMESTAMP    NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_procura_msgs_conv ON procura_chat_messages(conversation_id);
+CREATE INDEX IF NOT EXISTS idx_procura_msgs_po ON procura_chat_messages(po_number);
+
+-- -------------------------------------------------------
+-- Table: po_negotiation_proposals
+-- Counter-proposals submitted by vendors for buyer review
+-- -------------------------------------------------------
+CREATE TABLE IF NOT EXISTS po_negotiation_proposals (
+    id                     SERIAL         PRIMARY KEY,
+    po_id                  INTEGER        NOT NULL REFERENCES purchase_orders(id) ON DELETE CASCADE,
+    po_number              VARCHAR(50)    NOT NULL,
+    vendor_id              INTEGER        NOT NULL,
+    vendor_name            VARCHAR(255)   NOT NULL,
+    conversation_id        INTEGER        REFERENCES procura_conversations(id) ON DELETE SET NULL,
+    current_unit_price     NUMERIC(15, 2) NOT NULL,
+    proposed_unit_price    NUMERIC(15, 2),
+    current_quantity       INTEGER        NOT NULL,
+    proposed_quantity      INTEGER,
+    current_delivery_date  DATE,
+    proposed_delivery_date DATE,
+    current_total_price    NUMERIC(15, 2) NOT NULL,
+    proposed_total_price   NUMERIC(15, 2) NOT NULL,
+    price_variance_pct     NUMERIC(6, 2)  DEFAULT 0.00,
+    status                 VARCHAR(50)    NOT NULL DEFAULT 'PENDING',
+    reason                 TEXT,
+    validation_notes       TEXT,
+    reviewed_by            VARCHAR(255),
+    reviewed_at            TIMESTAMP,
+    review_notes           TEXT,
+    created_at             TIMESTAMP      NOT NULL DEFAULT NOW(),
+    updated_at             TIMESTAMP      NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_proposals_po ON po_negotiation_proposals(po_number);
+CREATE INDEX IF NOT EXISTS idx_proposals_status ON po_negotiation_proposals(status);
+
+

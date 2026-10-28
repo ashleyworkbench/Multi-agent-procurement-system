@@ -107,3 +107,22 @@ def get_download_url(object_name: str, expiry_hours: int = 24) -> Optional[str]:
     except Exception as e:
         log.warning(f"Could not generate pre-signed URL for {object_name}: {e}")
         return None
+
+
+def delete_object(object_name: str) -> bool:
+    """
+    Deletes an object from MinIO by name or path.
+    """
+    client = get_minio_client()
+    if not client:
+        return False
+    if object_name.startswith(f"{MINIO_BUCKET}/"):
+        object_name = object_name[len(MINIO_BUCKET) + 1:]
+    try:
+        client.remove_object(MINIO_BUCKET, object_name)
+        log.info(f"Deleted object {object_name} from MinIO bucket {MINIO_BUCKET}")
+        return True
+    except Exception as e:
+        log.error(f"Failed to delete {object_name} from MinIO: {e}")
+        return False
+

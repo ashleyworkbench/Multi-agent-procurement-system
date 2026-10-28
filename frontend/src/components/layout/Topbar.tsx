@@ -29,6 +29,11 @@ const PAGE_META: Record<string, { title: string; subtitle: string; tag: string }
     subtitle: "Rule-based Routing, DocuSign eSignatures & MinIO Storage",
     tag: "Agent 4 Active",
   },
+  "/procura": {
+    title: "Procura AI Vendor Assistant",
+    subtitle: "RAG Grounded Intelligence, Policy Inquiries & Price Negotiations",
+    tag: "Procura RAG Active",
+  },
   "/approvals": {
     title: "Executive Approval Portal",
     subtitle: "Tiered Authorization & Digital Signatures",

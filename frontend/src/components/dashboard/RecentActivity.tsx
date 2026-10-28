@@ -21,6 +21,7 @@ export function RecentActivity() {
     ORDERED:          "badge-purple",
     DELIVERED:        "badge-green",
     REJECTED:         "badge-red",
+    SUPERSEDED:       "badge-slate",
   };
 
   return (

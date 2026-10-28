@@ -89,12 +89,27 @@ def generate_po_pdf(
     created_at  = po_data.get("created_at", datetime.utcnow().strftime("%Y-%m-%d"))
     total_price = float(po_data.get("total_price", 0.0))
     currency    = po_data.get("currency", "INR")
-    status      = "APPROVED (DIGITALLY SIGNED)" if is_signed else po_data.get("status", "PENDING_APPROVAL")
-    tier        = po_data.get("approval_tier", "TIER_1_OFFICER")
+    tier        = po_data.get("approval_tier", "TIER_1_OFFICER") or "TIER_1_OFFICER"
     approver_name  = signer_name or po_data.get("assigned_approver_name", "Procurement Approver")
     approver_email = signer_email or po_data.get("assigned_approver_email", "approvals@procureflow.local")
 
-    status_color = "#16a34a" if is_signed else "#d97706"
+    raw_status  = po_data.get("status", "PENDING_APPROVAL")
+    if is_signed:
+        status = "APPROVED (DIGITALLY SIGNED)"
+        status_color = "#16a34a"
+    elif raw_status == "REJECTED":
+        status = "REJECTED (VOIDED)"
+        status_color = "#dc2626"
+    elif raw_status == "SUPERSEDED":
+        status = "SUPERSEDED (VOIDED)"
+        status_color = "#64748b"
+    elif raw_status == "APPROVED":
+        status = "APPROVED"
+        status_color = "#16a34a"
+    else:
+        status = raw_status
+        status_color = "#d97706"
+
     status_html = f'<font color="{status_color}">● {status}</font>'
 
     header_table_data = [
@@ -141,14 +156,15 @@ def generate_po_pdf(
                 f"<b>{vendor_name}</b><br/>"
                 f"Vendor ID: #{po_data.get('vendor_id', 'N/A')}<br/>"
                 f"Status: Verified Supplier<br/>"
-                f"SLA Delivery: {delivery}",
+                f"<b>Expected Delivery Date:</b> <font color='#1e3a8a'><b>{delivery}</b></font>",
                 body_style,
             ),
             Paragraph(
                 f"<b>PO Date:</b> {created_at_str}<br/>"
                 f"<b>Procurement Request:</b> #{request_id}<br/>"
                 f"<b>Approval Tier:</b> {tier.replace('_', ' ')}<br/>"
-                f"<b>Assigned Approver:</b> {approver_name} ({approver_email})",
+                f"<b>Assigned Approver:</b> {approver_name} ({approver_email})<br/>"
+                f"<b>Expected Delivery:</b> <font color='#1e3a8a'><b>{delivery}</b></font>",
                 body_style,
             ),
         ],
@@ -178,7 +194,7 @@ def generate_po_pdf(
         ],
         [
             Paragraph("1", body_style),
-            Paragraph(f"<b>{item_name}</b><br/><font color='#64748b' size=7.5>{po_data.get('notes', '')}</font>", body_style),
+            Paragraph(f"<b>{item_name}</b><br/><font color='#64748b' size=7.5>Delivery Schedule: {delivery}</font>", body_style),
             Paragraph(str(qty), body_style),
             Paragraph(f"₹{unit_price:,.2f}", body_style),
             Paragraph(f"₹{total_price:,.2f}", bold_style),
@@ -213,7 +229,26 @@ def generate_po_pdf(
         ('PADDING', (0, 0), (-1, -1), 4),
     ]))
     story.append(totals_table)
-    story.append(Spacer(1, 20))
+    story.append(Spacer(1, 15))
+
+    # 4b. Approved Revisions & Amendments Callout
+    raw_notes = po_data.get("notes") or ""
+    if "[Approved Revision" in raw_notes:
+        rev_lines = [l.strip() for l in raw_notes.split("\n") if "[Approved Revision" in l]
+        rev_paras = [
+            Paragraph("<b>OFFICIAL APPROVED AMENDMENTS & REVISED TERMS:</b>", ParagraphStyle("RevH", parent=bold_style, textColor=colors.HexColor("#0369a1"), fontSize=9)),
+            Spacer(1, 4),
+        ]
+        for r_item in rev_lines:
+            rev_paras.append(Paragraph(f"• <font color='#0c4a6e'><b>{r_item}</b></font>", subtitle_style))
+        rev_table = Table([[rev_paras]], colWidths=[530])
+        rev_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#f0f9ff")),
+            ('BOX', (0, 0), (-1, -1), 1.0, colors.HexColor("#7dd3fc")),
+            ('PADDING', (0, 0), (-1, -1), 8),
+        ]))
+        story.append(rev_table)
+        story.append(Spacer(1, 15))
 
     # 5. Terms & Commercial Notes
     terms_p = Paragraph(

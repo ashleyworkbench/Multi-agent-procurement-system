@@ -39,6 +39,10 @@ export interface AuthUser {
   name: string;
   email: string;
   role: UserRole;
+  vendor_id?: number;
+  vendor_name?: string;
+  rating?: number;
+  city?: string;
 }
 
 export function getStoredToken(): string | null {
@@ -70,6 +74,22 @@ export const authApi = {
         localStorage.setItem("procureflow_user", JSON.stringify(res.data.user));
       }
     }
+    return res.data;
+  },
+  vendorLogin: async (payload: { vendor_id?: number; vendor_name?: string; email?: string; password?: string }) => {
+    const res = await axios.post(`${GATEWAY_URL}/auth/vendor-login`, payload);
+    if (res.data?.access_token) {
+      if (typeof window !== "undefined") {
+        localStorage.setItem("procureflow_token", res.data.access_token);
+        localStorage.setItem("procureflow_user", JSON.stringify(res.data.user));
+      }
+    }
+    return res.data;
+  },
+  getVendors: async (): Promise<{ vendors: any[] }> => {
+    const res = await axios.get(`${GATEWAY_URL}/auth/vendors`, {
+      headers: { "X-API-KEY": GATEWAY_KEY },
+    });
     return res.data;
   },
   me: async (): Promise<AuthUser> => {
@@ -303,12 +323,12 @@ export const procurementApi = {
   getPO_PDF_Url: (id: number) => {
     const token = getStoredToken();
     const tokenParam = token ? `&token=${encodeURIComponent(token)}` : "";
-    return `${GATEWAY_URL}/procurement/purchase-orders/${id}/pdf?api_key=${PROCUREMENT_KEY}${tokenParam}`;
+    return `${GATEWAY_URL}/procurement/purchase-orders/${id}/pdf?api_key=${PROCUREMENT_KEY}${tokenParam}&_t=${Date.now()}`;
   },
   getPO_Download_Url: (id: number) => {
     const token = getStoredToken();
     const tokenParam = token ? `&token=${encodeURIComponent(token)}` : "";
-    return `${GATEWAY_URL}/procurement/purchase-orders/${id}/download?api_key=${PROCUREMENT_KEY}${tokenParam}`;
+    return `${GATEWAY_URL}/procurement/purchase-orders/${id}/download?api_key=${PROCUREMENT_KEY}${tokenParam}&_t=${Date.now()}`;
   },
   signPO: async (id: number, data: { signer_name: string; signer_email: string; signature_data?: string; notes?: string }) => {
     const token = getStoredToken();
@@ -685,6 +705,19 @@ export interface DefectiveItem {
   reported_by?: string;
   created_at: string;
   updated_at: string;
+  rma_number?: string;
+  batch_number?: string;
+  severity?: "CRITICAL" | "MAJOR" | "MINOR" | string;
+  root_cause?: string;
+  unit_price?: number;
+  total_claim_amount?: number;
+  quarantine_location?: string;
+  disposition_type?: "REPLACEMENT" | "CREDIT_NOTE" | "RETURN_TO_VENDOR" | "SCRAP_ON_SITE" | "REWORK" | string;
+  tracking_reference?: string;
+  vendor_action_status?: string;
+  vendor_comments?: string;
+  disposition_approved_by?: string;
+  resolution_date?: string;
 }
 
 export interface DefectiveStats {
@@ -694,6 +727,8 @@ export interface DefectiveStats {
   pending_resolution: number;
   resolved: number;
   rejected: number;
+  total_claim_value?: number;
+  critical_defects?: number;
 }
 
 export interface CreateDefectivePayload {
@@ -709,11 +744,29 @@ export interface CreateDefectivePayload {
   inspection_date?: string;
   evidence_photo_url?: string;
   reported_by?: string;
+  rma_number?: string;
+  batch_number?: string;
+  severity?: string;
+  root_cause?: string;
+  quarantine_location?: string;
+  unit_price?: number;
 }
 
 export interface UpdateDefectiveStatusPayload {
   status: string;
   resolution_notes?: string;
+  performed_by?: string;
+  disposition_type?: string;
+  tracking_reference?: string;
+  vendor_action_status?: string;
+  vendor_comments?: string;
+  disposition_approved_by?: string;
+}
+
+export interface VendorDefectiveResponsePayload {
+  action: "ACCEPT_REPLACEMENT" | "ACCEPT_CREDIT" | "REQUEST_REWORK" | "CONTEST" | string;
+  tracking_reference?: string;
+  vendor_comments?: string;
   performed_by?: string;
 }
 
@@ -722,7 +775,10 @@ export const defectiveApi = {
     const qs = new URLSearchParams(params as Record<string, string>);
     return apiFetch<{ defective_items: DefectiveItem[]; total: number; stats: DefectiveStats }>(`/defective-items?${qs.toString()}`);
   },
-  getSummary: async () => apiFetch<{ stats: DefectiveStats }>("/defective-items/summary"),
+  getSummary: async (params: Record<string, any> = {}) => {
+    const qs = new URLSearchParams(params as Record<string, string>);
+    return apiFetch<{ stats: DefectiveStats }>(`/defective-items/summary?${qs.toString()}`);
+  },
   getItem: async (id: number) => apiFetch<DefectiveItem>(`/defective-items/${id}`),
   create: async (payload: CreateDefectivePayload) =>
     apiFetch<DefectiveItem>("/defective-items", {
@@ -734,10 +790,322 @@ export const defectiveApi = {
       method: "PATCH",
       body: JSON.stringify(payload),
     }),
+  vendorResponse: async (id: number, payload: VendorDefectiveResponsePayload) =>
+    apiFetch<DefectiveItem>(`/defective-items/${id}/vendor-response`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
   delete: async (id: number) =>
     apiFetch<{ message: string }>(`/defective-items/${id}`, {
       method: "DELETE",
     }),
 };
 
+// ----------------------------------------------------------------------
+// Procura (Vendor RAG Chatbot & Negotiation)
+// ----------------------------------------------------------------------
+export interface ProcuraPO {
+  id: number;
+  po_number: string;
+  request_id: number;
+  vendor_id: number;
+  vendor_name: string;
+  item_name: string;
+  quantity: number;
+  unit_price: number;
+  total_price: number;
+  currency: string;
+  status: string;
+  delivery_date_expected?: string;
+  approval_tier?: string;
+  assigned_approver_name?: string;
+  assigned_approver_email?: string;
+  pdf_path?: string;
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProcuraChatMessage {
+  id: number;
+  conversation_id: number;
+  po_number: string;
+  sender: "vendor" | "assistant" | "system";
+  message: string;
+  intent?: string;
+  structured_data?: any;
+  created_at: string;
+}
+
+export interface ProcuraProposal {
+  id: number;
+  po_id: number;
+  po_number: string;
+  vendor_id: number;
+  vendor_name: string;
+  conversation_id?: number;
+  current_unit_price: number;
+  proposed_unit_price?: number;
+  current_quantity: number;
+  proposed_quantity?: number;
+  current_delivery_date?: string;
+  proposed_delivery_date?: string;
+  current_total_price: number;
+  proposed_total_price: number;
+  price_variance_pct: number;
+  status: "PENDING" | "APPROVED" | "REJECTED";
+  reason?: string;
+  validation_notes?: string;
+  reviewed_by?: string;
+  reviewed_at?: string;
+  review_notes?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProcuraVerifyResponse {
+  success: boolean;
+  token: string;
+  po: ProcuraPO;
+  conversation_id: number;
+  messages: ProcuraChatMessage[];
+  proposals: ProcuraProposal[];
+}
+
+export interface ProcuraChatResponse {
+  success: boolean;
+  response: string;
+  intent: string;
+  is_proposal: boolean;
+  proposal?: ProcuraProposal;
+  messages: ProcuraChatMessage[];
+  proposals: ProcuraProposal[];
+}
+
+export const procuraApi = {
+  verifyPO: async (poNumber: string, vendorIdentifier: string): Promise<ProcuraVerifyResponse> =>
+    apiFetch<ProcuraVerifyResponse>("/procura/verify-po", {
+      method: "POST",
+      body: JSON.stringify({ po_number: poNumber, vendor_identifier: vendorIdentifier }),
+    }),
+
+  getPO: async (poNumber: string, vendorToken?: string): Promise<{ po: ProcuraPO; proposals: ProcuraProposal[] }> => {
+    const headers: Record<string, string> = {};
+    if (vendorToken) headers["X-Vendor-Token"] = vendorToken;
+    return apiFetch<{ po: ProcuraPO; proposals: ProcuraProposal[] }>(`/procura/po/${poNumber}`, { headers });
+  },
+
+  getChatHistory: async (
+    poNumber: string,
+    vendorToken?: string
+  ): Promise<{ po: ProcuraPO; conversation_id: number; messages: ProcuraChatMessage[]; proposals: ProcuraProposal[] }> => {
+    const headers: Record<string, string> = {};
+    if (vendorToken) headers["X-Vendor-Token"] = vendorToken;
+    return apiFetch<{ po: ProcuraPO; conversation_id: number; messages: ProcuraChatMessage[]; proposals: ProcuraProposal[] }>(
+      `/procura/chat/${poNumber}/history`,
+      { headers }
+    );
+  },
+
+  sendMessage: async (
+    poNumber: string,
+    message: string,
+    vendorToken?: string
+  ): Promise<ProcuraChatResponse> => {
+    const headers: Record<string, string> = {};
+    if (vendorToken) headers["X-Vendor-Token"] = vendorToken;
+    return apiFetch<ProcuraChatResponse>("/procura/chat", {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ po_number: poNumber, message }),
+    });
+  },
+
+  submitNegotiation: async (
+    data: {
+      po_number: string;
+      proposed_unit_price?: number;
+      proposed_quantity?: number;
+      proposed_delivery_date?: string;
+      reason?: string;
+    },
+    vendorToken?: string
+  ): Promise<{ success: boolean; proposal: ProcuraProposal; messages: ProcuraChatMessage[]; proposals: ProcuraProposal[] }> => {
+    const headers: Record<string, string> = {};
+    if (vendorToken) headers["X-Vendor-Token"] = vendorToken;
+    return apiFetch<{ success: boolean; proposal: ProcuraProposal; messages: ProcuraChatMessage[]; proposals: ProcuraProposal[] }>(
+      "/procura/negotiate",
+      {
+        method: "POST",
+        headers,
+        body: JSON.stringify(data),
+      }
+    );
+  },
+
+  getProposals: async (
+    params: { po_number?: string; status?: string } = {},
+    vendorToken?: string
+  ): Promise<{ proposals: ProcuraProposal[]; total: number }> => {
+    const qs = new URLSearchParams();
+    if (params.po_number) qs.set("po_number", params.po_number);
+    if (params.status) qs.set("status", params.status);
+    const headers: Record<string, string> = {};
+    if (vendorToken) headers["X-Vendor-Token"] = vendorToken;
+    return apiFetch<{ proposals: ProcuraProposal[]; total: number }>(`/procura/proposals?${qs.toString()}`, { headers });
+  },
+
+  reviewProposal: async (
+    proposalId: number,
+    data: { action: "APPROVE" | "REJECT"; review_notes?: string }
+  ): Promise<{ success: boolean; proposal_id: number; status: string; message: string; updated_po?: ProcuraPO }> =>
+    apiFetch(`/procura/proposals/${proposalId}/review`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+};
+
+// ----------------------------------------------------------------------
+// Order Reports (Agent 6 Autonomous Audit & Dossier System)
+// ----------------------------------------------------------------------
+export interface OrderReportSummary {
+  id: number;
+  report_id: string;
+  po_id: number;
+  po_number: string;
+  vendor_id?: number;
+  vendor_name: string;
+  version: number;
+  status: string;
+  is_latest: boolean;
+  defect_count: number;
+  has_defects: boolean;
+  defect_summary?: {
+    defect_count: number;
+    total_defective_quantity: number;
+    total_claim_amount: number;
+    restitution_recovered_amount: number;
+    resolved_defect_count: number;
+    pending_review_count: number;
+  };
+  regeneration_reason?: string;
+  supersedes_report_id?: string;
+  executive_summary?: string;
+  order_data: {
+    id: number;
+    po_number: string;
+    item_name: string;
+    quantity: number;
+    unit_price: string | number;
+    total_price: string | number;
+    currency: string;
+    status: string;
+    approval_tier?: string;
+    assigned_approver_name?: string;
+    assigned_approver_email?: string;
+    docusign_status?: string;
+    docusign_envelope_id?: string;
+    created_at?: string;
+    delivery_date_expected?: string;
+    notes?: string;
+  };
+  financial_breakdown: {
+    currency: string;
+    gross_order_amount: number;
+    defective_claim_amount: number;
+    restitution_recovered_amount: number;
+    net_settled_amount: number;
+    settlement_status: string;
+    payment_disbursement_authorized: boolean;
+  };
+  integrity_hash: string;
+  pdf_filename?: string;
+  pdf_path?: string;
+  pdf_size_bytes?: number;
+  generated_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OrderReportDetail extends OrderReportSummary {
+  vendor_negotiations?: {
+    proposals: Array<{
+      id: number;
+      po_number: string;
+      vendor_name: string;
+      current_unit_price: number;
+      proposed_unit_price: number;
+      current_quantity?: number;
+      proposed_quantity?: number;
+      price_variance_pct: number;
+      status: string;
+      reason?: string;
+      reviewed_by?: string;
+      reviewed_at?: string;
+      review_notes?: string;
+      created_at?: string;
+    }>;
+    chat_messages: Array<{
+      id: number;
+      po_number: string;
+      sender: string;
+      message: string;
+      intent?: string;
+      created_at?: string;
+    }>;
+    proposal_count: number;
+    inquiry_count: number;
+    has_negotiations: boolean;
+  };
+  vendor_risk_analysis: Record<string, any>;
+  approval_audit_trail: Array<Record<string, any>>;
+  defective_items_log: Array<Record<string, any>>;
+  compliance_statement: Record<string, any>;
+}
+
+export interface OrderReportMetrics {
+  total_orders_documented: number;
+  approved_orders: number;
+  delivered_orders: number;
+  superseded_orders: number;
+  revised_orders: number;
+  total_spend_documented: number;
+}
+
+export const reportsApi = {
+  getReports: async (params: { po_id?: number; search?: string; status?: string; has_defects?: boolean; limit?: number; offset?: number } = {}) => {
+    const qs = new URLSearchParams();
+    if (params.po_id) qs.set("po_id", String(params.po_id));
+    if (params.search) qs.set("search", params.search);
+    if (params.status) qs.set("status", params.status);
+    if (params.has_defects !== undefined) qs.set("has_defects", String(params.has_defects));
+    if (params.limit) qs.set("limit", String(params.limit));
+    if (params.offset) qs.set("offset", String(params.offset));
+    return apiFetch<{ reports: OrderReportSummary[]; total: number; limit: number; offset: number }>(`/reports?${qs.toString()}`);
+  },
+
+  getMetrics: async () => apiFetch<OrderReportMetrics>("/reports/summary-metrics"),
+
+  getReport: async (reportId: string | number) => apiFetch<OrderReportDetail>(`/reports/${reportId}`),
+
+  getReportByPo: async (poId: number) => apiFetch<OrderReportDetail>(`/reports/by-po/${poId}`),
+
+  generateReport: async (poId: number, triggerReason = "MANUAL_TRIGGER", force = false) => {
+    const qs = new URLSearchParams({ trigger_reason: triggerReason, force: String(force) });
+    return apiFetch<OrderReportDetail>(`/reports/generate/${poId}?${qs.toString()}`, { method: "POST" });
+  },
+
+  regenerateReport: async (poId: number, reason = "DEFECT_UPDATE_SYNC") => {
+    const qs = new URLSearchParams({ reason });
+    return apiFetch<{ message: string; report: OrderReportDetail }>(`/reports/regenerate/${poId}?${qs.toString()}`, { method: "POST" });
+  },
+
+  deleteReport: async (reportId: string | number) => apiFetch<{ message: string }>(`/reports/${reportId}`, { method: "DELETE" }),
+
+  getPdfUrl: (reportId: string | number) => `${API_BASE}/reports/${reportId}/pdf`,
+  getDownloadUrl: (reportId: string | number) => `${API_BASE}/reports/${reportId}/download`,
+};
+
 export default API_BASE;
+
+

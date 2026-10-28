@@ -181,6 +181,36 @@ async def auth_me(
     )
 
 
+@app.get("/auth/vendors")
+async def auth_list_vendors(request: Request):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            f"{PROC_SVC_URL}/auth/vendors",
+            headers={"X-API-KEY": GATEWAY_KEY},
+        )
+    return Response(
+        content=response.content,
+        status_code=response.status_code,
+        media_type=response.headers.get("content-type", "application/json"),
+    )
+
+
+@app.post("/auth/vendor-login")
+async def auth_vendor_login(request: Request):
+    body = await request.json()
+    async with httpx.AsyncClient() as client:
+        response = await client.post(
+            f"{PROC_SVC_URL}/auth/vendor-login",
+            json=body,
+            headers={"X-API-KEY": GATEWAY_KEY},
+        )
+    return Response(
+        content=response.content,
+        status_code=response.status_code,
+        media_type=response.headers.get("content-type", "application/json"),
+    )
+
+
 
 # ------------------------------------------------------------------ #
 # HTTP client helper                                                   #
@@ -225,7 +255,7 @@ async def health():
     summary="Get all inventory items for an industry",
     dependencies=[Depends(verify_gateway_key)],
 )
-async def get_inventory_items(industry: str = Query(..., description="construction|pharma|manufacturing|electronics")):
+async def get_inventory_items(industry: str = Query("construction", description="construction|pharma|manufacturing|electronics")):
     """Returns full inventory list for the given industry."""
     ck = cache_key("inventory_all", industry)
     cached = await get_cached(ck)
@@ -396,7 +426,7 @@ async def get_vendors_for_item(
     summary="Get all vendors for an industry",
     dependencies=[Depends(verify_gateway_key)],
 )
-async def get_vendors(industry: str = Query(...)):
+async def get_vendors(industry: str = Query("construction", description="industry name, default construction")):
     ck = cache_key("vendors_all", industry)
     cached = await get_cached(ck)
     if cached:
@@ -808,7 +838,10 @@ async def proxy_po_pdf(po_id: int, request: Request):
             "Content-Disposition": resp.headers.get(
                 "content-disposition",
                 f'inline; filename="PO_{po_id}.pdf"'
-            )
+            ),
+            "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0",
+            "Pragma": "no-cache",
+            "Expires": "0",
         },
     )
 
@@ -839,19 +872,27 @@ async def proxy_po_download(po_id: int, request: Request):
             "Content-Disposition": resp.headers.get(
                 "content-disposition",
                 f'attachment; filename="PO_{po_id}.pdf"'
-            )
+            ),
+            "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0",
+            "Pragma": "no-cache",
+            "Expires": "0",
         },
     )
+
+
 @app.post("/procurement/purchase-orders/{po_id}/sign")
 async def proxy_sign_po(po_id: int, request: Request):
-    body = await request.json()
+    try:
+        body = await request.json()
+    except Exception:
+        body = {}
 
     headers = {
         "X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"
     }
 
     authorization = request.headers.get("Authorization")
-    if authorization:
+    if authorization and authorization.strip() not in ("", "Bearer", "Bearer null", "Bearer undefined"):
         headers["Authorization"] = authorization
 
     async with httpx.AsyncClient(timeout=20.0) as client:
@@ -877,7 +918,7 @@ async def proxy_update_po_status(po_id: int, request: Request):
     }
 
     authorization = request.headers.get("Authorization")
-    if authorization:
+    if authorization and authorization.strip() not in ("", "Bearer", "Bearer null", "Bearer undefined"):
         headers["Authorization"] = authorization
 
     async with httpx.AsyncClient(timeout=10.0) as client:
@@ -1003,7 +1044,11 @@ async def proxy_defective_items_summary(request: Request):
     if request.headers.get("Authorization"):
         headers["Authorization"] = request.headers["Authorization"]
     async with httpx.AsyncClient(timeout=10.0) as client:
-        resp = await client.get(f"{PROC_SVC_URL}/defective-items/summary", headers=headers)
+        resp = await client.get(
+            f"{PROC_SVC_URL}/defective-items/summary",
+            params=dict(request.query_params),
+            headers=headers
+        )
         return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
 
 
@@ -1053,6 +1098,17 @@ async def proxy_update_defective_item_status(item_id: int, request: Request):
         return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
 
 
+@app.post("/defective-items/{item_id}/vendor-response")
+async def proxy_vendor_defective_response(item_id: int, request: Request):
+    body = await request.json()
+    headers = {"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+    if request.headers.get("Authorization"):
+        headers["Authorization"] = request.headers["Authorization"]
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.post(f"{PROC_SVC_URL}/defective-items/{item_id}/vendor-response", json=body, headers=headers)
+        return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
+
+
 @app.delete("/defective-items/{item_id}")
 async def proxy_delete_defective_item(item_id: int, request: Request):
     headers = {"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
@@ -1061,6 +1117,226 @@ async def proxy_delete_defective_item(item_id: int, request: Request):
     async with httpx.AsyncClient(timeout=10.0) as client:
         resp = await client.delete(f"{PROC_SVC_URL}/defective-items/{item_id}", headers=headers)
         return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
+
+
+# ------------------------------------------------------------------ #
+# Procura (Vendor Chatbot & RAG Negotiation) Gateway Proxies         #
+# ------------------------------------------------------------------ #
+
+def _build_procura_headers(request: Request) -> dict:
+    headers = {
+        "X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012",
+    }
+    auth = request.headers.get("Authorization")
+    if auth and auth.strip() and auth.strip() != "Bearer":
+        headers["Authorization"] = auth.strip()
+    vendor_tok = request.headers.get("X-Vendor-Token")
+    if vendor_tok and vendor_tok.strip():
+        headers["X-Vendor-Token"] = vendor_tok.strip()
+    return headers
+
+
+@app.post("/procura/verify-po")
+async def proxy_procura_verify_po(request: Request):
+    body = await request.json()
+    headers = _build_procura_headers(request)
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        resp = await client.post(f"{PROC_SVC_URL}/procura/verify-po", json=body, headers=headers)
+        return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
+
+
+@app.get("/procura/po/{po_number}")
+async def proxy_procura_get_po(po_number: str, request: Request):
+    headers = _build_procura_headers(request)
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        resp = await client.get(f"{PROC_SVC_URL}/procura/po/{po_number}", headers=headers)
+        return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
+
+
+@app.get("/procura/chat/{po_number}/history")
+async def proxy_procura_chat_history(po_number: str, request: Request):
+    headers = _build_procura_headers(request)
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        resp = await client.get(f"{PROC_SVC_URL}/procura/chat/{po_number}/history", headers=headers)
+        return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
+
+
+@app.post("/procura/chat")
+async def proxy_procura_chat(request: Request):
+    body = await request.json()
+    headers = _build_procura_headers(request)
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        resp = await client.post(f"{PROC_SVC_URL}/procura/chat", json=body, headers=headers)
+        return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
+
+
+@app.post("/procura/negotiate")
+async def proxy_procura_negotiate(request: Request):
+    body = await request.json()
+    headers = _build_procura_headers(request)
+    async with httpx.AsyncClient(timeout=20.0) as client:
+        resp = await client.post(f"{PROC_SVC_URL}/procura/negotiate", json=body, headers=headers)
+        return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
+
+
+@app.get("/procura/proposals")
+async def proxy_procura_proposals(
+    po_number: Optional[str] = None,
+    status: Optional[str] = None,
+    request: Request = None,
+):
+    headers = _build_procura_headers(request)
+    params = {}
+    if po_number:
+        params["po_number"] = po_number
+    if status:
+        params["status"] = status
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        resp = await client.get(f"{PROC_SVC_URL}/procura/proposals", params=params, headers=headers)
+        return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
+
+
+@app.post("/procura/proposals/{proposal_id}/review")
+async def proxy_procura_review_proposal(proposal_id: int, request: Request):
+    body = await request.json()
+    headers = _build_procura_headers(request)
+    async with httpx.AsyncClient(timeout=20.0) as client:
+        resp = await client.post(f"{PROC_SVC_URL}/procura/proposals/{proposal_id}/review", json=body, headers=headers)
+        return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
+
+
+# ------------------------------------------------------------------ #
+# AGENT 6: Order Reports & Audit Dossier Gateway Proxies             #
+# ------------------------------------------------------------------ #
+
+def _build_reports_headers(request: Request) -> dict:
+    headers = {"X-API-KEY": "PROC-f3a8e7d6-9645-4827-34ab-7abc56789012"}
+    if request.headers.get("Authorization"):
+        headers["Authorization"] = request.headers["Authorization"]
+    return headers
+
+
+@app.get("/reports/summary-metrics")
+@app.get("/procurement/reports/summary-metrics")
+async def proxy_reports_summary_metrics(request: Request):
+    headers = _build_reports_headers(request)
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        resp = await client.get(f"{PROC_SVC_URL}/reports/summary-metrics", headers=headers)
+        return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
+
+
+@app.get("/reports")
+@app.get("/procurement/reports")
+async def proxy_list_reports(
+    po_id: Optional[int] = None,
+    search: Optional[str] = None,
+    status: Optional[str] = None,
+    has_defects: Optional[bool] = None,
+    limit: int = 50,
+    offset: int = 0,
+    request: Request = None,
+):
+    headers = _build_reports_headers(request)
+    params = {"limit": limit, "offset": offset}
+    if po_id is not None:
+        params["po_id"] = po_id
+    if search:
+        params["search"] = search
+    if status:
+        params["status"] = status
+    if has_defects is not None:
+        params["has_defects"] = has_defects
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        resp = await client.get(f"{PROC_SVC_URL}/reports", params=params, headers=headers)
+        return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
+
+
+@app.get("/reports/by-po/{po_id}")
+@app.get("/procurement/reports/by-po/{po_id}")
+async def proxy_get_report_by_po(po_id: int, request: Request):
+    headers = _build_reports_headers(request)
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        resp = await client.get(f"{PROC_SVC_URL}/reports/by-po/{po_id}", headers=headers)
+        return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
+
+
+@app.get("/reports/{report_id}")
+@app.get("/procurement/reports/{report_id}")
+async def proxy_get_report(report_id: str, request: Request):
+    headers = _build_reports_headers(request)
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        resp = await client.get(f"{PROC_SVC_URL}/reports/{report_id}", headers=headers)
+        return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
+
+
+@app.post("/reports/generate/{po_id}")
+@app.post("/procurement/reports/generate/{po_id}")
+async def proxy_generate_report(
+    po_id: int,
+    trigger_reason: Optional[str] = "MANUAL_TRIGGER",
+    force: bool = False,
+    request: Request = None,
+):
+    headers = _build_reports_headers(request)
+    params = {"trigger_reason": trigger_reason, "force": force}
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        resp = await client.post(f"{PROC_SVC_URL}/reports/generate/{po_id}", params=params, headers=headers)
+        return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
+
+
+@app.post("/reports/regenerate/{po_id}")
+@app.post("/procurement/reports/regenerate/{po_id}")
+async def proxy_regenerate_report(
+    po_id: int,
+    reason: Optional[str] = "DEFECT_UPDATE_SYNC",
+    request: Request = None,
+):
+    headers = _build_reports_headers(request)
+    params = {"reason": reason}
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        resp = await client.post(f"{PROC_SVC_URL}/reports/regenerate/{po_id}", params=params, headers=headers)
+        return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
+
+
+@app.get("/reports/{report_id}/pdf")
+@app.get("/procurement/reports/{report_id}/pdf")
+async def proxy_stream_report_pdf(report_id: str, request: Request):
+    headers = _build_reports_headers(request)
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        resp = await client.get(f"{PROC_SVC_URL}/reports/{report_id}/pdf", headers=headers)
+        cd = resp.headers.get("content-disposition", f"inline; filename={report_id}.pdf")
+        return Response(
+            content=resp.content,
+            status_code=resp.status_code,
+            media_type="application/pdf",
+            headers={"Content-Disposition": cd},
+        )
+
+
+@app.get("/reports/{report_id}/download")
+@app.get("/procurement/reports/{report_id}/download")
+async def proxy_download_report_pdf(report_id: str, request: Request):
+    headers = _build_reports_headers(request)
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        resp = await client.get(f"{PROC_SVC_URL}/reports/{report_id}/download", headers=headers)
+        cd = resp.headers.get("content-disposition", f"attachment; filename={report_id}.pdf")
+        return Response(
+            content=resp.content,
+            status_code=resp.status_code,
+            media_type="application/pdf",
+            headers={"Content-Disposition": cd},
+        )
+
+
+@app.delete("/reports/{report_id}")
+@app.delete("/procurement/reports/{report_id}")
+async def proxy_delete_report(report_id: str, request: Request):
+    headers = _build_reports_headers(request)
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        resp = await client.delete(f"{PROC_SVC_URL}/reports/{report_id}", headers=headers)
+        return Response(content=resp.content, status_code=resp.status_code, media_type="application/json")
+
+
 
 
 

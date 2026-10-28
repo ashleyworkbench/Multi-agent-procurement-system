@@ -14,6 +14,16 @@ const APPROVER_ALLOWED_ROUTES = [
   "/purchase-orders",
   "/approvals",
   "/contracts",
+  "/defective-items",
+  "/procura",
+  "/vendor-portal",
+];
+
+const VENDOR_ALLOWED_ROUTES = [
+  "/vendor-portal",
+  "/procura",
+  "/defective-items",
+  "/purchase-orders",
 ];
 
 export function AuthGuard({
@@ -41,7 +51,15 @@ export function AuthGuard({
       try {
         const currentUser = await authApi.me();
 
-        if (APPROVER_ROLES.includes(currentUser.role)) {
+        if (currentUser.role === "Vendor") {
+          const isAllowed = VENDOR_ALLOWED_ROUTES.some(
+            (route) => pathname === route || pathname.startsWith(`${route}/`)
+          );
+          if (!isAllowed) {
+            router.replace("/vendor-portal");
+            return;
+          }
+        } else if (APPROVER_ROLES.includes(currentUser.role)) {
           const isAllowed = APPROVER_ALLOWED_ROUTES.some(
             (route) => pathname === route || pathname.startsWith(`${route}/`)
           );

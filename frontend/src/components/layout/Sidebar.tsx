@@ -41,6 +41,7 @@ const navigation = [
       { label: "Dashboard",       href: "/",               icon: LayoutDashboard },
       { label: "Requests",        href: "/requests",        icon: FileText },
       { label: "Purchase Orders", href: "/purchase-orders", icon: ShoppingCart },
+      { label: "Procura AI Chat", href: "/procura",         icon: Bot },
       { label: "Approvals",       href: "/approvals",       icon: CheckSquare },
       { label: "Contracts",       href: "/contracts",       icon: FileSignature },
     ],
@@ -105,24 +106,52 @@ export function Sidebar() {
     setUser(getStoredUser());
   }, [pathname]);
 
+  const isVendor = user?.role === "Vendor";
   const isApprover =
     user?.role !== undefined && APPROVER_ROLES.includes(user.role);
 
-  const filteredNavigation = isApprover
-    ? [
-        {
-          section: "PROCUREMENT",
-          items: navigation
-            .flatMap((group) => group.items)
-            .filter((item) =>
-              ["/purchase-orders", "/approvals", "/contracts", "/defective-items"].includes(item.href)
-            ),
-        },
-      ]
-    : navigation.map((group) => ({
-        ...group,
-        items: group.items.filter((item) => item.href !== "/approvals"),
-      }));
+  const vendorNav = [
+    {
+      section: "VENDOR PORTAL",
+      items: [
+        { label: "Vendor Portal",     href: "/vendor-portal",   icon: Store },
+        { label: "My Purchase Orders", href: "/purchase-orders", icon: ShoppingCart },
+        { label: "Procura AI Chat",   href: "/procura",         icon: Bot },
+        { label: "Quality & Defects", href: "/defective-items", icon: PackageX },
+      ],
+    },
+  ];
+
+  const approverNav = [
+    {
+      section: "PROCUREMENT",
+      items: [
+        { label: "Purchase Orders",   href: "/purchase-orders", icon: ShoppingCart },
+        { label: "Approvals",         href: "/approvals",       icon: CheckSquare },
+        { label: "Procura AI Chat",   href: "/procura",         icon: Bot },
+        { label: "Contracts",         href: "/contracts",       icon: FileSignature },
+        { label: "Defective Items",   href: "/defective-items", icon: PackageX },
+      ],
+    },
+  ];
+
+  const adminNav = navigation.map((group) => {
+    if (group.section === "PROCUREMENT") {
+      const hasApprovals = group.items.some((i) => i.href === "/approvals");
+      if (!hasApprovals) {
+        const itemsCopy = [...group.items];
+        itemsCopy.splice(4, 0, { label: "Approvals", href: "/approvals", icon: CheckSquare });
+        return { ...group, items: itemsCopy };
+      }
+    }
+    return group;
+  });
+
+  const filteredNavigation = isVendor
+    ? vendorNav
+    : isApprover
+    ? approverNav
+    : adminNav;
 
   function handleLogout() {
     authApi.logout();
