@@ -55,32 +55,33 @@ ProcureFlow is a **fully automated procurement system** where AI agents handle t
 
 ## ✨ Features
 
-### 🤖 Intelligent Automation
-- **4 Autonomous AI Agents** working in pipeline
-- **OCR + LLM** for document intelligence
-- **Automatic industry detection** from item descriptions
-- **Multi-criteria vendor scoring** (rating, price, lead time)
-- **Real-time workflow tracking** with live updates
+### 🤖 Autonomous AI Agent Pipeline
+- **Agent 1: Document OCR & Request Ingestion** — Surya-OCR & LLM (Gemini Vision) extraction from PDFs, DOCX, and scanned purchase invoices, paired with a real-time folder watcher for instant zero-click processing.
+- **Agent 2: Inventory & Stock Verifier** — Automatic cross-industry categorization and live inventory validation across PostgreSQL and MySQL databases (Construction, Manufacturing, Pharma, Electronics).
+- **Agent 3: Vendor Risk & Reliability Evaluator** — Comprehensive risk analysis assessing vendor financial stability, defect rates, delivery history, and composite risk scoring before order placement.
+- **Agent 4: Procurement Orchestrator & PO Generator** — Automated purchase order creation, line-item budgeting, PDF generation, MinIO document archiving, and Kafka event publishing.
 
-### 🏗️ Enterprise Architecture
-- **Microservices-based** design for scalability
-- **Event-driven** communication via Apache Kafka
-- **Multi-database** support (PostgreSQL + MySQL)
-- **Redis caching** for performance optimization
-- **API Gateway** pattern with centralized routing
+### 🛡️ Defective Items & RMA Management
+- **Full-Lifecycle RMA Tracking** — End-to-end audit tracking for damaged or defective goods.
+- **Defect Dossier & Audits** — Detailed defect inspections with photo evidence, severity classifications, and supplier liability assessments.
+- **Automated Claims & PDF Export** — Generate formal Return Merchandise Authorization documents with downloadable PDF export for accounting.
 
-### 📊 Professional Dashboard
-- **Real-time agent monitoring** with live status
-- **Workflow visualization** with progress tracking
-- **Agent logs viewer** with event filtering
-- **Purchase order management** with approvals
-- **Data source configuration** for multi-industry support
+### 💬 Procura AI Vendor Negotiation & Chat
+- **Real-Time Vendor Portal** — Interactive supplier portal for quote discussions, delivery date revisions, and terms adjustments.
+- **AI Negotiation Assistant** — Embedded Procura assistant that parses vendor counter-proposals, recommends actions, and automatically updates purchase order revisions for buyer review.
 
-### 🔐 Security & Compliance
-- **API key authentication** for all services
-- **No direct database access** from agents
-- **Audit trail** for all procurement actions
-- **Role-based access control** (planned)
+### ✍️ Tiered Approvals & DocuSign E-Signatures
+- **3-Tier Approval Hierarchy**:
+  - **Tier 1 (< ₹50,000)**: Procurement Officer
+  - **Tier 2 (₹50,000 – ₹200,000)**: Operations Manager
+  - **Tier 3 (> ₹200,000)**: Finance Director
+- **DocuSign Digital Signatures** — Automatic email notifications with secure signing links, real-time webhook status updates, and legally binding digital signatures.
+- **Contract Repository** — Direct preview and download of executed and signed purchase order PDFs.
+
+### 📊 Real-Time Observability & Reporting
+- **Live Kafka Logs Panel** — Real-time event log streaming directly in the dashboard UI with live agent feedback.
+- **Audit & Analytics Reports** — Exportable metrics on procurement spend, agent performance, vendor reliability, and defective ratios.
+- **Centralized MkDocs Documentation** — Complete technical documentation site with dark/light mode and automated GitHub Pages CI/CD.
 
 ---
 
@@ -324,21 +325,23 @@ curl -X POST http://localhost:8005/evaluate/1
 
 ---
 
-### Agent 3: Vendor Intelligence
-**Port:** 8006  
-**Purpose:** Recommend optimal vendors
+### Agent 3: Vendor Intelligence & Risk Analysis
+**Port:** 8006 (Vendor Agent) / 8011 (Risk Analysis Agent)  
+**Purpose:** Recommend optimal vendors and evaluate supplier risk metrics
 
-**Scoring Algorithm:**
+**Scoring & Risk Engine:**
 ```
 Score = (0.40 × Rating) + (0.35 × PriceScore) + (0.25 × LeadTimeScore)
+Risk Index = Weighted composite of financial health, defect rate, delivery delays, and compliance history
 ```
 
 **Process:**
 1. Consumes from `inventory-evaluation-topic`
 2. Queries vendors via Integration Gateway
-3. Scores all vendors per item
-4. Selects best vendor
-5. Publishes to `vendor-recommendation-topic`
+3. Performs automated risk assessment via `agent-risk`
+4. Scores all vendors per shortage item
+5. Selects best vendor and attaches risk profile
+6. Publishes to `vendor-recommendation-topic`
 
 **Manual Test:**
 ```bash
@@ -448,16 +451,20 @@ GET    /dashboard/summary
 
 | Page | Route | Status | Description |
 |------|-------|--------|-------------|
-| **Dashboard** | `/` | ✅ Live | KPIs, charts, agent status |
-| **Agent Monitor** | `/agents` | ✅ Live | Real-time agent pipeline |
-| **Agent Logs** | `/agent-logs` | ✅ Live | Kafka event viewer |
-| **Workflows** | `/workflows` | ✅ Live | Request tracking |
-| **Purchase Orders** | `/purchase-orders` | ✅ Live | PO management |
-| **Approvals** | `/approvals` | ✅ Live | Approve/reject POs |
-| **File Uploads** | `/file-uploads` | ✅ Live | CSV/XLSX onboarding |
-| **Data Sources** | `/data-sources` | ✅ Live | Industry connections |
-| **Inventory** | `/inventory` | ✅ Live | Stock viewer |
-| **Vendors** | `/vendors` | ✅ Live | Vendor directory |
+| **Dashboard** | `/` | ✅ Live | Live KPIs, Kafka event feed, agent statuses |
+| **Agent Monitor** | `/agents` | ✅ Live | Real-time agent pipeline visualization & manual triggers |
+| **Agent Logs** | `/agent-logs` | ✅ Live | Searchable Kafka event & audit log stream |
+| **Workflows** | `/workflows` | ✅ Live | End-to-end procurement request tracking |
+| **Purchase Orders** | `/purchase-orders` | ✅ Live | PO management, PDF downloads & audit logs |
+| **Approvals** | `/approvals` | ✅ Live | Tiered role-based approval & rejection actions |
+| **Contracts** | `/contracts` | ✅ Live | DocuSign digitally signed contracts & PDF viewer |
+| **Defective Items & RMA** | `/defective-items` | ✅ Live | Damage audit dossiers, RMA generation & vendor claims |
+| **Reports** | `/reports` | ✅ Live | Executive spending analytics, agent SLA metrics & PDF export |
+| **Vendor Portal** | `/vendor-portal` | ✅ Live | Supplier collaboration, live chat & AI negotiations |
+| **File Uploads** | `/file-uploads` | ✅ Live | Batch invoice & catalogue onboarding (PDF, CSV, XLSX) |
+| **Data Sources** | `/data-sources` | ✅ Live | Multi-industry database connection status & metrics |
+| **Inventory** | `/inventory` | ✅ Live | Real-time stock viewer across PostgreSQL & MySQL |
+| **Vendors** | `/vendors` | ✅ Live | Supplier profiles, ratings & risk ratings |
 
 ### Features
 
@@ -670,13 +677,20 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
+## 🎓 Final Project Presentation & Demonstration Guide
+
+A complete, professionally formatted demo and presentation guide is included in the root directory:
+- **`FINAL_PROJECT_PRESENTATION_AND_DEMO_GUIDE.docx`** — Comprehensive presentation walkthrough with full live demo step-by-step instructions, credentials table, terminal commands, and talking points.
+- **`generate_demo_guide_docx.py`** — Generator script to reproduce or adapt the demo guide styling and content.
+
+---
+
 ## 📞 Support
 
 For issues, questions, or suggestions:
 
-- 🐛 **Bug Reports:** [GitHub Issues](https://github.com/yourusername/procureflow/issues)
-- 💬 **Discussions:** [GitHub Discussions](https://github.com/yourusername/procureflow/discussions)
-- 📧 **Email:** support@procureflow.com
+- 🐛 **Bug Reports:** [GitHub Issues](https://github.com/ashleyworkbench/Multi-agent-procurement-system/issues)
+- 💬 **Repository:** [ProcureFlow on GitHub](https://github.com/ashleyworkbench/Multi-agent-procurement-system)
 
 ---
 

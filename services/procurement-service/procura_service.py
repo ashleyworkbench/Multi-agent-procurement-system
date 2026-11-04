@@ -22,6 +22,7 @@ from jose import jwt, JWTError
 
 from pdf_generator import generate_po_pdf
 from minio_storage import upload_pdf_bytes
+from mailer import send_po_approval_email
 
 log = logging.getLogger("procura-service")
 
@@ -445,15 +446,15 @@ def review_proposal_by_buyer(
             if new_total > 200000:
                 new_tier = "TIER_3_DIRECTOR"
                 app_name = "Finance Director"
-                app_email = "director.finance@procureflow.local"
+                app_email = os.getenv("FINANCE_DIRECTOR_EMAIL") or "director.finance@procureflow.local"
             elif new_total >= 50000:
                 new_tier = "TIER_2_MANAGER"
                 app_name = "Operations Manager"
-                app_email = "manager.ops@procureflow.local"
+                app_email = os.getenv("OPERATIONS_MANAGER_EMAIL") or "manager.ops@procureflow.local"
             else:
                 new_tier = "TIER_1_OFFICER"
                 app_name = "Procurement Officer"
-                app_email = "officer.procurement@procureflow.local"
+                app_email = os.getenv("PROCUREMENT_OFFICER_EMAIL") or "officer.procurement@procureflow.local"
 
             # 1. Mark the OLD PO as SUPERSEDED (voided by new revision)
             old_status = po_data["status"]
@@ -533,12 +534,24 @@ def review_proposal_by_buyer(
             new_po_id = new_po_dict["id"]
 
             # Generate initial draft PDF for the new revised PO
+            draft_pdf = None
             try:
                 draft_pdf = generate_po_pdf(new_po_dict, is_signed=False)
                 new_pdf_path = upload_pdf_bytes(draft_pdf, f"pos/{new_po_number}.pdf")
                 cur.execute("UPDATE purchase_orders SET pdf_path = %s WHERE id = %s", (new_pdf_path, new_po_id))
+                new_po_dict["pdf_path"] = new_pdf_path
             except Exception as e:
                 log.warning(f"Could not generate initial PDF for revised PO {new_po_number}: {e}")
+
+            # Dispatch approval notification email with DocuSign signing link for the revised PO
+            try:
+                email_res = send_po_approval_email(new_po_dict, pdf_bytes=draft_pdf)
+                if email_res.get("sent"):
+                    cur.execute("UPDATE purchase_orders SET docusign_status = 'SENT' WHERE id = %s", (new_po_id,))
+                    new_po_dict["docusign_status"] = "SENT"
+                    log.info(f"Dispatched approval email for revised PO {new_po_number} to {app_email}")
+            except Exception as mail_err:
+                log.warning(f"Could not dispatch approval email for revised PO {new_po_number}: {mail_err}")
 
             # Audit log for creation of new revised PO
             cur.execute("""

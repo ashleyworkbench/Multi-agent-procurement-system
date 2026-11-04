@@ -9,7 +9,7 @@ import {
   type OrderReportDetail,
   type OrderReportMetrics,
 } from "@/lib/api";
-import { cn } from "@/lib/utils";
+import { cn, formatDate, formatDateTime, formatTime } from "@/lib/utils";
 import {
   FileText,
   ShieldCheck,
@@ -389,11 +389,7 @@ export default function ReportsView() {
                           </div>
                           <span className="text-[10px] text-slate-400 flex items-center gap-1">
                             <Clock className="w-3 h-3" />
-                            {new Date(report.created_at).toLocaleDateString("en-IN", {
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                            })}
+                            {formatDate(report.created_at)}
                           </span>
                         </div>
                       </td>
@@ -562,7 +558,7 @@ export default function ReportsView() {
                     </span>
                   </div>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Compiled by {selectedReport?.generated_by} &bull; {selectedReport?.created_at ? new Date(selectedReport.created_at).toLocaleString() : ""}
+                    Compiled by {selectedReport?.generated_by} &bull; {selectedReport?.created_at ? formatDateTime(selectedReport.created_at) : ""}
                   </p>
                 </div>
               </div>
@@ -674,7 +670,7 @@ export default function ReportsView() {
                         {(selectedReport.approval_audit_trail || []).map((audit: any, idx: number) => (
                           <div key={idx} className="text-xs flex items-start gap-3 border-b border-slate-200/50 dark:border-slate-800 pb-2.5">
                             <span className="text-[10px] font-mono text-slate-400 shrink-0 mt-0.5">
-                              {audit.created_at ? new Date(audit.created_at).toLocaleString() : ""}
+                              {audit.created_at ? formatDateTime(audit.created_at) : ""}
                             </span>
                             <div className="space-y-0.5 flex-1">
                               <div className="flex items-center gap-2">
@@ -780,7 +776,7 @@ export default function ReportsView() {
                                   {msg.sender === "vendor" ? <User className="w-3 h-3 text-indigo-600" /> : <Bot className="w-3 h-3 text-emerald-600" />}
                                   {msg.sender?.toUpperCase()}
                                 </span>
-                                <span>{msg.created_at ? new Date(msg.created_at).toLocaleTimeString() : ""}</span>
+                                <span>{msg.created_at ? formatTime(msg.created_at) : ""}</span>
                               </div>
                               <p className="text-slate-800 dark:text-slate-200 whitespace-pre-wrap">{msg.message}</p>
                             </div>

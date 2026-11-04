@@ -153,6 +153,7 @@ lerna-debug.log*
 .next/
 out/
 build/
+*.tsbuildinfo
 
 # Production
 /build

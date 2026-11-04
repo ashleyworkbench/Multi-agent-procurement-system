@@ -1,5 +1,4 @@
 import { StatCards } from "@/components/dashboard/StatCards";
-import { ProcurementChart } from "@/components/dashboard/ProcurementChart";
 import { AgentStatusPanel } from "@/components/dashboard/AgentStatusPanel";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { KafkaLogsPanel } from "@/components/dashboard/KafkaLogsPanel";
@@ -25,15 +24,12 @@ export default function DashboardPage() {
       {/* Live Kafka Logs & Automation Pipeline (Guidance Feedback) */}
       <KafkaLogsPanel />
 
-      {/* Row 2: Chart + Agent Status + Activity */}
+      {/* Row 2: Agent Status + Activity */}
       <div className="grid grid-cols-12 gap-5">
         <div className="col-span-12 lg:col-span-5">
-          <ProcurementChart />
-        </div>
-        <div className="col-span-12 lg:col-span-3">
           <AgentStatusPanel />
         </div>
-        <div className="col-span-12 lg:col-span-4">
+        <div className="col-span-12 lg:col-span-7">
           <RecentActivity />
         </div>
       </div>

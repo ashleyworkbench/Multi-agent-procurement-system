@@ -17,9 +17,6 @@ import {
   Plug,
   Upload,
   BarChart3,
-  TrendingUp,
-  Users,
-  Settings,
   ChevronLeft,
   Box,
   LogOut,
@@ -76,14 +73,6 @@ const navigation = [
     section: "ANALYTICS",
     items: [
       { label: "Reports",        href: "/reports",        icon: BarChart3 },
-      { label: "Spend Analysis", href: "/spend-analysis", icon: TrendingUp },
-    ],
-  },
-  {
-    section: "SYSTEM",
-    items: [
-      { label: "Users & Roles", href: "/users",    icon: Users },
-      { label: "Settings",      href: "/settings", icon: Settings },
     ],
   },
 ];

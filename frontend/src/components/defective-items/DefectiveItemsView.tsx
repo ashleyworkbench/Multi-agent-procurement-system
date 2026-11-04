@@ -12,7 +12,7 @@ import {
   type UpdateDefectiveStatusPayload,
   type AuthUser,
 } from "@/lib/api";
-import { cn } from "@/lib/utils";
+import { cn, formatDateTime } from "@/lib/utils";
 import {
   AlertTriangle,
   PackageX,
@@ -2032,7 +2032,7 @@ function DefectDossierModal({
         {/* Modal Footer */}
         <div className="flex items-center justify-between px-6 py-4 border-t border-slate-100 bg-slate-50/50">
           <span className="text-[11px] text-slate-400 font-mono">
-            Audit ID: #{item.id} • {item.created_at}
+            Audit ID: #{item.id} • {item.created_at ? formatDateTime(item.created_at) : "—"}
           </span>
           <div className="flex items-center gap-2">
             <button

@@ -16,6 +16,7 @@ services:
     container_name: procurement_postgres
     restart: unless-stopped
     environment:
+      TZ:                ${TZ:-Asia/Kolkata}
       POSTGRES_USER:     ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB:       postgres
@@ -38,6 +39,7 @@ services:
     container_name: procurement_mysql
     restart: unless-stopped
     environment:
+      TZ:                  ${TZ:-Asia/Kolkata}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_USER:          ${MYSQL_USER}
       MYSQL_PASSWORD:      ${MYSQL_PASSWORD}
